@@ -1,0 +1,343 @@
+--- /dev/null
++++ linux-xlnx-2024.2/Documentation/devicetree/bindings/net/xilinx-phy.txt	2025-03-03 14:23:34.414251900 +0900
+@@ -0,0 +1,15 @@
++Xilinx PCS/PMA PHY bindings
++
++Required properties:
++	- reg - The ID number for the phy, usually a small integer
++
++Optional properties:
++	- xlnx,phy-type - Describes type 1000BaseX (set to 0x5) or
++			  SGMII (set to 0x4)
++
++Example:
++
++	ethernet-phy@9 {
++		reg = <9>;
++		xlnx,phy-type = <0x5>;
++	};
+--- linux-6.6.40/drivers/net/phy/Kconfig	2025-03-03 14:21:57.380933600 +0900
++++ linux-xlnx-2024.2/drivers/net/phy/Kconfig	2025-03-03 14:23:54.285518100 +0900
+@@ -402,6 +402,14 @@
+ 	help
+ 	  Currently supports the vsc8244
+ 
++config XILINX_PHY
++	tristate "Drivers for xilinx PHYs"
++	help
++	  This module provides a driver for the Xilinx PCS/PMA Core.
++	  The supported PHY modes include SGMII and 1000BaseX.
++	  This can be used an Ethernet controller, for example Xilinx
++	  Axi Ethernet or Cadence GEM in Xilinx devices.
++
+ config XILINX_GMII2RGMII
+ 	tristate "Xilinx GMII2RGMII converter driver"
+ 	help
+--- linux-6.6.40/drivers/net/phy/Makefile	2025-03-03 14:21:57.381930700 +0900
++++ linux-xlnx-2024.2/drivers/net/phy/Makefile	2025-03-03 14:23:54.285518100 +0900
+@@ -94,4 +94,5 @@
+ obj-$(CONFIG_STE10XP)		+= ste10Xp.o
+ obj-$(CONFIG_TERANETICS_PHY)	+= teranetics.o
+ obj-$(CONFIG_VITESSE_PHY)	+= vitesse.o
++obj-$(CONFIG_XILINX_PHY)	+= xilinx_phy.o
+ obj-$(CONFIG_XILINX_GMII2RGMII) += xilinx_gmii2rgmii.o
+--- linux-6.6.40/drivers/net/phy/phy-core.c	2025-03-03 14:21:57.414040400 +0900
++++ linux-xlnx-2024.2/drivers/net/phy/phy-core.c	2025-03-03 14:23:54.317446200 +0900
+@@ -133,6 +133,9 @@
+ 	case PHY_INTERFACE_MODE_5GBASER:
+ 	case PHY_INTERFACE_MODE_10GBASER:
+ 	case PHY_INTERFACE_MODE_25GBASER:
++	case PHY_INTERFACE_MODE_100GBASER:
++	case PHY_INTERFACE_MODE_200GBASER:
++	case PHY_INTERFACE_MODE_400GBASER:
+ 	case PHY_INTERFACE_MODE_10GKR:
+ 	case PHY_INTERFACE_MODE_100BASEX:
+ 	case PHY_INTERFACE_MODE_RXAUI:
+--- linux-6.6.40/drivers/net/phy/phylink.c	2025-03-03 14:21:57.417032800 +0900
++++ linux-xlnx-2024.2/drivers/net/phy/phylink.c	2025-03-03 14:23:54.319441300 +0900
+@@ -237,6 +237,15 @@
+ 	case PHY_INTERFACE_MODE_XLGMII:
+ 		return SPEED_40000;
+ 
++	case PHY_INTERFACE_MODE_100GBASER:
++		return SPEED_100000;
++
++	case PHY_INTERFACE_MODE_200GBASER:
++		return SPEED_200000;
++
++	case PHY_INTERFACE_MODE_400GBASER:
++		return SPEED_400000;
++
+ 	case PHY_INTERFACE_MODE_INTERNAL:
+ 	case PHY_INTERFACE_MODE_NA:
+ 	case PHY_INTERFACE_MODE_MAX:
+@@ -545,6 +554,18 @@
+ 		caps |= MAC_25000FD;
+ 		break;
+ 
++	case PHY_INTERFACE_MODE_100GBASER:
++		caps |= MAC_100000FD;
++		break;
++
++	case PHY_INTERFACE_MODE_200GBASER:
++		caps |= MAC_200000FD;
++		break;
++
++	case PHY_INTERFACE_MODE_400GBASER:
++		caps |= MAC_400000FD;
++		break;
++
+ 	case PHY_INTERFACE_MODE_XLGMII:
+ 		caps |= MAC_40000FD;
+ 		break;
+--- linux-6.6.40/drivers/net/phy/xilinx_gmii2rgmii.c	2025-03-03 14:21:57.423016100 +0900
++++ linux-xlnx-2024.2/drivers/net/phy/xilinx_gmii2rgmii.c	2025-03-03 14:23:54.326422600 +0900
+@@ -15,6 +15,7 @@
+ #include <linux/mii.h>
+ #include <linux/mdio.h>
+ #include <linux/phy.h>
++#include <linux/clk.h>
+ #include <linux/of_mdio.h>
+ 
+ #define XILINX_GMII2RGMII_REG		0x10
+@@ -85,11 +86,17 @@
+ 	struct device *dev = &mdiodev->dev;
+ 	struct device_node *np = dev->of_node, *phy_node;
+ 	struct gmii2rgmii *priv;
++	struct clk *clkin;
+ 
+ 	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
+ 	if (!priv)
+ 		return -ENOMEM;
+ 
++	clkin = devm_clk_get_optional_enabled(dev, "clkin");
++	if (IS_ERR(clkin))
++		return dev_err_probe(dev, PTR_ERR(clkin),
++					"Failed to get and enable clock_in from Device Tree\n");
++
+ 	phy_node = of_parse_phandle(np, "phy-handle", 0);
+ 	if (!phy_node) {
+ 		dev_err(dev, "Couldn't parse phy-handle\n");
+--- /dev/null
++++ linux-xlnx-2024.2/drivers/net/phy/xilinx_phy.c	2025-03-03 14:23:54.326422600 +0900
+@@ -0,0 +1,162 @@
++// SPDX-License-Identifier: GPL-2.0+
++/* Xilinx PCS/PMA Core phy driver
++ *
++ * Copyright (C) 2015 Xilinx, Inc.
++ *
++ * Description:
++ * This driver is developed for PCS/PMA Core.
++ *
++ * This program is free software: you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License as published by
++ * the Free Software Foundation, either version 2 of the License, or
++ * (at your option) any later version.
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ */
++
++#include <linux/kernel.h>
++#include <linux/module.h>
++#include <linux/mii.h>
++#include <linux/phy.h>
++#include <linux/of.h>
++#include <linux/xilinx_phy.h>
++
++#define MII_PHY_STATUS_SPD_MASK		0x0C00
++#define MII_PHY_STATUS_FULLDUPLEX	0x1000
++#define MII_PHY_STATUS_1000		0x0800
++#define MII_PHY_STATUS_100		0x0400
++#define XPCSPMA_PHY_CTRL_ISOLATE_DISABLE 0xFBFF
++
++static int xilinxphy_read_status(struct phy_device *phydev)
++{
++	int err;
++	int status = 0;
++
++	/* Update the link, but return if there
++	 * was an error
++	 */
++	err = genphy_update_link(phydev);
++	if (err)
++		return err;
++
++	if (phydev->autoneg == AUTONEG_ENABLE) {
++		status = phy_read(phydev, MII_LPA);
++
++		if (status & MII_PHY_STATUS_FULLDUPLEX)
++			phydev->duplex = DUPLEX_FULL;
++		else
++			phydev->duplex = DUPLEX_HALF;
++
++		switch (status & MII_PHY_STATUS_SPD_MASK) {
++		case MII_PHY_STATUS_1000:
++			phydev->speed = SPEED_1000;
++			break;
++
++		case MII_PHY_STATUS_100:
++			phydev->speed = SPEED_100;
++			break;
++
++		default:
++			phydev->speed = SPEED_10;
++			break;
++		}
++	} else {
++		int bmcr = phy_read(phydev, MII_BMCR);
++
++		if (bmcr < 0)
++			return bmcr;
++
++		if (bmcr & BMCR_FULLDPLX)
++			phydev->duplex = DUPLEX_FULL;
++		else
++			phydev->duplex = DUPLEX_HALF;
++
++		if (bmcr & BMCR_SPEED1000)
++			phydev->speed = SPEED_1000;
++		else if (bmcr & BMCR_SPEED100)
++			phydev->speed = SPEED_100;
++		else
++			phydev->speed = SPEED_10;
++	}
++
++	/* For 1000BASE-X Phy Mode the speed/duplex will always be
++	 * 1000Mbps/fullduplex
++	 */
++	if (phydev->dev_flags == XAE_PHY_TYPE_1000BASE_X) {
++		phydev->duplex = DUPLEX_FULL;
++		phydev->speed = SPEED_1000;
++	}
++
++	/* For 2500BASE-X Phy Mode the speed/duplex will always be
++	 * 2500Mbps/fullduplex
++	 */
++	if (phydev->dev_flags == XAE_PHY_TYPE_2500) {
++		phydev->duplex = DUPLEX_FULL;
++		phydev->speed = SPEED_2500;
++	}
++
++	return 0;
++}
++
++static int xilinxphy_of_init(struct phy_device *phydev)
++{
++	struct device *dev = &phydev->mdio.dev;
++	struct device_node *of_node = dev->of_node;
++	u32 phytype;
++
++	if (!IS_ENABLED(CONFIG_OF_MDIO))
++		return 0;
++
++	if (!of_node)
++		return -ENODEV;
++
++	if (!of_property_read_u32(of_node, "xlnx,phy-type", &phytype)) {
++		if (phytype == XAE_PHY_TYPE_1000BASE_X)
++			phydev->dev_flags |= XAE_PHY_TYPE_1000BASE_X;
++		if (phytype == XAE_PHY_TYPE_2500)
++			phydev->dev_flags |= XAE_PHY_TYPE_2500;
++	}
++
++	return 0;
++}
++
++static int xilinxphy_config_init(struct phy_device *phydev)
++{
++	int temp;
++
++	xilinxphy_of_init(phydev);
++	temp = phy_read(phydev, MII_BMCR);
++	temp &= XPCSPMA_PHY_CTRL_ISOLATE_DISABLE;
++	phy_write(phydev, MII_BMCR, temp);
++
++	return 0;
++}
++
++static struct phy_driver xilinx_drivers[] = {
++	{
++		.phy_id = XILINX_PHY_ID,
++		.phy_id_mask = XILINX_PHY_ID_MASK,
++		.name = "Xilinx PCS/PMA PHY",
++		.flags = PHY_RST_AFTER_CLK_EN,
++		.features = PHY_GBIT_FEATURES,
++		.config_init = &xilinxphy_config_init,
++		.config_aneg = &genphy_config_aneg,
++		.read_status = &xilinxphy_read_status,
++		.resume = &genphy_resume,
++		.suspend = &genphy_suspend,
++	},
++};
++
++module_phy_driver(xilinx_drivers);
++
++static struct mdio_device_id __maybe_unused xilinx_tbl[] = {
++	{ XILINX_PHY_ID, XILINX_PHY_ID_MASK },
++	{ }
++};
++
++MODULE_DEVICE_TABLE(mdio, xilinx_tbl);
++MODULE_DESCRIPTION("Xilinx PCS/PMA PHY driver");
++MODULE_LICENSE("GPL");
+--- linux-6.6.40/include/linux/phy.h	2025-03-03 14:22:04.848644400 +0900
++++ linux-xlnx-2024.2/include/linux/phy.h	2025-03-03 14:24:01.508401400 +0900
+@@ -121,6 +121,9 @@
+  * @PHY_INTERFACE_MODE_XAUI: 10 Gigabit Attachment Unit Interface
+  * @PHY_INTERFACE_MODE_10GBASER: 10G BaseR
+  * @PHY_INTERFACE_MODE_25GBASER: 25G BaseR
++ * @PHY_INTERFACE_MODE_100GBASER: 100G BaseR
++ * @PHY_INTERFACE_MODE_200GBASER: 200G BaseR
++ * @PHY_INTERFACE_MODE_400GBASER: 400G BaseR
+  * @PHY_INTERFACE_MODE_USXGMII:  Universal Serial 10GE MII
+  * @PHY_INTERFACE_MODE_10GKR: 10GBASE-KR - with Clause 73 AN
+  * @PHY_INTERFACE_MODE_QUSGMII: Quad Universal SGMII
+@@ -160,6 +163,9 @@
+ 	/* 10GBASE-R, XFI, SFI - single lane 10G Serdes */
+ 	PHY_INTERFACE_MODE_10GBASER,
+ 	PHY_INTERFACE_MODE_25GBASER,
++	PHY_INTERFACE_MODE_100GBASER,
++	PHY_INTERFACE_MODE_200GBASER,
++	PHY_INTERFACE_MODE_400GBASER,
+ 	PHY_INTERFACE_MODE_USXGMII,
+ 	/* 10GBASE-KR - with Clause 73 AN */
+ 	PHY_INTERFACE_MODE_10GKR,
+@@ -278,6 +284,12 @@
+ 		return "10gbase-r";
+ 	case PHY_INTERFACE_MODE_25GBASER:
+ 		return "25gbase-r";
++	case PHY_INTERFACE_MODE_100GBASER:
++		return "100gbase-r";
++	case PHY_INTERFACE_MODE_200GBASER:
++		return "200gbase-r";
++	case PHY_INTERFACE_MODE_400GBASER:
++		return "400gbase-r";
+ 	case PHY_INTERFACE_MODE_USXGMII:
+ 		return "usxgmii";
+ 	case PHY_INTERFACE_MODE_10GKR:
+--- /dev/null
++++ linux-xlnx-2024.2/include/linux/xilinx_phy.h	2025-03-03 14:24:01.934348800 +0900
+@@ -0,0 +1,20 @@
++/* SPDX-License-Identifier: GPL-2.0+ */
++#ifndef _XILINX_PHY_H
++#define _XILINX_PHY_H
++
++/* Mask used for ID comparisons */
++#define XILINX_PHY_ID_MASK		0xfffffff0
++
++/* Known PHY IDs */
++#define XILINX_PHY_ID			0x01740c00
++
++/* struct phy_device dev_flags definitions */
++#define XAE_PHY_TYPE_MII		0
++#define XAE_PHY_TYPE_GMII		1
++#define XAE_PHY_TYPE_RGMII_1_3		2
++#define XAE_PHY_TYPE_RGMII_2_0		3
++#define XAE_PHY_TYPE_SGMII		4
++#define XAE_PHY_TYPE_1000BASE_X		5
++#define XAE_PHY_TYPE_2500		6
++
++#endif /* _XILINX_PHY_H */

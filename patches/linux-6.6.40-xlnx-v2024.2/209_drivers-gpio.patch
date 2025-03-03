@@ -1,0 +1,10 @@
+--- linux-6.6.40/drivers/gpio/gpio-zynqmp-modepin.c	2025-03-03 14:21:48.728451900 +0900
++++ linux-xlnx-2024.2/drivers/gpio/gpio-zynqmp-modepin.c	2025-03-03 14:23:45.789800500 +0900
+@@ -146,6 +146,7 @@
+ 	{ .compatible = "xlnx,zynqmp-gpio-modepin", },
+ 	{ }
+ };
++MODULE_DEVICE_TABLE(of, modepin_platform_id);
+ 
+ static struct platform_driver modepin_platform_driver = {
+ 	.driver = {

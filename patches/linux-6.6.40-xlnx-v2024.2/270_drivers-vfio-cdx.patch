@@ -1,0 +1,461 @@
+--- linux-6.6.40/drivers/vfio/cdx/Makefile	2025-03-03 14:22:02.087536000 +0900
++++ linux-xlnx-2024.2/drivers/vfio/cdx/Makefile	2025-03-03 14:23:58.862069300 +0900
+@@ -5,4 +5,4 @@
+ 
+ obj-$(CONFIG_VFIO_CDX) += vfio-cdx.o
+ 
+-vfio-cdx-objs := main.o
++vfio-cdx-objs := main.o intr.o
+--- /dev/null
++++ linux-xlnx-2024.2/drivers/vfio/cdx/intr.c	2025-03-03 14:23:58.863067300 +0900
+@@ -0,0 +1,211 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright (C) 2022-2023, Advanced Micro Devices, Inc.
++ */
++
++#include <linux/vfio.h>
++#include <linux/slab.h>
++#include <linux/types.h>
++#include <linux/eventfd.h>
++#include <linux/msi.h>
++#include <linux/interrupt.h>
++
++#include "linux/cdx/cdx_bus.h"
++#include "private.h"
++
++static irqreturn_t vfio_cdx_msihandler(int irq_no, void *arg)
++{
++	struct eventfd_ctx *trigger = arg;
++
++	eventfd_signal(trigger, 1);
++	return IRQ_HANDLED;
++}
++
++static int vfio_cdx_msi_enable(struct vfio_cdx_device *vdev, int nvec)
++{
++	struct cdx_device *cdx_dev = to_cdx_device(vdev->vdev.dev);
++	struct device *dev = vdev->vdev.dev;
++	int msi_idx, ret;
++
++	vdev->cdx_irqs = kcalloc(nvec, sizeof(struct vfio_cdx_irq), GFP_KERNEL);
++	if (!vdev->cdx_irqs)
++		return -ENOMEM;
++
++	ret = cdx_enable_msi(cdx_dev);
++	if (ret) {
++		kfree(vdev->cdx_irqs);
++		return ret;
++	}
++
++	/* Allocate cdx MSIs */
++	ret = cdx_msi_domain_alloc_irqs(dev, nvec);
++	if (ret) {
++		cdx_disable_msi(cdx_dev);
++		kfree(vdev->cdx_irqs);
++		return ret;
++	}
++
++	for (msi_idx = 0; msi_idx < nvec; msi_idx++)
++		vdev->cdx_irqs[msi_idx].irq_no = msi_get_virq(dev, msi_idx);
++
++	vdev->irq_count = nvec;
++	vdev->config_msi = 1;
++
++	return 0;
++}
++
++static int vfio_cdx_msi_set_vector_signal(struct vfio_cdx_device *vdev,
++					  int vector, int fd)
++{
++	struct eventfd_ctx *trigger;
++	int irq_no, ret;
++
++	if (vector < 0 || vector >= vdev->irq_count)
++		return -EINVAL;
++
++	irq_no = vdev->cdx_irqs[vector].irq_no;
++
++	if (vdev->cdx_irqs[vector].trigger) {
++		free_irq(irq_no, vdev->cdx_irqs[vector].trigger);
++		kfree(vdev->cdx_irqs[vector].name);
++		eventfd_ctx_put(vdev->cdx_irqs[vector].trigger);
++		vdev->cdx_irqs[vector].trigger = NULL;
++	}
++
++	if (fd < 0)
++		return 0;
++
++	vdev->cdx_irqs[vector].name = kasprintf(GFP_KERNEL, "vfio-msi[%d](%s)",
++						vector, dev_name(vdev->vdev.dev));
++	if (!vdev->cdx_irqs[vector].name)
++		return -ENOMEM;
++
++	trigger = eventfd_ctx_fdget(fd);
++	if (IS_ERR(trigger)) {
++		kfree(vdev->cdx_irqs[vector].name);
++		return PTR_ERR(trigger);
++	}
++
++	ret = request_irq(irq_no, vfio_cdx_msihandler, 0,
++			  vdev->cdx_irqs[vector].name, trigger);
++	if (ret) {
++		kfree(vdev->cdx_irqs[vector].name);
++		eventfd_ctx_put(trigger);
++		return ret;
++	}
++
++	vdev->cdx_irqs[vector].trigger = trigger;
++
++	return 0;
++}
++
++static int vfio_cdx_msi_set_block(struct vfio_cdx_device *vdev,
++				  unsigned int start, unsigned int count,
++				  int32_t *fds)
++{
++	int i, j, ret = 0;
++
++	if (start >= vdev->irq_count || start + count > vdev->irq_count)
++		return -EINVAL;
++
++	for (i = 0, j = start; i < count && !ret; i++, j++) {
++		int fd = fds ? fds[i] : -1;
++
++		ret = vfio_cdx_msi_set_vector_signal(vdev, j, fd);
++	}
++
++	if (ret) {
++		for (--j; j >= (int)start; j--)
++			vfio_cdx_msi_set_vector_signal(vdev, j, -1);
++	}
++
++	return ret;
++}
++
++static void vfio_cdx_msi_disable(struct vfio_cdx_device *vdev)
++{
++	struct cdx_device *cdx_dev = to_cdx_device(vdev->vdev.dev);
++	struct device *dev = vdev->vdev.dev;
++
++	vfio_cdx_msi_set_block(vdev, 0, vdev->irq_count, NULL);
++
++	if (!vdev->config_msi)
++		return;
++
++	cdx_msi_domain_free_irqs(dev, MSI_DEFAULT_DOMAIN);
++	cdx_disable_msi(cdx_dev);
++	kfree(vdev->cdx_irqs);
++
++	vdev->cdx_irqs = NULL;
++	vdev->irq_count = 0;
++	vdev->config_msi = 0;
++}
++
++static int vfio_cdx_set_msi_trigger(struct vfio_cdx_device *vdev,
++				    unsigned int index, unsigned int start,
++				    unsigned int count, u32 flags,
++				    void *data)
++{
++	struct cdx_device *cdx_dev = to_cdx_device(vdev->vdev.dev);
++	int i;
++
++	if (start + count > cdx_dev->num_msi)
++		return -EINVAL;
++
++	if (!count && (flags & VFIO_IRQ_SET_DATA_NONE)) {
++		vfio_cdx_msi_disable(vdev);
++		return 0;
++	}
++
++	if (flags & VFIO_IRQ_SET_DATA_EVENTFD) {
++		s32 *fds = data;
++		int ret;
++
++		if (vdev->config_msi)
++			return vfio_cdx_msi_set_block(vdev, start, count,
++						  fds);
++		ret = vfio_cdx_msi_enable(vdev, cdx_dev->num_msi);
++		if (ret)
++			return ret;
++
++		ret = vfio_cdx_msi_set_block(vdev, start, count, fds);
++		if (ret)
++			vfio_cdx_msi_disable(vdev);
++
++		return ret;
++	}
++
++	for (i = start; i < start + count; i++) {
++		if (!vdev->cdx_irqs[i].trigger)
++			continue;
++		if (flags & VFIO_IRQ_SET_DATA_NONE)
++			eventfd_signal(vdev->cdx_irqs[i].trigger, 1);
++	}
++
++	return 0;
++}
++
++int vfio_cdx_set_irqs_ioctl(struct vfio_cdx_device *vdev,
++			    u32 flags, unsigned int index,
++			    unsigned int start, unsigned int count,
++			    void *data)
++{
++	if (flags & VFIO_IRQ_SET_ACTION_TRIGGER)
++		return vfio_cdx_set_msi_trigger(vdev, index, start,
++			  count, flags, data);
++	else
++		return -EINVAL;
++}
++
++/* Free All IRQs for the given device */
++void vfio_cdx_irqs_cleanup(struct vfio_cdx_device *vdev)
++{
++	/*
++	 * Device does not support any interrupt or the interrupts
++	 * were not configured
++	 */
++	if (!vdev->cdx_irqs)
++		return;
++
++	vfio_cdx_set_msi_trigger(vdev, 1, 0, 0, VFIO_IRQ_SET_DATA_NONE, NULL);
++}
+--- linux-6.6.40/drivers/vfio/cdx/main.c	2025-03-03 14:22:02.087536000 +0900
++++ linux-xlnx-2024.2/drivers/vfio/cdx/main.c	2025-03-03 14:23:58.863067300 +0900
+@@ -14,7 +14,7 @@
+ 		container_of(core_vdev, struct vfio_cdx_device, vdev);
+ 	struct cdx_device *cdx_dev = to_cdx_device(core_vdev->dev);
+ 	int count = cdx_dev->res_count;
+-	int i;
++	int i, ret;
+ 
+ 	vdev->regions = kcalloc(count, sizeof(struct vfio_cdx_region),
+ 				GFP_KERNEL_ACCOUNT);
+@@ -39,6 +39,17 @@
+ 		if (!(cdx_dev->res[i].flags & IORESOURCE_READONLY))
+ 			vdev->regions[i].flags |= VFIO_REGION_INFO_FLAG_WRITE;
+ 	}
++	ret = cdx_dev_reset(core_vdev->dev);
++	if (ret) {
++		kfree(vdev->regions);
++		vdev->regions = NULL;
++		return ret;
++	}
++	ret = cdx_clear_master(cdx_dev);
++	if (ret)
++		vdev->flags &= ~BME_SUPPORT;
++	else
++		vdev->flags |= BME_SUPPORT;
+ 
+ 	return 0;
+ }
+@@ -50,6 +61,50 @@
+ 
+ 	kfree(vdev->regions);
+ 	cdx_dev_reset(core_vdev->dev);
++	vfio_cdx_irqs_cleanup(vdev);
++}
++
++static int vfio_cdx_bm_ctrl(struct vfio_device *core_vdev, u32 flags,
++			    void __user *arg, size_t argsz)
++{
++	size_t minsz =
++		offsetofend(struct vfio_device_feature_bus_master, op);
++	struct vfio_cdx_device *vdev =
++		container_of(core_vdev, struct vfio_cdx_device, vdev);
++	struct cdx_device *cdx_dev = to_cdx_device(core_vdev->dev);
++	struct vfio_device_feature_bus_master ops;
++	int ret;
++
++	if (!(vdev->flags & BME_SUPPORT))
++		return -ENOTTY;
++
++	ret = vfio_check_feature(flags, argsz, VFIO_DEVICE_FEATURE_SET,
++				 sizeof(ops));
++	if (ret != 1)
++		return ret;
++
++	if (copy_from_user(&ops, arg, minsz))
++		return -EFAULT;
++
++	switch (ops.op) {
++	case VFIO_DEVICE_FEATURE_CLEAR_MASTER:
++		return cdx_clear_master(cdx_dev);
++	case VFIO_DEVICE_FEATURE_SET_MASTER:
++		return cdx_set_master(cdx_dev);
++	default:
++		return -EINVAL;
++	}
++}
++
++static int vfio_cdx_ioctl_feature(struct vfio_device *device, u32 flags,
++				  void __user *arg, size_t argsz)
++{
++	switch (flags & VFIO_DEVICE_FEATURE_MASK) {
++	case VFIO_DEVICE_FEATURE_BUS_MASTER:
++		return vfio_cdx_bm_ctrl(device, flags, arg, argsz);
++	default:
++		return -ENOTTY;
++	}
+ }
+ 
+ static int vfio_cdx_ioctl_get_info(struct vfio_cdx_device *vdev,
+@@ -69,7 +124,7 @@
+ 	info.flags |= VFIO_DEVICE_FLAGS_RESET;
+ 
+ 	info.num_regions = cdx_dev->res_count;
+-	info.num_irqs = 0;
++	info.num_irqs = cdx_dev->num_msi ? 1 : 0;
+ 
+ 	return copy_to_user(arg, &info, minsz) ? -EFAULT : 0;
+ }
+@@ -98,6 +153,59 @@
+ 	return copy_to_user(arg, &info, minsz) ? -EFAULT : 0;
+ }
+ 
++static int vfio_cdx_ioctl_get_irq_info(struct vfio_cdx_device *vdev,
++				       struct vfio_irq_info __user *arg)
++{
++	unsigned long minsz = offsetofend(struct vfio_irq_info, count);
++	struct cdx_device *cdx_dev = to_cdx_device(vdev->vdev.dev);
++	struct vfio_irq_info info;
++
++	if (copy_from_user(&info, arg, minsz))
++		return -EFAULT;
++
++	if (info.argsz < minsz)
++		return -EINVAL;
++
++	if (info.index >= 1)
++		return -EINVAL;
++
++	info.flags = VFIO_IRQ_INFO_EVENTFD;
++	info.count = cdx_dev->num_msi;
++
++	return copy_to_user(arg, &info, minsz) ? -EFAULT : 0;
++}
++
++static int vfio_cdx_ioctl_set_irqs(struct vfio_cdx_device *vdev,
++				   struct vfio_irq_set __user *arg)
++{
++	unsigned long minsz = offsetofend(struct vfio_irq_set, count);
++	struct cdx_device *cdx_dev = to_cdx_device(vdev->vdev.dev);
++	struct vfio_irq_set hdr;
++	size_t data_size = 0;
++	u8 *data = NULL;
++	int ret = 0;
++
++	if (copy_from_user(&hdr, arg, minsz))
++		return -EFAULT;
++
++	ret = vfio_set_irqs_validate_and_prepare(&hdr, cdx_dev->num_msi,
++						 1, &data_size);
++	if (ret)
++		return ret;
++
++	if (data_size) {
++		data = memdup_user(arg->data, data_size);
++		if (IS_ERR(data))
++			return PTR_ERR(data);
++	}
++
++	ret = vfio_cdx_set_irqs_ioctl(vdev, hdr.flags, hdr.index,
++				      hdr.start, hdr.count, data);
++	kfree(data);
++
++	return ret;
++}
++
+ static long vfio_cdx_ioctl(struct vfio_device *core_vdev,
+ 			   unsigned int cmd, unsigned long arg)
+ {
+@@ -110,6 +218,10 @@
+ 		return vfio_cdx_ioctl_get_info(vdev, uarg);
+ 	case VFIO_DEVICE_GET_REGION_INFO:
+ 		return vfio_cdx_ioctl_get_region_info(vdev, uarg);
++	case VFIO_DEVICE_GET_IRQ_INFO:
++		return vfio_cdx_ioctl_get_irq_info(vdev, uarg);
++	case VFIO_DEVICE_SET_IRQS:
++		return vfio_cdx_ioctl_set_irqs(vdev, uarg);
+ 	case VFIO_DEVICE_RESET:
+ 		return cdx_dev_reset(core_vdev->dev);
+ 	default:
+@@ -169,6 +281,7 @@
+ 	.open_device	= vfio_cdx_open_device,
+ 	.close_device	= vfio_cdx_close_device,
+ 	.ioctl		= vfio_cdx_ioctl,
++	.device_feature = vfio_cdx_ioctl_feature,
+ 	.mmap		= vfio_cdx_mmap,
+ 	.bind_iommufd	= vfio_iommufd_physical_bind,
+ 	.unbind_iommufd	= vfio_iommufd_physical_unbind,
+@@ -231,3 +344,4 @@
+ 
+ MODULE_LICENSE("GPL");
+ MODULE_DESCRIPTION("VFIO for CDX devices - User Level meta-driver");
++MODULE_IMPORT_NS(CDX_BUS);
+--- linux-6.6.40/drivers/vfio/cdx/private.h	2025-03-03 14:22:02.088533700 +0900
++++ linux-xlnx-2024.2/drivers/vfio/cdx/private.h	2025-03-03 14:23:58.863067300 +0900
+@@ -13,6 +13,14 @@
+ 	return ((u64)(index) << VFIO_CDX_OFFSET_SHIFT);
+ }
+ 
++struct vfio_cdx_irq {
++	u32			flags;
++	u32			count;
++	int			irq_no;
++	struct eventfd_ctx	*trigger;
++	char			*name;
++};
++
+ struct vfio_cdx_region {
+ 	u32			flags;
+ 	u32			type;
+@@ -23,6 +31,18 @@
+ struct vfio_cdx_device {
+ 	struct vfio_device	vdev;
+ 	struct vfio_cdx_region	*regions;
++	u32			flags;
++#define BME_SUPPORT BIT(0)
++	struct vfio_cdx_irq	*cdx_irqs;
++	u32			irq_count;
++	u32			config_msi;
+ };
+ 
++int vfio_cdx_set_irqs_ioctl(struct vfio_cdx_device *vdev,
++			    u32 flags, unsigned int index,
++			    unsigned int start, unsigned int count,
++			    void *data);
++
++void vfio_cdx_irqs_cleanup(struct vfio_cdx_device *vdev);
++
+ #endif /* VFIO_CDX_PRIVATE_H */
+--- linux-6.6.40/include/uapi/linux/vfio.h	2025-03-03 14:22:05.975565100 +0900
++++ linux-xlnx-2024.2/include/uapi/linux/vfio.h	2025-03-03 14:24:02.667184700 +0900
+@@ -1434,6 +1434,27 @@
+ 
+ #define VFIO_DEVICE_FEATURE_MIG_DATA_SIZE 9
+ 
++/**
++ * Upon VFIO_DEVICE_FEATURE_SET, set or clear the BUS mastering for the device
++ * based on the operation specified in op flag.
++ *
++ * The functionality is incorporated for devices that needs bus master control,
++ * but the in-band device interface lacks the support. Consequently, it is not
++ * applicable to PCI devices, as bus master control for PCI devices is managed
++ * in-band through the configuration space. At present, this feature is supported
++ * only for CDX devices.
++ * When the device's BUS MASTER setting is configured as CLEAR, it will result in
++ * blocking all incoming DMA requests from the device. On the other hand, configuring
++ * the device's BUS MASTER setting as SET (enable) will grant the device the
++ * capability to perform DMA to the host memory.
++ */
++struct vfio_device_feature_bus_master {
++	__u32 op;
++#define		VFIO_DEVICE_FEATURE_CLEAR_MASTER	0	/* Clear Bus Master */
++#define		VFIO_DEVICE_FEATURE_SET_MASTER		1	/* Set Bus Master */
++};
++#define VFIO_DEVICE_FEATURE_BUS_MASTER 10
++
+ /* -------- API for Type1 VFIO IOMMU -------- */
+ 
+ /**

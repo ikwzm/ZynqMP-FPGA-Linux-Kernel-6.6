@@ -1,0 +1,36 @@
+--- linux-6.6.40/kernel/irq/handle.c	2025-03-03 14:22:06.212546500 +0900
++++ linux-xlnx-2024.2/kernel/irq/handle.c	2025-03-03 14:24:02.900672700 +0900
+@@ -215,7 +215,11 @@
+ }
+ 
+ #ifdef CONFIG_GENERIC_IRQ_MULTI_HANDLER
++#ifndef CONFIG_IRQCHIP_XILINX_INTC_MODULE_SUPPORT_EXPERIMENTAL
+ int __init set_handle_irq(void (*handle_irq)(struct pt_regs *))
++#else
++int set_handle_irq(void (*handle_irq)(struct pt_regs *))
++#endif
+ {
+ 	if (handle_arch_irq)
+ 		return -EBUSY;
+--- linux-6.6.40/kernel/irq/irqdesc.c	2025-03-03 14:22:06.215606000 +0900
++++ linux-xlnx-2024.2/kernel/irq/irqdesc.c	2025-03-03 14:24:02.902667900 +0900
+@@ -383,9 +383,7 @@
+ {
+ 	return mtree_load(&sparse_irqs, irq);
+ }
+-#ifdef CONFIG_KVM_BOOK3S_64_HV_MODULE
+ EXPORT_SYMBOL_GPL(irq_to_desc);
+-#endif
+ 
+ #ifdef CONFIG_SMP
+ static void free_masks(struct irq_desc *desc)
+--- linux-6.6.40/kernel/irq/msi.c	2025-03-03 14:22:06.217600000 +0900
++++ linux-xlnx-2024.2/kernel/irq/msi.c	2025-03-03 14:24:02.905724100 +0900
+@@ -1627,6 +1627,7 @@
+ 	msi_domain_free_irqs_all_locked(dev, domid);
+ 	msi_unlock_descs(dev);
+ }
++EXPORT_SYMBOL_GPL(msi_domain_free_irqs_all);
+ 
+ /**
+  * msi_get_domain_info - Get the MSI interrupt domain info for @domain

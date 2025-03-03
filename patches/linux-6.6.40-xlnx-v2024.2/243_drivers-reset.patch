@@ -1,0 +1,20 @@
+--- linux-6.6.40/Documentation/devicetree/bindings/power/reset/xlnx,zynqmp-power.yaml	2025-03-03 14:21:37.809791000 +0900
++++ linux-xlnx-2024.2/Documentation/devicetree/bindings/power/reset/xlnx,zynqmp-power.yaml	2025-03-03 14:23:34.657343700 +0900
+@@ -57,7 +57,7 @@
+ 
+     firmware {
+       zynqmp-firmware {
+-        zynqmp-power {
++        power-management {
+           compatible = "xlnx,zynqmp-power";
+           interrupts = <0 35 4>;
+         };
+@@ -70,7 +70,7 @@
+ 
+     firmware {
+       zynqmp-firmware {
+-        zynqmp-power {
++        power-management {
+           compatible = "xlnx,zynqmp-power";
+           interrupt-parent = <&gic>;
+           interrupts = <0 35 4>;
