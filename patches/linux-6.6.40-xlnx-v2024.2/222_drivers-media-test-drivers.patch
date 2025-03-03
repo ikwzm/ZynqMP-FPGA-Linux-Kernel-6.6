@@ -1,0 +1,17 @@
+--- linux-6.6.40/drivers/media/test-drivers/vivid/vivid-vid-common.c	2025-03-03 14:21:54.911414100 +0900
++++ linux-xlnx-2024.2/drivers/media/test-drivers/vivid/vivid-vid-common.c	2025-03-03 14:23:51.877654700 +0900
+@@ -74,6 +74,14 @@
+ 		.buffers = 1,
+ 	},
+ 	{
++		.fourcc   = V4L2_PIX_FMT_YUV444P,
++		.vdownsampling = { 1, 1, 1 },
++		.bit_depth = { 8, 8, 8 },
++		.color_enc = TGP_COLOR_ENC_YCBCR,
++		.planes   = 3,
++		.buffers = 1,
++	},
++	{
+ 		.fourcc   = V4L2_PIX_FMT_YUV420,
+ 		.vdownsampling = { 1, 2, 2 },
+ 		.bit_depth = { 8, 4, 4 },

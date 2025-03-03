@@ -1,0 +1,144 @@
+--- /dev/null
++++ linux-xlnx-2024.2/Documentation/ABI/testing/sysfs-bus-platform-onboard-usb-dev	2025-03-03 14:23:32.564182300 +0900
+@@ -0,0 +1,9 @@
++What:		/sys/bus/platform/devices/<dev>/always_powered_in_suspend
++Date:		June 2022
++KernelVersion:	5.20
++Contact:	Matthias Kaehlcke <matthias@kaehlcke.net>
++		linux-usb@vger.kernel.org
++Description:
++		(RW) Controls whether the USB hub remains always powered
++		during system suspend or not. This attribute is not
++		available for non-hub devices.
+--- linux-6.6.40/Documentation/ABI/testing/sysfs-bus-platform-onboard-usb-hub	2025-03-03 14:21:35.895219800 +0900
++++ linux-xlnx-2024.2/Documentation/ABI/testing/sysfs-bus-platform-onboard-usb-hub	1970-01-01 09:00:00.000000000 +0900
+@@ -1,8 +0,0 @@
+-What:		/sys/bus/platform/devices/<dev>/always_powered_in_suspend
+-Date:		June 2022
+-KernelVersion:	5.20
+-Contact:	Matthias Kaehlcke <matthias@kaehlcke.net>
+-		linux-usb@vger.kernel.org
+-Description:
+-		(RW) Controls whether the USB hub remains always powered
+-		during system suspend or not.
+\ No newline at end of file
+--- linux-6.6.40/Documentation/devicetree/bindings/usb/usb-xhci.yaml	2025-03-03 14:21:38.437224800 +0900
++++ linux-xlnx-2024.2/Documentation/devicetree/bindings/usb/usb-xhci.yaml	2025-03-03 14:23:35.228170900 +0900
+@@ -21,6 +21,13 @@
+     description: Determines if platform is USB3 LPM capable
+     type: boolean
+ 
++  snps,xhci-reset-on-resume:
++    description:
++      When set, xhci host will reset the host controller on resume from
++      suspend. Some controllers might lose power during suspend, so host
++      require re-initialization.
++    type: boolean
++
+   quirk-broken-port-ped:
+     description: Set if the controller has broken port disable mechanism
+     type: boolean
+--- linux-6.6.40/drivers/usb/core/Makefile	2025-03-03 14:22:01.677530000 +0900
++++ linux-xlnx-2024.2/drivers/usb/core/Makefile	2025-03-03 14:23:58.513105600 +0900
+@@ -12,8 +12,8 @@
+ usbcore-$(CONFIG_USB_PCI)		+= hcd-pci.o
+ usbcore-$(CONFIG_ACPI)		+= usb-acpi.o
+ 
+-ifdef CONFIG_USB_ONBOARD_HUB
+-usbcore-y			+= ../misc/onboard_usb_hub_pdevs.o
++ifdef CONFIG_USB_ONBOARD_DEV
++usbcore-y			+= ../misc/onboard_usb_dev_pdevs.o
+ endif
+ 
+ obj-$(CONFIG_USB)		+= usbcore.o
+--- linux-6.6.40/drivers/usb/core/hub.c	2025-03-03 14:22:01.682516600 +0900
++++ linux-xlnx-2024.2/drivers/usb/core/hub.c	2025-03-03 14:23:58.519089500 +0900
+@@ -23,7 +23,7 @@
+ #include <linux/usb.h>
+ #include <linux/usbdevice_fs.h>
+ #include <linux/usb/hcd.h>
+-#include <linux/usb/onboard_hub.h>
++#include <linux/usb/onboard_dev.h>
+ #include <linux/usb/otg.h>
+ #include <linux/usb/quirks.h>
+ #include <linux/workqueue.h>
+@@ -1785,7 +1785,7 @@
+ 	if (hub->quirk_disable_autosuspend)
+ 		usb_autopm_put_interface(intf);
+ 
+-	onboard_hub_destroy_pdevs(&hub->onboard_hub_devs);
++	onboard_dev_destroy_pdevs(&hub->onboard_devs);
+ 
+ 	hub_put(hub);
+ }
+@@ -1904,7 +1904,7 @@
+ 	INIT_DELAYED_WORK(&hub->leds, led_work);
+ 	INIT_DELAYED_WORK(&hub->init_work, NULL);
+ 	INIT_WORK(&hub->events, hub_event);
+-	INIT_LIST_HEAD(&hub->onboard_hub_devs);
++	INIT_LIST_HEAD(&hub->onboard_devs);
+ 	spin_lock_init(&hub->irq_urb_lock);
+ 	timer_setup(&hub->irq_urb_retry, hub_retry_irq_urb, 0);
+ 	usb_get_intf(intf);
+@@ -1934,7 +1934,7 @@
+ 	}
+ 
+ 	if (hub_configure(hub, &desc->endpoint[0].desc) >= 0) {
+-		onboard_hub_create_pdevs(hdev, &hub->onboard_hub_devs);
++		onboard_dev_create_pdevs(hdev, &hub->onboard_devs);
+ 
+ 		return 0;
+ 	}
+--- linux-6.6.40/drivers/usb/core/hub.h	2025-03-03 14:22:01.682516600 +0900
++++ linux-xlnx-2024.2/drivers/usb/core/hub.h	2025-03-03 14:23:58.519089500 +0900
+@@ -73,7 +73,7 @@
+ 	spinlock_t		irq_urb_lock;
+ 	struct timer_list	irq_urb_retry;
+ 	struct usb_port		**ports;
+-	struct list_head        onboard_hub_devs;
++	struct list_head        onboard_devs;
+ };
+ 
+ /**
+--- /dev/null
++++ linux-xlnx-2024.2/include/linux/usb/onboard_dev.h	2025-03-03 14:24:01.868874500 +0900
+@@ -0,0 +1,18 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++
++#ifndef __LINUX_USB_ONBOARD_DEV_H
++#define __LINUX_USB_ONBOARD_DEV_H
++
++struct usb_device;
++struct list_head;
++
++#if IS_ENABLED(CONFIG_USB_ONBOARD_DEV)
++void onboard_dev_create_pdevs(struct usb_device *parent_dev, struct list_head *pdev_list);
++void onboard_dev_destroy_pdevs(struct list_head *pdev_list);
++#else
++static inline void onboard_dev_create_pdevs(struct usb_device *parent_dev,
++					    struct list_head *pdev_list) {}
++static inline void onboard_dev_destroy_pdevs(struct list_head *pdev_list) {}
++#endif
++
++#endif /* __LINUX_USB_ONBOARD_DEV_H */
+--- linux-6.6.40/include/linux/usb/onboard_hub.h	2025-03-03 14:22:05.215588600 +0900
++++ linux-xlnx-2024.2/include/linux/usb/onboard_hub.h	1970-01-01 09:00:00.000000000 +0900
+@@ -1,18 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0 */
+-
+-#ifndef __LINUX_USB_ONBOARD_HUB_H
+-#define __LINUX_USB_ONBOARD_HUB_H
+-
+-struct usb_device;
+-struct list_head;
+-
+-#if IS_ENABLED(CONFIG_USB_ONBOARD_HUB)
+-void onboard_hub_create_pdevs(struct usb_device *parent_hub, struct list_head *pdev_list);
+-void onboard_hub_destroy_pdevs(struct list_head *pdev_list);
+-#else
+-static inline void onboard_hub_create_pdevs(struct usb_device *parent_hub,
+-					    struct list_head *pdev_list) {}
+-static inline void onboard_hub_destroy_pdevs(struct list_head *pdev_list) {}
+-#endif
+-
+-#endif /* __LINUX_USB_ONBOARD_HUB_H */
