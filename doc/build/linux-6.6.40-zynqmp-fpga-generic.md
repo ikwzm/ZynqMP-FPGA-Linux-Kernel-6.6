@@ -1,0 +1,85 @@
+# Build Linux Kernel
+
+There are two ways
+
+1. run scripts/build-linux-6.6.40-zynqmp-fpga-generic.sh (easy)
+2. run this chapter step-by-step (annoying)
+
+## Download Linux Kernel Source
+
+### Clone from linux-stable.git
+
+```console
+shell$ git clone --depth 1 -b v6.6.40 git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-6.6.40-zynqmp-fpga-generic
+```
+
+### Make Branch linux-6.6.40-zynqmp-fpga-generic
+
+```console
+shell$ cd linux-6.6.40-zynqmp-fpga-generic
+shell$ git checkout -b linux-6.6.40-zynqmp-fpga-generic refs/tags/v6.6.40
+```
+
+## Patch to Linux Kernel
+
+### Patch for linux-xlnx-v2024.2
+
+```console
+shell$ sh ../patches/linux-6.6.40-xlnx-v2024.2/zynqmp_fpga_patch.sh 
+```
+
+### Patch for builddeb
+
+```console
+shell$ patch -p1 < ../patches/linux-6.6.40-zynqmp-fpga-builddeb.diff 
+shell$ git add --all
+shell$ git commit -m "[update] scripts/package/builddeb to add tools/include and postinst script to header package."
+```
+
+### Add zynqmp_fpga_generic_defconfig
+
+```console
+shell$ cp ../files/zynqmp_fpga_generic_defconfig arch/arm64/configs/
+shell$ git add arch/arm64/configs/zynqmp_fpga_generic_defconfig
+shell$ git commit -m "[add] zynqmp_fpga_generic_defconfig to arch/arm64/configs"
+```
+
+### Create tag and .version
+
+```console
+shell$ git tag -a v6.6.40-zynqmp-fpga -m "release v6.6.40-zynqmp-fpga-generic-1"
+shell$ echo 0 > .version
+```
+
+## Build
+
+### Setup for Build 
+
+```console
+shell$ cd linux-6.6.40-zynqmp-fpga-generic
+shell$ export ARCH=arm64
+shell$ export CROSS_COMPILE=aarch64-linux-gnu-
+shell$ make zynqmp_fpga_generic_defconfig
+```
+
+### Build Linux Kernel and device tree
+
+```console
+shell$ export DTC_FLAGS=--symbols
+shell$ rm -rf debian
+shell$ make deb-pkg
+```
+
+### Install kernel image to this repository
+
+```console
+shell$ cp arch/arm64/boot/Image.gz ../vmlinuz-6.6.40-zynqmp-fpga-generic-1
+shell$ cp .config             ../files/config-6.6.40-zynqmp-fpga-generic-1
+```
+
+### Install devicetree to this repository
+
+```console
+shell$ install -d ../devicetrees/6.6.40-zynqmp-fpga-generic-1
+shell$ cp arch/arm64/boot/dts/xilinx/* ../devicetrees/6.6.40-zynqmp-fpga-generic-1
+```
