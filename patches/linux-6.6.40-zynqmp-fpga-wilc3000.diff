@@ -1,0 +1,25 @@
+diff --git a/drivers/staging/Kconfig b/drivers/staging/Kconfig
+index 9237492dc..5eca9e15c 100644
+--- a/drivers/staging/Kconfig
++++ b/drivers/staging/Kconfig
+@@ -60,6 +60,8 @@ source "drivers/staging/gdm724x/Kconfig"
+ 
+ source "drivers/staging/fbtft/Kconfig"
+ 
++source "drivers/staging/wilc3000/Kconfig"
++
+ source "drivers/staging/most/Kconfig"
+ 
+ source "drivers/staging/ks7010/Kconfig"
+diff --git a/drivers/staging/Makefile b/drivers/staging/Makefile
+index 35cd1d0ac..040b56a27 100644
+--- a/drivers/staging/Makefile
++++ b/drivers/staging/Makefile
+@@ -28,6 +28,7 @@ obj-$(CONFIG_PI433)		+= pi433/
+ obj-$(CONFIG_XIL_AXIS_FIFO)	+= axis-fifo/
+ obj-$(CONFIG_FIELDBUS_DEV)     += fieldbus/
+ obj-$(CONFIG_QLGE)		+= qlge/
++obj-$(CONFIG_WILC)		+= wilc3000/
+ obj-$(CONFIG_XILINX_FCLK)	+= fclk/
+ obj-$(CONFIG_XLNX_HDCP1X_CIPHER)	+= xlnx_hdcp1x/
+ obj-$(CONFIG_XLNX_SYNC)		+= xlnxsync/
