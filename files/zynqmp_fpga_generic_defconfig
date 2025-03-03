@@ -5735,6 +5735,11 @@ CONFIG_TYPEC_NVIDIA_ALTMODE=m
 CONFIG_MMC=y
 
 #### 
+#### HW reset support for Microchip WILC BT + WiFi devices
+#### 
+CONFIG_PWRSEQ_WILC=y
+
+#### 
 #### Secure Digital Host Controller Interface support
 #### 
 CONFIG_MMC_SDHCI=y
@@ -5925,6 +5930,11 @@ CONFIG_UIO_XILINX_AI_ENGINE=y
 ### Staging drivers
 ### ----------------------------------------------------------------------------
 CONFIG_STAGING=y
+
+#### 
+#### WILC SDIO
+#### 
+CONFIG_WILC_SDIO=y
 
 #### 
 #### Xilinx PL clock enabler
