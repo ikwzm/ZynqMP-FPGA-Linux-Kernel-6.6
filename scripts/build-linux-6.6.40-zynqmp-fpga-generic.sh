@@ -41,6 +41,46 @@ patch -p1 < ../patches/linux-$KERNEL_VERSION$KERNEL_EXTRA_VERSION-builddeb.diff
 git add --all
 git commit -m "[update] scripts/package/builddeb to add tools/include and postinst script to header package."
 
+### Add ATWILC3000 Linux Driver for Ultra96-V2
+
+rm -rf drivers/staging/wilc3000
+cp -r ../patches/microchip-wilc-driver/wilc1000 drivers/staging/wilc3000
+patch -p1 < ../patches/linux-$KERNEL_VERSION$KERNEL_EXTRA_VERSION-wilc3000.diff
+patch -p1 < ../patches/linux-$KERNEL_VERSION$KERNEL_EXTRA_VERSION-pwrseq-wilc.diff
+git add --all
+git commit -m "[add] drivers/staging/wilc3000"
+
+### Patch for Ultra96
+
+patch -p1 < ../patches/linux-$KERNEL_VERSION$KERNEL_EXTRA_VERSION-ultra96.diff
+git add --all
+git commit -m "[patch] for Ultra96."
+
+### Patch for Ultra96-V2
+
+patch -p1 < ../patches/linux-$KERNEL_VERSION$KERNEL_EXTRA_VERSION-ultra96v2.diff 
+git add --all
+git commit -m "[patch] for Ultra96-V2."
+
+### Patch for UltraZed-EG IO Carrier Card
+
+patch -p1 < ../patches/linux-$KERNEL_VERSION$KERNEL_EXTRA_VERSION-uz3eg-iocc.diff 
+git add --all
+git commit -m "[patch] for UltraZed-EG IO Carrier Card."
+
+### Patch for Kria KV260
+
+patch -p1 < ../patches/linux-$KERNEL_VERSION$KERNEL_EXTRA_VERSION-kv260.diff 
+git add --all
+git commit -m "[patch] for Kria KV260."
+
+### Patch for Kria KR260
+
+patch -p1 < ../patches/linux-$KERNEL_VERSION$KERNEL_EXTRA_VERSION-kr260.diff 
+git add --all
+git commit -m "[patch] for Kria KR260."
+
+
 ### Add defconfig
 
 cp ../files/$KERNEL_DEFCONFIG arch/arm64/configs/

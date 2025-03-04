@@ -36,6 +36,57 @@ shell$ git add --all
 shell$ git commit -m "[update] scripts/package/builddeb to add tools/include and postinst script to header package."
 ```
 
+### Add ATWILC3000 Linux Driver for Ultra96-V2
+
+```console
+shell$ rm -rf drivers/staging/wilc3000
+shell$ cp -r ../patches/microchip-wilc-driver/wilc1000 drivers/staging/wilc3000
+shell$ patch -p1 < ../patches/linux-6.6.40-zynqmp-fpga-wilc3000.diff
+shell$ patch -p1 < ../patches/linux-6.6.40-zynqmp-fpga-pwrseq-wilc.diff
+shell$ git add --all
+shell$ git commit -m "[add] drivers/staging/wilc3000"
+```
+
+### Patch for Ultra96
+
+```console
+shell$ patch -p1 < ../patches/linux-6.6.40-zynqmp-fpga-ultra96.diff
+shell$ git add --all
+shell$ git commit -m "[patch] for Ultra96."
+```
+
+### Patch for Ultra96-V2
+
+```console
+shell$ patch -p1 < ../patches/linux-6.6.40-zynqmp-fpga-ultra96v2.diff 
+shell$ git add --all
+shell$ git commit -m "[patch] for Ultra96-V2."
+```
+
+### Patch for UltraZed-EG IO Carrier Card
+
+```console
+shell$ patch -p1 < ../patches/linux-6.6.40-zynqmp-fpga-uz3eg-iocc.diff 
+shell$ git add --all
+shell$ git commit -m "[patch] for UltraZed-EG IO Carrier Card."
+```
+
+### Patch for Kria KV260
+
+```console
+shell$ patch -p1 < ../patches/linux-6.6.40-zynqmp-fpga-kv260.diff 
+shell$ git add --all
+shell$ git commit -m "[patch] for Kria KV260."
+```
+
+### Patch for Kria KR260
+
+```console
+shell$ patch -p1 < ../patches/linux-6.6.40-zynqmp-fpga-kr260.diff 
+shell$ git add --all
+shell$ git commit -m "[patch] for Kria KR260."
+```
+
 ### Add zynqmp_fpga_generic_defconfig
 
 ```console
