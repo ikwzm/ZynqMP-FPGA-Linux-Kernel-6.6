@@ -1,0 +1,16 @@
+diff --git a/arch/arm64/boot/dts/xilinx/avnet-ultra96-rev1.dts b/arch/arm64/boot/dts/xilinx/avnet-ultra96-rev1.dts
+index 4c1bd69e7..a0f6485ae 100644
+--- a/arch/arm64/boot/dts/xilinx/avnet-ultra96-rev1.dts
++++ b/arch/arm64/boot/dts/xilinx/avnet-ultra96-rev1.dts
+@@ -16,4 +16,11 @@ / {
+ 	compatible = "avnet,ultra96-rev1", "avnet,ultra96",
+ 		     "xlnx,zynqmp-zcu100-revC", "xlnx,zynqmp-zcu100",
+ 		     "xlnx,zynqmp";
++
++	amba_pl: amba_pl@0 {
++		#address-cells = <2>;
++		#size-cells = <2>;
++		compatible = "simple-bus";
++		ranges ;
++	};
+ };
