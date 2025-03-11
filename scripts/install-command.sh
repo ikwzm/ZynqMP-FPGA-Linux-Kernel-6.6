@@ -3,7 +3,7 @@
 set -e
 script_name=$0
 script_dir=$(cd $(dirname $0); pwd)
-script_version="0.1"
+script_version="0.3"
 verbose=0
 dry_run=0
 error=0
@@ -220,7 +220,7 @@ if [ -z "$kernel_release" ] && [ -n "$KERNEL_RELEASE" ]; then
     kernel_release="$KERNEL_RELEASE"
 fi
 
-if [ -z "$kernel_release" ] && [ -n "$kernel_version" ] && [ -n "$extra_version" ] && [ -n "$local_version" ]; then
+if [ -z "$kernel_release" ] && [ -n "$kernel_version$extra_version$local_version" ]; then
     kernel_release="$kernel_version$extra_version$local_version"
 fi
 
