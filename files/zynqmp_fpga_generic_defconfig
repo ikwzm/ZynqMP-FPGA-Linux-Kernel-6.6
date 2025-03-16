@@ -2452,6 +2452,11 @@ CONFIG_BLK_DEV_RAM=y
 ##### 
 CONFIG_BLK_DEV_RAM_SIZE=65536
 
+#### 
+#### Virtio block driver
+#### 
+CONFIG_VIRTIO_BLK=m
+
 ### end of Block devices
 
 ### ----------------------------------------------------------------------------
@@ -2505,6 +2510,18 @@ CONFIG_MISC_RTSX_USB=m
 #### SCSI disk support
 #### 
 CONFIG_BLK_DEV_SD=y
+
+#### 
+#### SCSI low-level drivers
+#### 
+#### CONFIG_SCSI_LOWLEVEL=y
+
+##### 
+##### virtio-scsi support
+##### 
+CONFIG_SCSI_VIRTIO=m
+
+#### end of SCSI low-level drivers
 
 ### end of SCSI device support
 
@@ -2586,6 +2603,11 @@ CONFIG_TUN=y
 ##### Virtual ethernet pair device
 ##### 
 CONFIG_VETH=m
+
+##### 
+##### Virtio network driver
+##### 
+CONFIG_VIRTIO_NET=m
 
 #### 
 #### Ethernet driver support
@@ -3486,6 +3508,11 @@ CONFIG_SERIAL_DEV_BUS=y
 #### end of Serial device bus
 
 #### 
+#### Virtio console
+#### 
+CONFIG_VIRTIO_CONSOLE=m
+
+#### 
 #### Hardware Random Number Generator Core support
 #### 
 CONFIG_HW_RANDOM=n
@@ -3549,6 +3576,11 @@ CONFIG_I2C_CADENCE=y
 ###### Xilinx I2C Controller
 ###### 
 CONFIG_I2C_XILINX=y
+
+###### 
+###### Virtio I2C Adapter
+###### 
+CONFIG_I2C_VIRTIO=m
 
 ##### end of I2C Hardware Bus support
 
@@ -3655,6 +3687,17 @@ CONFIG_GPIO_PCA9570=y
 CONFIG_GPIO_TPS65086=y
 
 #### end of MFD GPIO expanders
+
+#### 
+#### Virtual GPIO drivers
+#### 
+
+##### 
+##### VirtIO GPIO support
+##### 
+CONFIG_GPIO_VIRTIO=m
+
+#### end of Virtual GPIO drivers
 
 ### end of GPIO Support
 
@@ -4755,6 +4798,11 @@ CONFIG_DRM_FBDEV_LEAK_PHYS_SMEM=y
 CONFIG_DRM_UDL=m
 
 #### 
+#### Virtio GPU driver
+#### 
+CONFIG_DRM_VIRTIO_GPU=m
+
+#### 
 #### Display Panels
 #### 
 
@@ -4938,6 +4986,11 @@ CONFIG_SND_SOC_XILINX_SPDIF=y
 CONFIG_SND_SOC_XILINX_PL_SND_CARD=y
 
 ##### end of ALSA for SoC audio support
+
+##### 
+##### Virtio sound driver
+##### 
+CONFIG_SND_VIRTIO=m
 
 #### end of Advanced Linux Sound Architecture
 
@@ -5927,6 +5980,45 @@ CONFIG_UIO_XILINX_AI_ENGINE=y
 ### end of Userspace I/O drivers
 
 ### ----------------------------------------------------------------------------
+### Virtio drivers
+### ----------------------------------------------------------------------------
+### CONFIG_VIRTIO_MENU=y
+
+#### 
+#### PCI driver for virtio devices
+#### 
+CONFIG_VIRTIO_PCI=m
+
+##### 
+##### Support for legacy virtio draft 0.9.X and older devices
+##### 
+CONFIG_VIRTIO_PCI_LEGACY=m
+
+#### 
+#### Virtio balloon driver
+#### 
+CONFIG_VIRTIO_BALLOON=m
+
+#### 
+#### Virtio input driver
+#### 
+CONFIG_VIRTIO_INPUT=m
+
+#### 
+#### Platform bus driver for memory mapped virtio devices
+#### 
+CONFIG_VIRTIO_MMIO=m
+
+##### 
+##### Memory mapped virtio devices parameter parsing
+##### 
+CONFIG_VIRTIO_MMIO_CMDLINE_DEVICES=y
+
+CONFIG_VIRTIO_DMA_SHARED_BUFFER=m
+
+### end of Virtio drivers
+
+### ----------------------------------------------------------------------------
 ### Staging drivers
 ### ----------------------------------------------------------------------------
 CONFIG_STAGING=y
@@ -6044,6 +6136,18 @@ CONFIG_COMMON_CLK_XLNX_CLKWZRD=y
 CONFIG_COMMON_CLK_ZYNQMP=y
 
 ### end of Common Clock Framework
+
+### ----------------------------------------------------------------------------
+### IOMMU Hardware Support
+### ----------------------------------------------------------------------------
+### CONFIG_IOMMU_SUPPORT=y
+
+#### 
+#### Virtio IOMMU driver
+#### 
+CONFIG_VIRTIO_IOMMU=m
+
+### end of IOMMU Hardware Support
 
 ### ----------------------------------------------------------------------------
 ### Remoteproc drivers
@@ -6320,6 +6424,11 @@ CONFIG_AUTOFS_FS=y
 ### FUSE (Filesystem in Userspace) support
 ### ----------------------------------------------------------------------------
 CONFIG_FUSE_FS=m
+
+#### 
+#### Virtio Filesystem
+#### 
+CONFIG_VIRTIO_FS=m
 
 ### ----------------------------------------------------------------------------
 ### Overlay filesystem support
