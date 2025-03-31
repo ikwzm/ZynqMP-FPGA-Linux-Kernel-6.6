@@ -1,0 +1,11 @@
+--- linux-6.6.70/drivers/virtio/virtio_ring.c	2025-03-31 13:53:24.953294100 +0900
++++ linux-xlnx-6.6.70-2024.1/drivers/virtio/virtio_ring.c	2025-03-31 13:55:16.801259200 +0900
+@@ -291,7 +291,7 @@
+ 	 * the DMA API if we're a Xen guest, which at least allows
+ 	 * all of the sensible Xen configurations to work correctly.
+ 	 */
+-	if (xen_domain())
++	if (xen_vring_use_dma())
+ 		return true;
+ 
+ 	return false;

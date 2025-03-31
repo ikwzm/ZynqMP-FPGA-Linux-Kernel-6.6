@@ -1,0 +1,29 @@
+--- linux-6.6.70/drivers/usb/chipidea/ci_hdrc_usb2.c	2025-03-31 13:53:24.305908700 +0900
++++ linux-xlnx-6.6.70-2024.1/drivers/usb/chipidea/ci_hdrc_usb2.c	2025-03-31 13:55:16.093526600 +0900
+@@ -65,6 +65,14 @@
+ 	if (match && match->data) {
+ 		/* struct copy */
+ 		*ci_pdata = *(struct ci_hdrc_platform_data *)match->data;
++		if (of_device_is_compatible(pdev->dev.of_node,
++					    "xlnx,zynq-usb-2.20a")) {
++			ci_pdata->usb_phy = devm_usb_get_phy_by_phandle(dev,
++									"usb-phy",
++									0);
++			if (IS_ERR(ci_pdata->usb_phy))
++				return PTR_ERR(ci_pdata->usb_phy);
++		}
+ 	}
+ 
+ 	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
+--- linux-6.6.70/drivers/usb/chipidea/udc.c	2025-03-31 13:53:24.310022100 +0900
++++ linux-xlnx-6.6.70-2024.1/drivers/usb/chipidea/udc.c	2025-03-31 13:55:16.097639200 +0900
+@@ -688,7 +688,8 @@
+ 		if ((TD_STATUS_ACTIVE & tmptoken) != 0) {
+ 			int n = hw_ep_bit(hwep->num, hwep->dir);
+ 
+-			if (ci->rev == CI_REVISION_24)
++			if (ci->rev == CI_REVISION_24 ||
++			    ci->rev == CI_REVISION_22)
+ 				if (!hw_read(ci, OP_ENDPTSTAT, BIT(n)))
+ 					reprime_dtd(ci, hwep, node);
+ 			hwreq->req.status = -EALREADY;

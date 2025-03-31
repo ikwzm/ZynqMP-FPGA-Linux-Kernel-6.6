@@ -1,0 +1,11 @@
+--- linux-6.6.70/sound/pci/hda/cs35l56_hda_spi.c	2025-03-31 13:53:30.756133100 +0900
++++ linux-xlnx-6.6.70-2024.1/sound/pci/hda/cs35l56_hda_spi.c	2025-03-31 13:55:22.603186900 +0900
+@@ -29,7 +29,7 @@
+ 		return ret;
+ 	}
+ 
+-	ret = cs35l56_hda_common_probe(cs35l56, spi->chip_select);
++	ret = cs35l56_hda_common_probe(cs35l56, spi_get_chipselect(spi, 0));
+ 	if (ret)
+ 		return ret;
+ 	ret = cs35l56_irq_request(&cs35l56->base, spi->irq);

@@ -1,0 +1,22 @@
+--- linux-6.6.70/net/ipv4/af_inet.c	2025-03-31 13:53:29.461150800 +0900
++++ linux-xlnx-6.6.70-2024.1/net/ipv4/af_inet.c	2025-03-31 13:55:21.247370700 +0900
+@@ -121,6 +121,7 @@
+ #include <net/compat.h>
+ 
+ #include <trace/events/sock.h>
++#include <xen/pvcalls.h>
+ 
+ /* The inetsw table contains everything that inet_create needs to
+  * build a new socket.
+@@ -2008,6 +2009,11 @@
+ 	for (r = &inetsw[0]; r < &inetsw[SOCK_MAX]; ++r)
+ 		INIT_LIST_HEAD(r);
+ 
++	if (pvcalls) {
++		pr_info("Enabling pvcalls for AF_INET SOCK_STREAM\n");
++		inetsw_array[0].ops = &pvcalls_stream_ops;
++	}
++
+ 	for (q = inetsw_array; q < &inetsw_array[INETSW_ARRAY_LEN]; ++q)
+ 		inet_register_protosw(q);
+ 
