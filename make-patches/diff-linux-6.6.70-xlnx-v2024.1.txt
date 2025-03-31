@@ -1,20 +1,17 @@
 ---
-name: linux-6.6.40-xlnx-v2024.2
-file: ./make-patches/diff-linux-6.6.40-xlnx-v2024.2.txt
-a:    {name: linux-6.6.40, path: linux-6.6.40} 
-b:    {name: linux-xlnx-2024.2, path: linux-xlnx-2024.2} 
+name: linux-6.6.70-xlnx-v2024.1
+file: ./make-patches/diff-linux-6.6.70-xlnx-v2024.1.txt
+a:    {name: linux-6.6.70, path: linux-6.6.70} 
+b:    {name: linux-xlnx-6.6.70-2024.1, path: linux-xlnx-6.6.70-2024.1} 
 contents:
  - U: Documentation/ABI/stable/sysfs-driver-firmware-zynqmp
  - U: Documentation/ABI/testing/sysfs-bus-cdx
- - A: Documentation/ABI/testing/sysfs-bus-platform-onboard-usb-dev
- - D: Documentation/ABI/testing/sysfs-bus-platform-onboard-usb-hub
  - U: Documentation/ABI/testing/sysfs-class-fpga-bridge
  - A: Documentation/ABI/testing/sysfs-driver-xilsem-edac
  - U: Documentation/admin-guide/devices.txt
  - U: Documentation/devicetree/bindings/Makefile
  - D: Documentation/devicetree/bindings/arm/xilinx.yaml
  - A: Documentation/devicetree/bindings/arm/zynq/
- - A: Documentation/devicetree/bindings/clock/idt,idt8t49n24x.txt
  - A: Documentation/devicetree/bindings/clock/renesas,proxo.yaml
  - A: Documentation/devicetree/bindings/clock/silabs,si5324.txt
  - U: Documentation/devicetree/bindings/clock/xlnx,clocking-wizard.yaml
@@ -39,7 +36,6 @@ contents:
  - A: Documentation/devicetree/bindings/dma/xilinx/xilinx_frmbuf.txt
  - A: Documentation/devicetree/bindings/dma/xilinx/xlnx,axi-dma-test.yaml
  - A: Documentation/devicetree/bindings/dma/xilinx/xlnx,axi-vdma-test.yaml
- - U: Documentation/devicetree/bindings/dma/xilinx/xlnx,zynqmp-dma-1.0.yaml
  - A: Documentation/devicetree/bindings/edac/xlnx,versal-xilsem-edac.yaml
  - U: Documentation/devicetree/bindings/firmware/xilinx/xlnx,zynqmp-firmware.yaml
  - D: Documentation/devicetree/bindings/fpga/fpga-region.txt
@@ -89,12 +85,10 @@ contents:
  - U: Documentation/devicetree/bindings/net/can/xilinx,can.yaml
  - A: Documentation/devicetree/bindings/net/xilinx-phy.txt
  - U: Documentation/devicetree/bindings/net/xlnx,axi-ethernet.yaml
- - U: Documentation/devicetree/bindings/net/xlnx,emaclite.yaml
  - U: Documentation/devicetree/bindings/net/xlnx,gmii-to-rgmii.yaml
  - A: Documentation/devicetree/bindings/nvmem/xlnx,versal-sec-cfg.yaml
  - D: Documentation/devicetree/bindings/nvmem/xlnx,zynqmp-nvmem.txt
  - A: Documentation/devicetree/bindings/nvmem/xlnx,zynqmp-nvmem.yaml
- - U: Documentation/devicetree/bindings/pci/xilinx-versal-cpm.yaml
  - U: Documentation/devicetree/bindings/pci/xlnx,nwl-pcie.yaml
  - A: Documentation/devicetree/bindings/pci/xlnx,xdma-host.yaml
  - A: Documentation/devicetree/bindings/perf/xilinx-apm.yaml
@@ -106,7 +100,7 @@ contents:
  - A: Documentation/devicetree/bindings/ptp/ptp-xilinx.yaml
  - U: Documentation/devicetree/bindings/remoteproc/renesas,rcar-rproc.yaml
  - A: Documentation/devicetree/bindings/remoteproc/xilinx,zynqmp-r5-remoteproc.yaml
- - U: Documentation/devicetree/bindings/remoteproc/xlnx,zynqmp-r5fss.yaml
+ - A: Documentation/devicetree/bindings/remoteproc/zynq_remoteproc.txt
  - D: Documentation/devicetree/bindings/reserved-memory/framebuffer.yaml
  - D: Documentation/devicetree/bindings/reserved-memory/memory-region.yaml
  - U: Documentation/devicetree/bindings/reserved-memory/reserved-memory.txt
@@ -136,9 +130,7 @@ contents:
  - U: Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml
  - U: Documentation/devicetree/bindings/spi/spi-zynqmp-qspi.yaml
  - A: Documentation/devicetree/bindings/staging/net/
- - A: Documentation/devicetree/bindings/thermal/xlnx,versal-thermal.yaml
  - U: Documentation/devicetree/bindings/timer/cdns,ttc.yaml
- - A: Documentation/devicetree/bindings/ufs/amd,versal2-ufs.yaml
  - A: Documentation/devicetree/bindings/usb/microchip,usb2244.yaml
  - U: Documentation/devicetree/bindings/usb/snps,dwc3.yaml
  - A: Documentation/devicetree/bindings/usb/ulpi-phy.yaml
@@ -184,7 +176,7 @@ contents:
  - A: arch/arm64/boot/dts/xilinx/versal-net-ipp-rev1.9-ospi.dts
  - A: arch/arm64/boot/dts/xilinx/versal-net-ipp-rev1.9.dts
  - A: arch/arm64/boot/dts/xilinx/versal-net-vn-p-b2197-00-revA.dts
- - A: arch/arm64/boot/dts/xilinx/versal-net-vn-x-b2197-01-revA.dts
+ - A: arch/arm64/boot/dts/xilinx/versal-net-vn-x-b2197-00-revA.dts
  - A: arch/arm64/boot/dts/xilinx/versal-net.dtsi
  - A: arch/arm64/boot/dts/xilinx/versal-v350-revA.dts
  - A: arch/arm64/boot/dts/xilinx/versal-vc-p-a2197-00-revA-x-prc-01-revA-ospi.dts
@@ -299,14 +291,6 @@ contents:
  - U: arch/microblaze/kernel/setup.c
  - U: arch/microblaze/kernel/vmlinux.lds.S
  - U: arch/microblaze/mm/init.c
- - U: crypto/asymmetric_keys/public_key.c
- - U: crypto/asymmetric_keys/x509_cert_parser.c
- - U: crypto/ecc.c
- - U: crypto/ecc_curve_defs.h
- - U: crypto/ecdsa.c
- - U: crypto/ecrdsa_defs.h
- - U: crypto/testmgr.c
- - U: crypto/testmgr.h
  - U: drivers/cdx/Kconfig
  - U: drivers/cdx/Makefile
  - U: drivers/cdx/cdx.c
@@ -321,7 +305,6 @@ contents:
  - A: drivers/clk/clk-proxo.c
  - A: drivers/clk/clk-si5324.c
  - A: drivers/clk/clk-si5324.h
- - A: drivers/clk/idt/
  - A: drivers/clk/si5324.h
  - A: drivers/clk/si5324drv.c
  - A: drivers/clk/si5324drv.h
@@ -333,7 +316,6 @@ contents:
  - U: drivers/crypto/xilinx/Makefile
  - A: drivers/crypto/xilinx/xilinx-ecdsa.c
  - A: drivers/crypto/xilinx/xilinx-rsa.c
- - A: drivers/crypto/xilinx/xilinx_ecdsasig.asn1
  - U: drivers/crypto/xilinx/zynqmp-aes-gcm.c
  - A: drivers/crypto/xilinx/zynqmp-rsa.c
  - U: drivers/crypto/xilinx/zynqmp-sha.c
@@ -343,10 +325,8 @@ contents:
  - A: drivers/dma/xilinx/vdmatest.c
  - U: drivers/dma/xilinx/xilinx_dpdma.c
  - A: drivers/dma/xilinx/xilinx_frmbuf.c
- - U: drivers/dma/xilinx/zynqmp_dma.c
  - U: drivers/edac/Kconfig
  - U: drivers/edac/Makefile
- - U: drivers/edac/synopsys_edac.c
  - A: drivers/edac/versal_edac.c
  - A: drivers/edac/xilinx_xilsem_edac.c
  - U: drivers/firmware/xilinx/Kconfig
@@ -363,7 +343,6 @@ contents:
  - A: drivers/fpga/xilinx-afi.c
  - A: drivers/fpga/zynq-afi.c
  - U: drivers/fpga/zynqmp-fpga.c
- - U: drivers/gpio/gpio-zynqmp-modepin.c
  - U: drivers/gpu/drm/display/drm_dp_helper.c
  - U: drivers/gpu/drm/display/drm_hdmi_helper.c
  - U: drivers/gpu/drm/drm_atomic_state_helper.c
@@ -410,7 +389,6 @@ contents:
  - U: drivers/hwmon/pmbus/Kconfig
  - U: drivers/hwmon/pmbus/Makefile
  - A: drivers/hwmon/pmbus/tps544.c
- - U: drivers/i2c/busses/i2c-cadence.c
  - U: drivers/i3c/master/dw-i3c-master.c
  - U: drivers/iio/adc/Kconfig
  - U: drivers/iio/adc/Makefile
@@ -422,6 +400,7 @@ contents:
  - U: drivers/iio/adc/xilinx-ams.c
  - U: drivers/iio/adc/xilinx-xadc-core.c
  - U: drivers/irqchip/Kconfig
+ - U: drivers/irqchip/irq-gic.c
  - U: drivers/irqchip/irq-xilinx-intc.c
  - U: drivers/irqchip/irqchip.c
  - U: drivers/mailbox/zynqmp-ipi-mailbox.c
@@ -456,7 +435,6 @@ contents:
  - A: drivers/media/platform/xilinx/xilinx-hdmirxss.c
  - A: drivers/media/platform/xilinx/xilinx-hls-common.h
  - A: drivers/media/platform/xilinx/xilinx-hls.c
- - A: drivers/media/platform/xilinx/xilinx-isp-params.h
  - A: drivers/media/platform/xilinx/xilinx-isppipeline.c
  - A: drivers/media/platform/xilinx/xilinx-m2m.c
  - A: drivers/media/platform/xilinx/xilinx-multi-scaler-coeff.h
@@ -498,7 +476,6 @@ contents:
  - A: drivers/misc/xilinx_puf.c
  - A: drivers/misc/xlnx_dpu.c
  - A: drivers/misc/xlnx_dpu.h
- - U: drivers/mmc/host/sdhci-of-arasan.c
  - U: drivers/mtd/nand/raw/arasan-nand-controller.c
  - U: drivers/mtd/spi-nor/atmel.c
  - U: drivers/mtd/spi-nor/core.c
@@ -522,16 +499,10 @@ contents:
  - U: drivers/net/ethernet/xilinx/Makefile
  - U: drivers/net/ethernet/xilinx/xilinx_axienet.h
  - A: drivers/net/ethernet/xilinx/xilinx_axienet_dma.c
- - A: drivers/net/ethernet/xilinx/xilinx_axienet_eoe.c
- - A: drivers/net/ethernet/xilinx/xilinx_axienet_eoe.h
  - U: drivers/net/ethernet/xilinx/xilinx_axienet_main.c
  - A: drivers/net/ethernet/xilinx/xilinx_axienet_mcdma.c
- - U: drivers/net/ethernet/xilinx/xilinx_axienet_mdio.c
- - U: drivers/net/ethernet/xilinx/xilinx_emaclite.c
  - U: drivers/net/phy/Kconfig
  - U: drivers/net/phy/Makefile
- - U: drivers/net/phy/phy-core.c
- - U: drivers/net/phy/phylink.c
  - U: drivers/net/phy/xilinx_gmii2rgmii.c
  - A: drivers/net/phy/xilinx_phy.c
  - U: drivers/nvmem/Kconfig
@@ -541,7 +512,6 @@ contents:
  - U: drivers/of/Kconfig
  - U: drivers/of/Makefile
  - A: drivers/of/configfs.c
- - U: drivers/of/overlay.c
  - U: drivers/pci/controller/Kconfig
  - U: drivers/pci/controller/Makefile
  - A: drivers/pci/controller/pcie-xilinx-common.h
@@ -550,7 +520,6 @@ contents:
  - U: drivers/pci/controller/pcie-xilinx-nwl.c
  - U: drivers/phy/xilinx/Kconfig
  - U: drivers/phy/xilinx/Makefile
- - U: drivers/phy/xilinx/phy-zynqmp.c
  - A: drivers/phy/xilinx/xhdmiphy.c
  - A: drivers/phy/xilinx/xhdmiphy.h
  - A: drivers/phy/xilinx/xhdmiphy_core.c
@@ -572,13 +541,13 @@ contents:
  - U: drivers/remoteproc/Makefile
  - U: drivers/remoteproc/remoteproc_core.c
  - U: drivers/remoteproc/xlnx_r5_remoteproc.c
+ - A: drivers/remoteproc/zynq_remoteproc.c
  - A: drivers/remoteproc/zynqmp_r5_remoteproc.c
  - U: drivers/rpmsg/Kconfig
  - U: drivers/rpmsg/virtio_rpmsg_bus.c
  - U: drivers/soc/xilinx/xlnx_event_manager.c
  - U: drivers/soc/xilinx/zynqmp_power.c
  - U: drivers/spi/spi-cadence-quadspi.c
- - U: drivers/spi/spi-cadence.c
  - U: drivers/spi/spi-mem.c
  - U: drivers/spi/spi-xilinx.c
  - U: drivers/spi/spi-zynq-qspi.c
@@ -595,20 +564,10 @@ contents:
  - A: drivers/staging/xlnxsync/
  - A: drivers/staging/xroeframer/
  - A: drivers/staging/xroetrafficgen/
- - U: drivers/thermal/Kconfig
- - U: drivers/thermal/Makefile
- - A: drivers/thermal/versal_thermal.c
  - U: drivers/tty/hvc/hvc_dcc.c
  - U: drivers/tty/serial/Kconfig
  - U: drivers/tty/serial/uartlite.c
  - U: drivers/tty/serial/xilinx_uartps.c
- - U: drivers/ufs/core/ufshcd-priv.h
- - U: drivers/ufs/core/ufshcd.c
- - U: drivers/ufs/host/Kconfig
- - U: drivers/ufs/host/Makefile
- - A: drivers/ufs/host/ufs-amd-versal2.c
- - U: drivers/ufs/host/ufshcd-dwc.h
- - U: drivers/ufs/host/ufshci-dwc.h
  - U: drivers/uio/Kconfig
  - U: drivers/uio/Makefile
  - D: drivers/uio/uio.c
@@ -619,9 +578,6 @@ contents:
  - A: drivers/uio/uio_xilinx_apm.c
  - U: drivers/usb/chipidea/ci_hdrc_usb2.c
  - U: drivers/usb/chipidea/udc.c
- - U: drivers/usb/core/Makefile
- - U: drivers/usb/core/hub.c
- - U: drivers/usb/core/hub.h
  - U: drivers/usb/dwc3/Kconfig
  - U: drivers/usb/dwc3/Makefile
  - U: drivers/usb/dwc3/core.c
@@ -637,17 +593,12 @@ contents:
  - A: drivers/usb/dwc3/otg.h
  - A: drivers/usb/dwc3/platform_data.h
  - U: drivers/usb/gadget/function/f_tcm.c
+ - U: drivers/usb/gadget/function/uvc_video.c
  - U: drivers/usb/host/xhci-plat.c
  - U: drivers/usb/host/xhci.c
  - U: drivers/usb/host/xhci.h
  - U: drivers/usb/misc/Kconfig
  - U: drivers/usb/misc/Makefile
- - A: drivers/usb/misc/onboard_usb_dev.c
- - A: drivers/usb/misc/onboard_usb_dev.h
- - A: drivers/usb/misc/onboard_usb_dev_pdevs.c
- - D: drivers/usb/misc/onboard_usb_hub.c
- - D: drivers/usb/misc/onboard_usb_hub.h
- - D: drivers/usb/misc/onboard_usb_hub_pdevs.c
  - A: drivers/usb/misc/usb2244.c
  - A: drivers/usb/misc/usb5744.c
  - U: drivers/usb/phy/Kconfig
@@ -662,18 +613,11 @@ contents:
  - U: drivers/w1/masters/Makefile
  - A: drivers/w1/masters/amd_axi_w1.c
  - U: drivers/watchdog/of_xilinx_wdt.c
- - U: drivers/watchdog/xilinx_wwdt.c
  - U: drivers/xen/Kconfig
  - U: drivers/xen/Makefile
  - U: drivers/xen/pci.c
  - A: drivers/xen/pvcalls.c
  - U: drivers/xen/xen-pciback/pci_stub.c
- - U: include/clocksource/timer-xilinx.h
- - U: include/crypto/ecc_curve.h
- - U: include/crypto/ecdh.h
- - A: include/crypto/ecdsa.h
- - U: include/crypto/hash.h
- - U: include/crypto/internal/ecc.h
  - U: include/drm/display/drm_dp.h
  - U: include/drm/display/drm_hdmi_helper.h
  - U: include/drm/drm_connector.h
@@ -696,6 +640,7 @@ contents:
  - U: include/linux/fpga/fpga-mgr.h
  - A: include/linux/iio/adc/versal-sysmon-events.h
  - U: include/linux/irq.h
+ - U: include/linux/irqchip/arm-gic.h
  - U: include/linux/irqchip.h
  - U: include/linux/mfd/idt82p33_reg.h
  - U: include/linux/mfd/idt8a340_reg.h
@@ -704,15 +649,11 @@ contents:
  - U: include/linux/mod_devicetable.h
  - U: include/linux/mtd/spi-nor.h
  - U: include/linux/of_irq.h
- - U: include/linux/oid_registry.h
  - A: include/linux/phy/phy-hdmi.h
  - U: include/linux/phy/phy.h
- - U: include/linux/phy.h
  - A: include/linux/ptp/
  - U: include/linux/spi/spi-mem.h
  - U: include/linux/spi/spi.h
- - A: include/linux/usb/onboard_dev.h
- - D: include/linux/usb/onboard_hub.h
  - A: include/linux/xilinx_phy.h
  - A: include/linux/xlnx/
  - A: include/linux/xlnx-ai-engine.h
@@ -736,9 +677,6 @@ contents:
  - A: include/uapi/linux/xlnx_mpg2tsmux_interface.h
  - A: include/uapi/linux/xlnxsync.h
  - A: include/uapi/misc/xilinx_puf.h
- - U: include/ufs/ufshcd.h
- - U: include/ufs/ufshci.h
- - U: include/ufs/unipro.h
  - U: include/xen/interface/physdev.h
  - U: include/xen/pci.h
  - A: include/xen/pvcalls.h
