@@ -1,0 +1,13 @@
+diff --git a/Makefile b/Makefile
+index 4c0dd62e0..cbe05c737 100644
+--- a/Makefile
++++ b/Makefile
+@@ -2,7 +2,7 @@
+ VERSION = 6
+ PATCHLEVEL = 6
+ SUBLEVEL = 70
+-EXTRAVERSION =
++EXTRAVERSION = -zynqmp-fpga
+ NAME = Pinguïn Aangedreven
+ 
+ # *DOCUMENTATION*
