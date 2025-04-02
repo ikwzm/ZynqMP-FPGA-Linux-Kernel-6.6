@@ -1,0 +1,620 @@
+diff --git a/Documentation/devicetree/bindings/soc/xilinx/xilinx.yaml b/Documentation/devicetree/bindings/soc/xilinx/xilinx.yaml
+new file mode 100644
+index 000000000..541f7b029
+--- /dev/null
++++ b/Documentation/devicetree/bindings/soc/xilinx/xilinx.yaml
+@@ -0,0 +1,216 @@
++# SPDX-License-Identifier: GPL-2.0
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/soc/xilinx/xilinx.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Xilinx Zynq Platforms
++
++maintainers:
++  - Michal Simek <michal.simek@amd.com>
++
++description: |
++  Xilinx boards with Zynq-7000 SOC or Zynq UltraScale+ MPSoC or Versal or Versal NET
++
++properties:
++  $nodename:
++    const: '/'
++  compatible:
++    oneOf:
++      - items:
++          - enum:
++              - adapteva,parallella
++              - digilent,zynq-zybo
++              - digilent,zynq-zybo-z7
++              - ebang,ebaz4205
++              - myir,zynq-zturn-v5
++              - myir,zynq-zturn
++              - xlnx,zynq-cc108
++              - xlnx,zynq-zc702
++              - xlnx,zynq-zc706
++              - xlnx,zynq-zc770-xm010
++              - xlnx,zynq-zc770-xm011
++              - xlnx,zynq-zc770-xm012
++              - xlnx,zynq-zc770-xm013
++          - const: xlnx,zynq-7000
++
++      - items:
++          - const: avnet,zynq-microzed
++          - const: xlnx,zynq-microzed
++          - const: xlnx,zynq-7000
++
++      - items:
++          - const: avnet,zynq-zed
++          - const: xlnx,zynq-zed
++          - const: xlnx,zynq-7000
++
++      - items:
++          - enum:
++              - xlnx,zynqmp-zc1751
++          - const: xlnx,zynqmp
++
++      - description: Xilinx internal board zc1232
++        items:
++          - const: xlnx,zynqmp-zc1232-revA
++          - const: xlnx,zynqmp-zc1232
++          - const: xlnx,zynqmp
++
++      - description: Xilinx internal board zc1254
++        items:
++          - const: xlnx,zynqmp-zc1254-revA
++          - const: xlnx,zynqmp-zc1254
++          - const: xlnx,zynqmp
++
++      - description: Xilinx evaluation board zcu1275
++        items:
++          - enum:
++              - xlnx,zynqmp-zcu1275-revA
++              - xlnx,zynqmp-zcu1275-revB
++              - xlnx,zynqmp-zcu1275-rev1.0
++          - const: xlnx,zynqmp-zcu1275
++          - const: xlnx,zynqmp
++
++      - description: Xilinx 96boards compatible board zcu100
++        items:
++          - const: xlnx,zynqmp-zcu100-revC
++          - const: xlnx,zynqmp-zcu100
++          - const: xlnx,zynqmp
++
++      - description: Xilinx 96boards compatible board Ultra96
++        items:
++          - const: avnet,ultra96-rev1
++          - const: avnet,ultra96
++          - const: xlnx,zynqmp-zcu100-revC
++          - const: xlnx,zynqmp-zcu100
++          - const: xlnx,zynqmp
++
++      - description: Xilinx ZynqMP based System Controller
++        items:
++          - enum:
++              - xlnx,zynqmp-sc-revB
++              - xlnx,zynqmp-sc-revC
++          - const: xlnx,zynqmp-sc
++          - const: xlnx,zynqmp
++
++      - description: Xilinx evaluation board zcu102
++        items:
++          - enum:
++              - xlnx,zynqmp-zcu102-revA
++              - xlnx,zynqmp-zcu102-revB
++              - xlnx,zynqmp-zcu102-rev1.0
++              - xlnx,zynqmp-zcu102-rev1.1
++          - const: xlnx,zynqmp-zcu102
++          - const: xlnx,zynqmp
++
++      - description: Xilinx evaluation board zcu104
++        items:
++          - enum:
++              - xlnx,zynqmp-zcu104-revA
++              - xlnx,zynqmp-zcu104-revC
++              - xlnx,zynqmp-zcu104-rev1.0
++          - const: xlnx,zynqmp-zcu104
++          - const: xlnx,zynqmp
++
++      - description: Xilinx evaluation board zcu106
++        items:
++          - enum:
++              - xlnx,zynqmp-zcu106-revA
++              - xlnx,zynqmp-zcu106-rev1.0
++          - const: xlnx,zynqmp-zcu106
++          - const: xlnx,zynqmp
++
++      - description: Xilinx evaluation board zcu111
++        items:
++          - enum:
++              - xlnx,zynqmp-zcu111-revA
++              - xlnx,zynqmp-zcu111-rev1.0
++          - const: xlnx,zynqmp-zcu111
++          - const: xlnx,zynqmp
++
++      - description: Xilinx evaluation board zcu208
++        items:
++          - enum:
++              - xlnx,zynqmp-zcu208-revA
++              - xlnx,zynqmp-zcu208-rev1.0
++          - const: xlnx,zynqmp-zcu208
++          - const: xlnx,zynqmp
++
++      - description: Xilinx evaluation board zcu216
++        items:
++          - enum:
++              - xlnx,zynqmp-zcu216-revA
++              - xlnx,zynqmp-zcu216-rev1.0
++          - const: xlnx,zynqmp-zcu216
++          - const: xlnx,zynqmp
++
++      - description: Xilinx evaluation board zcu1285
++        items:
++          - enum:
++              - xlnx,zynqmp-zcu1285-revA
++              - xlnx,zynqmp-zcu1285-rev1.0
++          - const: xlnx,zynqmp-zcu1285
++
++      - description: Xilinx Kria SOMs
++        items:
++          - const: xlnx,zynqmp-sm-k26-rev1
++          - const: xlnx,zynqmp-sm-k26-revB
++          - const: xlnx,zynqmp-sm-k26-revA
++          - const: xlnx,zynqmp-sm-k26
++          - const: xlnx,zynqmp
++
++      - description: Xilinx Kria SOMs (starter)
++        items:
++          - const: xlnx,zynqmp-smk-k26-rev1
++          - const: xlnx,zynqmp-smk-k26-revB
++          - const: xlnx,zynqmp-smk-k26-revA
++          - const: xlnx,zynqmp-smk-k26
++          - const: xlnx,zynqmp
++
++      - description: Xilinx Versal NET b2197 (Tenzing2)
++        items:
++          - const: xlnx,versal-net-vn-p-b2197-00-revA
++          - const: xlnx,versal-net-vn-p-b2197-00
++          - const: xlnx,versal-net
++
++      - description: Xilinx Kria SOM KV260 revA/Y/Z
++        minItems: 3
++        items:
++          enum:
++            - xlnx,zynqmp-sk-kv260-revA
++            - xlnx,zynqmp-sk-kv260-revY
++            - xlnx,zynqmp-sk-kv260-revZ
++            - xlnx,zynqmp-sk-kv260
++            - xlnx,zynqmp
++        allOf:
++          - contains:
++              const: xlnx,zynqmp-sk-kv260-revA
++          - contains:
++              const: xlnx,zynqmp-sk-kv260
++          - contains:
++              const: xlnx,zynqmp
++
++      - description: Xilinx Kria SOM KV260 rev2/1/B
++        minItems: 3
++        items:
++          enum:
++            - xlnx,zynqmp-sk-kv260-rev2
++            - xlnx,zynqmp-sk-kv260-rev1
++            - xlnx,zynqmp-sk-kv260-revB
++            - xlnx,zynqmp-sk-kv260
++            - xlnx,zynqmp
++        allOf:
++          - contains:
++              const: xlnx,zynqmp-sk-kv260-revB
++          - contains:
++              const: xlnx,zynqmp-sk-kv260
++          - contains:
++              const: xlnx,zynqmp
++
++      - description: AMD MicroBlaze V (QEMU)
++        items:
++          - const: qemu,mbv
++          - const: amd,mbv
++
++additionalProperties: true
++
++...
+diff --git a/Documentation/devicetree/bindings/soc/xilinx/xlnx,ai_engine.txt b/Documentation/devicetree/bindings/soc/xilinx/xlnx,ai_engine.txt
+new file mode 100644
+index 000000000..b7643a138
+--- /dev/null
++++ b/Documentation/devicetree/bindings/soc/xilinx/xlnx,ai_engine.txt
+@@ -0,0 +1,28 @@
++Xilinx AI Engine
++----------------
++
++The Xilinx AI Engine is a tile processor with many cores (up to 400) that
++can run in parallel. The data routing between cores is configured through
++internal switches, and shim tiles interface with external interconnect, such
++as memory or PL.
++
++Required properties:
++
++- compatible: Must be "xlnx,ai_engine".
++- reg: Physical base address and length of the registers set for the device.
++- interrupt-parent: the phandle to the interrupt controller.
++- interrupts: the interrupt numbers.
++- interrupt-names: Should be "interrupt0", "interrupt1", "interrupt2" or
++  "interrupt3".
++
++Example:
++
++	ai_engine@20000000000 {
++		compatible = "xlnx,ai_engine";
++		reg = <0x200 0x0 0x1 0x0>;
++		interrupt-parent = <&gic>;
++		interrupts = <0x0 0x94 0x1>,
++			     <0x0 0x95 0x1>,
++			     <0x0 0x96 0x1>;
++		interrupt-names = "interrupt1", "interrupt2", "interrupt3";
++	};
+diff --git a/drivers/soc/xilinx/xlnx_event_manager.c b/drivers/soc/xilinx/xlnx_event_manager.c
+index 8f6a2614d..318358ebe 100644
+--- a/drivers/soc/xilinx/xlnx_event_manager.c
++++ b/drivers/soc/xilinx/xlnx_event_manager.c
+@@ -3,12 +3,14 @@
+  * Xilinx Event Management Driver
+  *
+  *  Copyright (C) 2021 Xilinx, Inc.
+- *  Copyright (C) 2024 Advanced Micro Devices, Inc.
++ *  Copyright (C) 2023 - 2024 Advanced Micro Devices, Inc.
+  *
+  *  Abhyuday Godhasara <abhyuday.godhasara@xilinx.com>
+  */
+ 
+ #include <linux/cpuhotplug.h>
++#include <linux/firmware/xlnx-versal-error-events.h>
++#include <linux/firmware/xlnx-versal-net-error-events.h>
+ #include <linux/firmware/xlnx-event-manager.h>
+ #include <linux/firmware/xlnx-zynqmp.h>
+ #include <linux/hashtable.h>
+@@ -24,6 +26,7 @@ static DEFINE_PER_CPU_READ_MOSTLY(int, dummy_cpu_number);
+ 
+ static int virq_sgi;
+ static int event_manager_availability = -EACCES;
++static u32 pm_sub_family_code;
+ 
+ /* SGI number used for Event management driver */
+ #define XLNX_EVENT_SGI_NUM	(15)
+@@ -36,7 +39,6 @@ static int event_manager_availability = -EACCES;
+ 
+ #define MAX_BITS	(32U) /* Number of bits available for error mask */
+ 
+-#define FIRMWARE_VERSION_MASK			(0xFFFFU)
+ #define REGISTER_NOTIFIER_FIRMWARE_VERSION	(2U)
+ 
+ static DEFINE_HASHTABLE(reg_driver_map, REGISTERED_DRIVER_MAX_ORDER);
+@@ -78,11 +80,24 @@ struct registered_event_data {
+ 
+ static bool xlnx_is_error_event(const u32 node_id)
+ {
+-	if (node_id == EVENT_ERROR_PMC_ERR1 ||
+-	    node_id == EVENT_ERROR_PMC_ERR2 ||
+-	    node_id == EVENT_ERROR_PSM_ERR1 ||
+-	    node_id == EVENT_ERROR_PSM_ERR2)
+-		return true;
++	if (pm_sub_family_code == VERSAL_SUB_FAMILY_CODE) {
++		if (node_id == VERSAL_EVENT_ERROR_PMC_ERR1 ||
++		    node_id == VERSAL_EVENT_ERROR_PMC_ERR2 ||
++		    node_id == VERSAL_EVENT_ERROR_PSM_ERR1 ||
++		    node_id == VERSAL_EVENT_ERROR_PSM_ERR2 ||
++		    node_id == VERSAL_EVENT_ERROR_SW_ERR)
++			return true;
++	} else {
++		if (node_id == VERSAL_NET_EVENT_ERROR_PMC_ERR1 ||
++		    node_id == VERSAL_NET_EVENT_ERROR_PMC_ERR2 ||
++		    node_id == VERSAL_NET_EVENT_ERROR_PMC_ERR3 ||
++		    node_id == VERSAL_NET_EVENT_ERROR_PSM_ERR1 ||
++		    node_id == VERSAL_NET_EVENT_ERROR_PSM_ERR2 ||
++		    node_id == VERSAL_NET_EVENT_ERROR_PSM_ERR3 ||
++		    node_id == VERSAL_NET_EVENT_ERROR_PSM_ERR4 ||
++		    node_id == VERSAL_NET_EVENT_ERROR_SW_ERR)
++			return true;
++	}
+ 
+ 	return false;
+ }
+@@ -177,7 +192,7 @@ static int xlnx_add_cb_for_suspend(event_cb_func_t cb_fun, void *data)
+ 	if (!cb_data) {
+ 		kfree(eve_data);
+ 		return -ENOMEM;
+-	}
++        }
+ 	cb_data->eve_cb = cb_fun;
+ 	cb_data->agent_data = data;
+ 
+@@ -486,7 +501,7 @@ static void xlnx_call_notify_cb_handler(const u32 *payload)
+ 
+ static void xlnx_get_event_callback_data(u32 *buf)
+ {
+-	zynqmp_pm_invoke_fn(GET_CALLBACK_DATA, 0, 0, 0, 0, buf);
++	zynqmp_pm_invoke_fn(GET_CALLBACK_DATA, buf, 0);
+ }
+ 
+ static irqreturn_t xlnx_event_handler(int irq, void *dev_id)
+@@ -623,6 +638,7 @@ static void xlnx_event_cleanup_sgi(struct platform_device *pdev)
+ static int xlnx_event_manager_probe(struct platform_device *pdev)
+ {
+ 	int ret;
++	u32 *platform_data;
+ 
+ 	ret = zynqmp_pm_feature(PM_REGISTER_NOTIFIER);
+ 	if (ret < 0) {
+@@ -651,12 +667,18 @@ static int xlnx_event_manager_probe(struct platform_device *pdev)
+ 
+ 	ret = zynqmp_pm_register_sgi(sgi_num, 0);
+ 	if (ret) {
+-		dev_err(&pdev->dev, "SGI %d Registration over TF-A failed with %d\n", sgi_num, ret);
++		if (ret == -EOPNOTSUPP)
++			dev_err(&pdev->dev, "SGI registration not supported by TF-A or Xen\n");
++		else
++			dev_err(&pdev->dev, "SGI %d registration failed, err %d\n", sgi_num, ret);
++
+ 		xlnx_event_cleanup_sgi(pdev);
+ 		return ret;
+ 	}
+ 
+ 	event_manager_availability = 0;
++	platform_data = (u32 *)dev_get_platdata((const struct device *)&pdev->dev);
++	pm_sub_family_code = *platform_data;
+ 
+ 	dev_info(&pdev->dev, "SGI %d Registered over TF-A\n", sgi_num);
+ 	dev_info(&pdev->dev, "Xilinx Event Management driver probed\n");
+diff --git a/drivers/soc/xilinx/zynqmp_power.c b/drivers/soc/xilinx/zynqmp_power.c
+index d7c784d77..0b91f5cae 100644
+--- a/drivers/soc/xilinx/zynqmp_power.c
++++ b/drivers/soc/xilinx/zynqmp_power.c
+@@ -3,6 +3,7 @@
+  * Xilinx Zynq MPSoC Power Management
+  *
+  *  Copyright (C) 2014-2019 Xilinx, Inc.
++ *  Copyright (C) 2023 Advanced Micro Devices, Inc.
+  *
+  *  Davorin Mista <davorin.mista@aggios.com>
+  *  Jolly Shah <jollys@xilinx.com>
+@@ -30,9 +31,27 @@ struct zynqmp_pm_work_struct {
+ 	u32 args[CB_ARG_CNT];
+ };
+ 
+-static struct zynqmp_pm_work_struct *zynqmp_pm_init_suspend_work;
++/**
++ * struct zynqmp_pm_event_info - event related information
++ * @cb_fun:	Function pointer to store the callback function.
++ * @cb_type:	Type of callback from pm_api_cb_id,
++ *			PM_NOTIFY_CB - for Error Events,
++ *			PM_INIT_SUSPEND_CB - for suspend callback.
++ * @node_id:	Node-Id related to event.
++ * @event:	Event Mask for the Error Event.
++ * @wake:	Flag specifying whether the subsystem should be woken upon
++ *		event notification.
++ */
++struct zynqmp_pm_event_info {
++	event_cb_func_t cb_fun;
++	enum pm_api_cb_id cb_type;
++	u32 node_id;
++	u32 event;
++	bool wake;
++};
++
++static struct zynqmp_pm_work_struct *zynqmp_pm_init_suspend_work, *zynqmp_pm_init_restart_work;
+ static struct mbox_chan *rx_chan;
+-static bool event_registered;
+ 
+ enum pm_suspend_mode {
+ 	PM_SUSPEND_MODE_FIRST = 0,
+@@ -51,7 +70,20 @@ static enum pm_suspend_mode suspend_mode = PM_SUSPEND_MODE_STD;
+ 
+ static void zynqmp_pm_get_callback_data(u32 *buf)
+ {
+-	zynqmp_pm_invoke_fn(GET_CALLBACK_DATA, 0, 0, 0, 0, buf);
++	zynqmp_pm_invoke_fn(GET_CALLBACK_DATA, buf, 0);
++}
++
++static void subsystem_restart_event_callback(const u32 *payload, void *data)
++{
++	/* First element is callback API ID, others are callback arguments */
++	if (work_pending(&zynqmp_pm_init_restart_work->callback_work))
++		return;
++
++	/* Copy callback arguments into work's structure */
++	memcpy(zynqmp_pm_init_restart_work->args, &payload[0],
++	       sizeof(zynqmp_pm_init_restart_work->args));
++
++	queue_work(system_unbound_wq, &zynqmp_pm_init_restart_work->callback_work);
+ }
+ 
+ static void suspend_event_callback(const u32 *payload, void *data)
+@@ -83,9 +115,11 @@ static irqreturn_t zynqmp_pm_isr(int irq, void *data)
+ 			pm_suspend(PM_SUSPEND_MEM);
+ 			break;
+ 		default:
+-			pr_err("%s Unsupported InitSuspendCb reason "
+-				"code %d\n", __func__, payload[1]);
++			pr_err("%s Unsupported InitSuspendCb reason code %d\n",
++			       __func__, payload[1]);
+ 		}
++	} else {
++		pr_err("%s() Unsupported Callback %d\n", __func__, payload[0]);
+ 	}
+ 
+ 	return IRQ_HANDLED;
+@@ -117,6 +151,37 @@ static void ipi_receive_callback(struct mbox_client *cl, void *data)
+ 	}
+ }
+ 
++/**
++ * zynqmp_pm_subsystem_restart_work_fn - Initiate Subsystem restart
++ * @work:	Pointer to work_struct
++ *
++ * Bottom-half of PM callback IRQ handler.
++ */
++static void zynqmp_pm_subsystem_restart_work_fn(struct work_struct *work)
++{
++	int ret;
++	struct zynqmp_pm_work_struct *pm_work = container_of(work, struct zynqmp_pm_work_struct,
++							     callback_work);
++
++	/* First element is callback API ID, others are callback arguments */
++	if (pm_work->args[0] == PM_NOTIFY_CB) {
++		if (pm_work->args[2] == EVENT_SUBSYSTEM_RESTART) {
++			ret = zynqmp_pm_system_shutdown(ZYNQMP_PM_SHUTDOWN_TYPE_SETSCOPE_ONLY,
++							ZYNQMP_PM_SHUTDOWN_SUBTYPE_SUBSYSTEM);
++			if (ret) {
++				pr_err("unable to set shutdown scope\n");
++				return;
++			}
++
++			kernel_restart(NULL);
++		} else {
++			pr_err("%s Unsupported Event - %d\n", __func__, pm_work->args[2]);
++		}
++	} else {
++		pr_err("%s() Unsupported Callback %d\n", __func__, pm_work->args[0]);
++	}
++}
++
+ /**
+  * zynqmp_pm_init_suspend_work_fn - Initialize suspend
+  * @work:	Pointer to work_struct
+@@ -182,10 +247,46 @@ static ssize_t suspend_mode_store(struct device *dev,
+ 
+ static DEVICE_ATTR_RW(suspend_mode);
+ 
++static void unregister_event(struct device *dev, void *res)
++{
++	struct zynqmp_pm_event_info *event_info = res;
++
++	xlnx_unregister_event(event_info->cb_type, event_info->node_id,
++			      event_info->event, event_info->cb_fun, NULL);
++}
++
++static int register_event(struct device *dev, const enum pm_api_cb_id cb_type, const u32 node_id,
++			  const u32 event, const bool wake, event_cb_func_t cb_fun)
++{
++	int ret;
++	struct zynqmp_pm_event_info *event_info;
++
++	event_info = devres_alloc(unregister_event, sizeof(struct zynqmp_pm_event_info),
++				  GFP_KERNEL);
++	if (!event_info)
++		return -ENOMEM;
++
++	event_info->cb_type = cb_type;
++	event_info->node_id = node_id;
++	event_info->event = event;
++	event_info->wake = wake;
++	event_info->cb_fun = cb_fun;
++
++	ret = xlnx_register_event(event_info->cb_type, event_info->node_id,
++				  event_info->event, event_info->wake, event_info->cb_fun, NULL);
++	if (ret) {
++		devres_free(event_info);
++		return ret;
++	}
++
++	devres_add(dev, event_info);
++	return 0;
++}
++
+ static int zynqmp_pm_probe(struct platform_device *pdev)
+ {
+ 	int ret, irq;
+-	u32 pm_api_version;
++	u32 pm_api_version, pm_family_code, pm_sub_family_code, node_id;
+ 	struct mbox_client *client;
+ 
+ 	ret = zynqmp_pm_get_api_version(&pm_api_version);
+@@ -203,21 +304,43 @@ static int zynqmp_pm_probe(struct platform_device *pdev)
+ 	 * is not available to use) or -ENODEV(Xilinx Event Manager not compiled),
+ 	 * then use ipi-mailbox or interrupt method.
+ 	 */
+-	ret = xlnx_register_event(PM_INIT_SUSPEND_CB, 0, 0, false,
+-				  suspend_event_callback, NULL);
++	ret = register_event(&pdev->dev, PM_INIT_SUSPEND_CB, 0, 0, false,
++			     suspend_event_callback);
+ 	if (!ret) {
+ 		zynqmp_pm_init_suspend_work = devm_kzalloc(&pdev->dev,
+ 							   sizeof(struct zynqmp_pm_work_struct),
+ 							   GFP_KERNEL);
+-		if (!zynqmp_pm_init_suspend_work) {
+-			xlnx_unregister_event(PM_INIT_SUSPEND_CB, 0, 0,
+-					      suspend_event_callback, NULL);
++		if (!zynqmp_pm_init_suspend_work)
+ 			return -ENOMEM;
+-		}
+-		event_registered = true;
+ 
+ 		INIT_WORK(&zynqmp_pm_init_suspend_work->callback_work,
+ 			  zynqmp_pm_init_suspend_work_fn);
++
++		ret = zynqmp_pm_get_family_info(&pm_family_code, &pm_sub_family_code);
++		if (ret < 0)
++			return ret;
++
++		if (pm_sub_family_code == VERSALNET_SUB_FAMILY_CODE)
++			node_id = PM_DEV_ACPU_0_0;
++		else
++			node_id = PM_DEV_ACPU_0;
++
++		ret = register_event(&pdev->dev, PM_NOTIFY_CB, node_id, EVENT_SUBSYSTEM_RESTART,
++				     false, subsystem_restart_event_callback);
++		if (ret) {
++			dev_err(&pdev->dev, "Failed to Register with Xilinx Event manager %d\n",
++				ret);
++			return ret;
++		}
++
++		zynqmp_pm_init_restart_work = devm_kzalloc(&pdev->dev,
++							   sizeof(struct zynqmp_pm_work_struct),
++							   GFP_KERNEL);
++		if (!zynqmp_pm_init_restart_work)
++			return -ENOMEM;
++
++		INIT_WORK(&zynqmp_pm_init_restart_work->callback_work,
++			  zynqmp_pm_subsystem_restart_work_fn);
+ 	} else if (ret != -EACCES && ret != -ENODEV) {
+ 		dev_err(&pdev->dev, "Failed to Register with Xilinx Event manager %d\n", ret);
+ 		return ret;
+@@ -254,8 +377,8 @@ static int zynqmp_pm_probe(struct platform_device *pdev)
+ 						dev_name(&pdev->dev),
+ 						&pdev->dev);
+ 		if (ret) {
+-			dev_err(&pdev->dev, "devm_request_threaded_irq '%d' "
+-					    "failed with %d\n", irq, ret);
++			dev_err(&pdev->dev, "devm_request_threaded_irq '%d' failed with %d\n",
++				irq, ret);
+ 			return ret;
+ 		}
+ 	} else {
+@@ -264,15 +387,8 @@ static int zynqmp_pm_probe(struct platform_device *pdev)
+ 	}
+ 
+ 	ret = sysfs_create_file(&pdev->dev.kobj, &dev_attr_suspend_mode.attr);
+-	if (ret) {
+-		if (event_registered) {
+-			xlnx_unregister_event(PM_INIT_SUSPEND_CB, 0, 0, suspend_event_callback,
+-					      NULL);
+-			event_registered = false;
+-		}
+-		dev_err(&pdev->dev, "unable to create sysfs interface\n");
++	if (ret)
+ 		return ret;
+-	}
+ 
+ 	return 0;
+ }
+@@ -280,8 +396,6 @@ static int zynqmp_pm_probe(struct platform_device *pdev)
+ static int zynqmp_pm_remove(struct platform_device *pdev)
+ {
+ 	sysfs_remove_file(&pdev->dev.kobj, &dev_attr_suspend_mode.attr);
+-	if (event_registered)
+-		xlnx_unregister_event(PM_INIT_SUSPEND_CB, 0, 0, suspend_event_callback, NULL);
+ 
+ 	if (!rx_chan)
+ 		mbox_free_channel(rx_chan);

@@ -1,0 +1,60 @@
+diff --git a/Documentation/devicetree/bindings/timer/cdns,ttc.yaml b/Documentation/devicetree/bindings/timer/cdns,ttc.yaml
+index dbba780c9..da342464d 100644
+--- a/Documentation/devicetree/bindings/timer/cdns,ttc.yaml
++++ b/Documentation/devicetree/bindings/timer/cdns,ttc.yaml
+@@ -32,12 +32,23 @@ properties:
+     description: |
+       Bit width of the timer, necessary if not 16.
+ 
++  "#pwm-cells":
++    const: 3
++
+ required:
+   - compatible
+   - reg
+-  - interrupts
+   - clocks
+ 
++allOf:
++  - if:
++      not:
++        required:
++          - "#pwm-cells"
++    then:
++      required:
++        - interrupts
++
+ additionalProperties: false
+ 
+ examples:
+@@ -50,3 +61,12 @@ examples:
+         clocks = <&cpu_clk 3>;
+         timer-width = <32>;
+     };
++
++  - |
++    pwm: pwm@f8002000 {
++        compatible = "cdns,ttc";
++        reg = <0xf8002000 0x1000>;
++        clocks = <&cpu_clk 3>;
++        timer-width = <32>;
++        #pwm-cells = <3>;
++    };
+diff --git a/drivers/clocksource/timer-cadence-ttc.c b/drivers/clocksource/timer-cadence-ttc.c
+index 32daaac9b..f8fcb1a4b 100644
+--- a/drivers/clocksource/timer-cadence-ttc.c
++++ b/drivers/clocksource/timer-cadence-ttc.c
+@@ -477,6 +477,13 @@ static int __init ttc_timer_probe(struct platform_device *pdev)
+ 	u32 timer_width = 16;
+ 	struct device_node *timer = pdev->dev.of_node;
+ 
++	/*
++	 * If pwm-cells property is present in TTC node,
++	 * it would be treated as PWM device.
++	 */
++	if (of_property_read_bool(timer, "#pwm-cells"))
++		return -ENODEV;
++
+ 	if (initialized)
+ 		return 0;
+ 

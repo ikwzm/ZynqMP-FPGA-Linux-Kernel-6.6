@@ -1,0 +1,22 @@
+diff --git a/Documentation/devicetree/bindings/power/reset/xlnx,zynqmp-power.yaml b/Documentation/devicetree/bindings/power/reset/xlnx,zynqmp-power.yaml
+index 45792e216..799831636 100644
+--- a/Documentation/devicetree/bindings/power/reset/xlnx,zynqmp-power.yaml
++++ b/Documentation/devicetree/bindings/power/reset/xlnx,zynqmp-power.yaml
+@@ -57,7 +57,7 @@ examples:
+ 
+     firmware {
+       zynqmp-firmware {
+-        zynqmp-power {
++        power-management {
+           compatible = "xlnx,zynqmp-power";
+           interrupts = <0 35 4>;
+         };
+@@ -70,7 +70,7 @@ examples:
+ 
+     firmware {
+       zynqmp-firmware {
+-        zynqmp-power {
++        power-management {
+           compatible = "xlnx,zynqmp-power";
+           interrupt-parent = <&gic>;
+           interrupts = <0 35 4>;

@@ -1,0 +1,412 @@
+diff --git a/Documentation/devicetree/bindings/interrupt-controller/xilinx,intc.txt b/Documentation/devicetree/bindings/interrupt-controller/xilinx,intc.txt
+new file mode 100644
+index 000000000..03b39f4b1
+--- /dev/null
++++ b/Documentation/devicetree/bindings/interrupt-controller/xilinx,intc.txt
+@@ -0,0 +1,56 @@
++Xilinx Interrupt Controller
++
++The controller is a soft IP core that is configured at build time for the
++number of interrupts and the type of each interrupt. These details cannot
++be changed at run time.
++
++Required properties:
++
++- compatible : should be "xlnx,xps-intc-1.00.a"
++- reg : Specifies base physical address and size of the registers.
++- interrupt-controller : Identifies the node as an interrupt controller
++- #interrupt-cells : Specifies the number of cells needed to encode an
++		     interrupt source. The value shall be a minimum of 1.
++		     The Xilinx device trees typically use 2 but the 2nd value
++		     is not used.
++- xlnx,kind-of-intr : A 32 bit value specifying the interrupt type for each
++		      possible interrupt (1 = edge, 0 = level). The interrupt
++		      type typically comes in thru the device tree node of
++		      the interrupt generating device, but in this case
++		      the interrupt type is determined by the interrupt
++		      controller based on how it was implemented.
++- xlnx,num-intr-inputs: Specifies the number of interrupts supported
++		        by the specific implementation of the controller (1-32).
++
++Optional properties:
++- interrupt-parent : Specifies an interrupt controller from which it is
++		     chained (cascaded).
++- interrupts : Specifies the interrupt of the parent controller from which
++	       it is chained.
++
++Example:
++
++axi_intc_0: interrupt-controller@41800000 {
++	#interrupt-cells = <2>;
++	compatible = "xlnx,xps-intc-1.00.a";
++	interrupt-controller;
++	reg = <0x41800000 0x10000>;
++	xlnx,kind-of-intr = <0x1>;
++	xlnx,num-intr-inputs = <0x1>;
++};
++
++Chained Example:
++
++The interrupt is chained to hardware interrupt 61 (29 + 32) of the GIC
++for Zynq.
++
++axi_intc_0: interrupt-controller@41800000 {
++	#interrupt-cells = <2>;
++	compatible = "xlnx,xps-intc-1.00.a";
++	interrupt-controller;
++	interrupt-parent = <&ps7_scugic_0>;
++	interrupts = <0 29 4>;
++	reg = <0x41800000 0x10000>;
++	xlnx,kind-of-intr = <0x1>;
++	xlnx,num-intr-inputs = <0x1>;
++};
+diff --git a/drivers/irqchip/Kconfig b/drivers/irqchip/Kconfig
+index e7b736800..5676a4f2a 100644
+--- a/drivers/irqchip/Kconfig
++++ b/drivers/irqchip/Kconfig
+@@ -311,6 +311,13 @@ config XILINX_INTC
+ 	  This is used as a primary controller with MicroBlaze and can also
+ 	  be used as a secondary chained controller on other platforms.
+ 
++config IRQCHIP_XILINX_INTC_MODULE_SUPPORT_EXPERIMENTAL
++	bool "IRQCHIP Xilinx Intc driver module support (experimental)"
++	depends on XILINX_INTC
++	help
++	  Enable support to load irqchip driver as a module as part of DT overlay.
++	  This is currently supported for XIlinx INTC irqchip driver.
++
+ config IRQ_CROSSBAR
+ 	bool
+ 	help
+diff --git a/drivers/irqchip/irq-xilinx-intc.c b/drivers/irqchip/irq-xilinx-intc.c
+index 7e08714d5..87cf102b3 100644
+--- a/drivers/irqchip/irq-xilinx-intc.c
++++ b/drivers/irqchip/irq-xilinx-intc.c
+@@ -9,6 +9,7 @@
+  * for more details.
+  */
+ 
++#include <linux/clk.h>
+ #include <linux/irqdomain.h>
+ #include <linux/irq.h>
+ #include <linux/irqchip.h>
+@@ -18,6 +19,7 @@
+ #include <linux/jump_label.h>
+ #include <linux/bug.h>
+ #include <linux/of_irq.h>
++#include <linux/of_platform.h>
+ 
+ /* No one else should require these constants, so define them locally here. */
+ #define ISR 0x00			/* Interrupt Status Register */
+@@ -41,6 +43,9 @@ struct xintc_irq_chip {
+ 	struct		irq_domain *root_domain;
+ 	u32		intr_mask;
+ 	u32		nr_irq;
++#ifdef CONFIG_IRQCHIP_XILINX_INTC_MODULE_SUPPORT_EXPERIMENTAL
++	int				irq;
++#endif
+ };
+ 
+ static struct xintc_irq_chip *primary_intc;
+@@ -165,8 +170,13 @@ static void xil_intc_handle_irq(struct pt_regs *regs)
+ 	} while (true);
+ }
+ 
++#ifndef CONFIG_IRQCHIP_XILINX_INTC_MODULE_SUPPORT_EXPERIMENTAL
+ static int __init xilinx_intc_of_init(struct device_node *intc,
+ 					     struct device_node *parent)
++#else
++static int xilinx_intc_of_init(struct device_node *intc,
++			       struct device_node *parent)
++#endif
+ {
+ 	struct xintc_irq_chip *irqc;
+ 	int ret, irq;
+@@ -174,6 +184,24 @@ static int __init xilinx_intc_of_init(struct device_node *intc,
+ 	irqc = kzalloc(sizeof(*irqc), GFP_KERNEL);
+ 	if (!irqc)
+ 		return -ENOMEM;
++
++	if (parent) {
++		struct platform_device *pdev;
++		struct clk *clkin;
++
++		pdev = of_find_device_by_node(intc);
++		if (pdev) {
++			clkin = devm_clk_get_optional_enabled(&pdev->dev, NULL);
++			if (IS_ERR(clkin)) {
++				platform_device_put(pdev);
++				return dev_err_probe(&pdev->dev, PTR_ERR(clkin),
++					     "Failed to get and enable clock from Device Tree\n");
++			}
++			platform_device_put(pdev);
++		}
++
++	}
++
+ 	irqc->base = of_iomap(intc, 0);
+ 	BUG_ON(!irqc->base);
+ 
+@@ -222,6 +250,10 @@ static int __init xilinx_intc_of_init(struct device_node *intc,
+ 
+ 	if (parent) {
+ 		irq = irq_of_parse_and_map(intc, 0);
++#ifdef CONFIG_IRQCHIP_XILINX_INTC_MODULE_SUPPORT_EXPERIMENTAL
++		irqc->irq = irq;
++		intc->data = irqc;
++#endif
+ 		if (irq) {
+ 			irq_set_chained_handler_and_data(irq,
+ 							 xil_intc_irq_handler,
+@@ -246,5 +278,63 @@ static int __init xilinx_intc_of_init(struct device_node *intc,
+ 
+ }
+ 
++#ifdef CONFIG_IRQCHIP_XILINX_INTC_MODULE_SUPPORT_EXPERIMENTAL
++static int xilinx_intc_of_remove(struct device_node *intc,
++				 struct device_node *parent)
++{
++	int irq;
++	struct xintc_irq_chip *irqc;
++
++	if (!parent)
++		return 0;
++
++	irqc = intc->data;
++	irq = irqc->irq;
++
++	irq_set_chained_handler_and_data(irq, NULL, NULL);
++
++	if (irqc->root_domain) {
++		unsigned int tempirq;
++		unsigned int i;
++
++		for (i = 0; i < irqc->root_domain->mapcount; i++) {
++			tempirq = irq_find_mapping(irqc->root_domain, i);
++			if (tempirq)
++				irq_dispose_mapping(tempirq);
++		}
++		irq_dispose_mapping(irq);
++		irq_domain_remove(irqc->root_domain);
++	}
++
++	/*
++	 * Disable all external interrupts until they are
++	 * explicity requested.
++	 */
++	xintc_write(irqc, IER, 0);
++	/* Acknowledge any pending interrupts just in case. */
++	xintc_write(irqc, IAR, 0xffffffff);
++	/* Turn off the Master Enable. */
++	xintc_write(irqc, MER, 0x0);
++
++	iounmap(irqc->base);
++	kfree(irqc);
++
++	return 0;
++}
++
++static struct irqc_init_remove_funps intc_funps = {
++	.irqchip_initp = xilinx_intc_of_init,
++	.irqchip_removep = xilinx_intc_of_remove,
++};
++
++IRQCHIP_PLATFORM_DRIVER_BEGIN(xilinx_intc_xps)
++IRQCHIP_MATCH("xlnx,xps-intc-1.00.a", &intc_funps)
++IRQCHIP_PLATFORM_DRIVER_END(xilinx_intc_xps)
++
++IRQCHIP_PLATFORM_DRIVER_BEGIN(xilinx_intc_opb)
++IRQCHIP_MATCH("xlnx,opb-intc-1.00.c", &intc_funps)
++IRQCHIP_PLATFORM_DRIVER_END(xilinx_intc_opb)
++#else
+ IRQCHIP_DECLARE(xilinx_intc_xps, "xlnx,xps-intc-1.00.a", xilinx_intc_of_init);
+ IRQCHIP_DECLARE(xilinx_intc_opb, "xlnx,opb-intc-1.00.c", xilinx_intc_of_init);
++#endif
+diff --git a/drivers/irqchip/irqchip.c b/drivers/irqchip/irqchip.c
+index 1eeb0d015..11c9bc836 100644
+--- a/drivers/irqchip/irqchip.c
++++ b/drivers/irqchip/irqchip.c
+@@ -15,6 +15,14 @@
+ #include <linux/irqchip.h>
+ #include <linux/platform_device.h>
+ 
++#ifdef CONFIG_IRQCHIP_XILINX_INTC_MODULE_SUPPORT_EXPERIMENTAL
++struct platform_irqchip_instance {
++	of_irq_init_cb_t irq_init_cb;
++	of_irq_remove_cb_t irq_remove_cb;
++	struct device_node *parent_node;
++};
++#endif
++
+ /*
+  * This special of_device_id is the sentinel at the end of the
+  * of_device_id[] array of all irqchips. It is automatically placed at
+@@ -32,6 +40,7 @@ void __init irqchip_init(void)
+ 	acpi_probe_device_table(irqchip);
+ }
+ 
++#ifndef CONFIG_IRQCHIP_XILINX_INTC_MODULE_SUPPORT_EXPERIMENTAL
+ int platform_irqchip_probe(struct platform_device *pdev)
+ {
+ 	struct device_node *np = pdev->dev.of_node;
+@@ -62,3 +71,59 @@ int platform_irqchip_probe(struct platform_device *pdev)
+ 	return irq_init_cb(np, par_np);
+ }
+ EXPORT_SYMBOL_GPL(platform_irqchip_probe);
++#else
++int platform_irqchip_probe(struct platform_device *pdev)
++{
++	struct platform_irqchip_instance *irqchip;
++	const struct irqc_init_remove_funps *irqchip_funps;
++	struct device_node *np = pdev->dev.of_node;
++	struct device_node *par_np = of_irq_find_parent(np);
++
++	irqchip = devm_kzalloc(&pdev->dev, sizeof(*irqchip), GFP_KERNEL);
++	if (!irqchip)
++		return -ENOMEM;
++
++	platform_set_drvdata(pdev, irqchip);
++
++	irqchip_funps = of_device_get_match_data(&pdev->dev);
++	irqchip->irq_init_cb =	irqchip_funps->irqchip_initp;
++	irqchip->irq_remove_cb = irqchip_funps->irqchip_removep;
++	irqchip->parent_node = par_np;
++
++	if (!irqchip->irq_init_cb)
++		return -EINVAL;
++
++	if (par_np == np)
++		par_np = NULL;
++
++	/*
++	 * If there's a parent interrupt controller and  none of the parent irq
++	 * domains have been registered, that means the parent interrupt
++	 * controller has not been initialized yet.  it's not time for this
++	 * interrupt controller to initialize. So, defer probe of this
++	 * interrupt controller. The actual initialization callback of this
++	 * interrupt controller can check for specific domains as necessary.
++	 */
++	if (par_np && !irq_find_matching_host(par_np, DOMAIN_BUS_ANY))
++		return -EPROBE_DEFER;
++
++	return irqchip->irq_init_cb(np, par_np);
++}
++EXPORT_SYMBOL_GPL(platform_irqchip_probe);
++
++int platform_irqchip_remove(struct platform_device *pdev)
++{
++	struct device_node *np = pdev->dev.of_node;
++	struct platform_irqchip_instance *irqchip = platform_get_drvdata(pdev);
++	struct device_node *par_np = irqchip->parent_node;
++
++	if (!irqchip->irq_remove_cb)
++		return -EINVAL;
++
++	if (par_np == np)
++		par_np = NULL;
++
++	return irqchip->irq_remove_cb(np, par_np);
++}
++EXPORT_SYMBOL_GPL(platform_irqchip_remove);
++#endif
+diff --git a/include/linux/irq.h b/include/linux/irq.h
+index 90081afa1..ccbd45929 100644
+--- a/include/linux/irq.h
++++ b/include/linux/irq.h
+@@ -1117,6 +1117,21 @@ struct irq_domain_chip_generic {
+ 	struct irq_chip_generic	*gc[];
+ };
+ 
++#ifdef CONFIG_IRQCHIP_XILINX_INTC_MODULE_SUPPORT_EXPERIMENTAL
++/**
++ * struct irqc_init_remove_funps - Stores function pointers for irqc init
++ * and remove APIs. Used when the irqchip driver is to be used as a module.
++ * @irqchip_initp:	Function pointer for init/entry point of a irqchip driver.
++ * @irqchip_removep:Function pointer for irqchip driver remove function.
++ */
++struct irqc_init_remove_funps {
++	int (*irqchip_initp)(struct device_node *irqc,
++			     struct device_node *parent);
++	int (*irqchip_removep)(struct device_node *irqc,
++			       struct device_node *parent);
++};
++#endif
++
+ /* Generic chip callback functions */
+ void irq_gc_noop(struct irq_data *d);
+ void irq_gc_mask_disable_reg(struct irq_data *d);
+@@ -1273,7 +1288,11 @@ int ipi_mux_create(unsigned int nr_ipi, void (*mux_send)(unsigned int cpu));
+  * Returns 0 on success, or -EBUSY if an IRQ handler has already been
+  * registered.
+  */
++#ifndef CONFIG_IRQCHIP_XILINX_INTC_MODULE_SUPPORT_EXPERIMENTAL
+ int __init set_handle_irq(void (*handle_irq)(struct pt_regs *));
++#else
++int set_handle_irq(void (*handle_irq)(struct pt_regs *));
++#endif
+ 
+ /*
+  * Allows interrupt handlers to find the irqchip that's been registered as the
+diff --git a/include/linux/irqchip.h b/include/linux/irqchip.h
+index d5e6024cb..e4fe1ab15 100644
+--- a/include/linux/irqchip.h
++++ b/include/linux/irqchip.h
+@@ -37,14 +37,16 @@ extern of_irq_init_cb_t typecheck_irq_init_cb;
+ 	OF_DECLARE_2(irqchip, name, compat, typecheck_irq_init_cb(fn))
+ 
+ extern int platform_irqchip_probe(struct platform_device *pdev);
++#ifdef CONFIG_IRQCHIP_XILINX_INTC_MODULE_SUPPORT_EXPERIMENTAL
++extern int platform_irqchip_remove(struct platform_device *pdev);
++#endif
+ 
+ #define IRQCHIP_PLATFORM_DRIVER_BEGIN(drv_name) \
+ static const struct of_device_id drv_name##_irqchip_match_table[] = {
+-
++#ifndef CONFIG_IRQCHIP_XILINX_INTC_MODULE_SUPPORT_EXPERIMENTAL
+ #define IRQCHIP_MATCH(compat, fn) { .compatible = compat,		\
+ 				    .data = typecheck_irq_init_cb(fn), },
+ 
+-
+ #define IRQCHIP_PLATFORM_DRIVER_END(drv_name, ...)			\
+ 	{},								\
+ };									\
+@@ -61,6 +63,24 @@ static struct platform_driver drv_name##_driver = {			\
+ 	},								\
+ };									\
+ builtin_platform_driver(drv_name##_driver)
++#else
++#define IRQCHIP_MATCH(compat, fn) { .compatible = compat, .data = fn },
++#define IRQCHIP_PLATFORM_DRIVER_END(drv_name)				\
++	{},								\
++};									\
++MODULE_DEVICE_TABLE(of, drv_name##_irqchip_match_table);		\
++static struct platform_driver drv_name##_driver = {		\
++	.probe  = platform_irqchip_probe,				\
++	.remove = platform_irqchip_remove,              \
++	.driver = {							\
++		.name = #drv_name,					\
++		.owner = THIS_MODULE,					\
++		.of_match_table = drv_name##_irqchip_match_table,	\
++		.suppress_bind_attrs = true,				\
++	},								\
++};									\
++builtin_platform_driver(drv_name##_driver)
++#endif
+ 
+ /*
+  * This macro must be used by the different irqchip drivers to declare
+diff --git a/include/linux/of_irq.h b/include/linux/of_irq.h
+index d6d3eae2f..007306e8c 100644
+--- a/include/linux/of_irq.h
++++ b/include/linux/of_irq.h
+@@ -10,7 +10,9 @@
+ #include <linux/of.h>
+ 
+ typedef int (*of_irq_init_cb_t)(struct device_node *, struct device_node *);
+-
++#ifdef CONFIG_IRQCHIP_XILINX_INTC_MODULE_SUPPORT_EXPERIMENTAL
++typedef int (*of_irq_remove_cb_t)(struct device_node *, struct device_node *);
++#endif
+ /*
+  * Workarounds only applied to 32bit powermac machines
+  */

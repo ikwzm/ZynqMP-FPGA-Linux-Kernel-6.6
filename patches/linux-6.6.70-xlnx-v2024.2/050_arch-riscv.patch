@@ -1,0 +1,12 @@
+diff --git a/Documentation/devicetree/bindings/riscv/cpus.yaml b/Documentation/devicetree/bindings/riscv/cpus.yaml
+index 97e8441ed..7b077af62 100644
+--- a/Documentation/devicetree/bindings/riscv/cpus.yaml
++++ b/Documentation/devicetree/bindings/riscv/cpus.yaml
+@@ -32,6 +32,7 @@ properties:
+     oneOf:
+       - items:
+           - enum:
++              - amd,mbv32
+               - andestech,ax45mp
+               - canaan,k210
+               - sifive,bullet0

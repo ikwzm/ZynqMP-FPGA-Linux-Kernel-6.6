@@ -1,0 +1,91 @@
+diff --git a/Documentation/devicetree/bindings/w1/amd,axi-1wire-host.yaml b/Documentation/devicetree/bindings/w1/amd,axi-1wire-host.yaml
+new file mode 100644
+index 000000000..ef70fa2c0
+--- /dev/null
++++ b/Documentation/devicetree/bindings/w1/amd,axi-1wire-host.yaml
+@@ -0,0 +1,44 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/w1/amd,axi-1wire-host.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: AMD AXI 1-wire bus host for programmable logic
++
++maintainers:
++  - Kris Chaplin <kris.chaplin@amd.com>
++
++properties:
++  compatible:
++    const: amd,axi-1wire-host
++
++  reg:
++    maxItems: 1
++
++  clocks:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++required:
++  - compatible
++  - reg
++  - clocks
++  - interrupts
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++
++    onewire@a0000000 {
++        compatible = "amd,axi-1wire-host";
++        reg = <0xa0000000 0x10000>;
++        clocks = <&zynqmp_clk 0x47>;
++        interrupts = <GIC_SPI 0x59 IRQ_TYPE_LEVEL_HIGH>;
++    };
++
++...
+diff --git a/drivers/watchdog/of_xilinx_wdt.c b/drivers/watchdog/of_xilinx_wdt.c
+index 05657dc1d..352853e6f 100644
+--- a/drivers/watchdog/of_xilinx_wdt.c
++++ b/drivers/watchdog/of_xilinx_wdt.c
+@@ -187,7 +187,7 @@ static int xwdt_probe(struct platform_device *pdev)
+ 
+ 	watchdog_set_nowayout(xilinx_wdt_wdd, enable_once);
+ 
+-	xdev->clk = devm_clk_get_enabled(dev, NULL);
++	xdev->clk = devm_clk_get_prepared(dev, NULL);
+ 	if (IS_ERR(xdev->clk)) {
+ 		if (PTR_ERR(xdev->clk) != -ENOENT)
+ 			return PTR_ERR(xdev->clk);
+@@ -218,18 +218,25 @@ static int xwdt_probe(struct platform_device *pdev)
+ 	spin_lock_init(&xdev->spinlock);
+ 	watchdog_set_drvdata(xilinx_wdt_wdd, xdev);
+ 
++	rc = clk_enable(xdev->clk);
++	if (rc) {
++		dev_err(dev, "unable to enable clock\n");
++		return rc;
++	}
++
+ 	rc = xwdt_selftest(xdev);
+ 	if (rc == XWT_TIMER_FAILED) {
+ 		dev_err(dev, "SelfTest routine error\n");
++		clk_disable(xdev->clk);
+ 		return rc;
+ 	}
+ 
++	clk_disable(xdev->clk);
++
+ 	rc = devm_watchdog_register_device(dev, xilinx_wdt_wdd);
+ 	if (rc)
+ 		return rc;
+ 
+-	clk_disable(xdev->clk);
+-
+ 	dev_info(dev, "Xilinx Watchdog Timer with timeout %ds\n",
+ 		 xilinx_wdt_wdd->timeout);
+ 

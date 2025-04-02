@@ -1,0 +1,2586 @@
+diff --git a/Documentation/devicetree/bindings/crypto/xlnx,zynqmp-aes.yaml b/Documentation/devicetree/bindings/crypto/xlnx,zynqmp-aes.yaml
+index 8aead97a5..a7062a041 100644
+--- a/Documentation/devicetree/bindings/crypto/xlnx,zynqmp-aes.yaml
++++ b/Documentation/devicetree/bindings/crypto/xlnx,zynqmp-aes.yaml
+@@ -10,6 +10,8 @@ maintainers:
+   - Kalyani Akula <kalyani.akula@amd.com>
+   - Michal Simek <michal.simek@amd.com>
+ 
++deprecated: true
++
+ description: |
+   The ZynqMP AES-GCM hardened cryptographic accelerator is used to
+   encrypt or decrypt the data with provided key and initialization vector.
+diff --git a/Documentation/devicetree/bindings/crypto/zynqmp-rsa.txt b/Documentation/devicetree/bindings/crypto/zynqmp-rsa.txt
+new file mode 100644
+index 000000000..564392c20
+--- /dev/null
++++ b/Documentation/devicetree/bindings/crypto/zynqmp-rsa.txt
+@@ -0,0 +1,12 @@
++Xilinx ZynqMP RSA hw acceleration support
++
++The zynqmp PS-RSA hw accelerator is used to encrypt/decrypt
++the given user data.
++
++Required properties:
++- compatible:	should contain "xlnx,zynqmp-rsa" (deprecated)
++
++Example:
++	xlnx_rsa: zynqmp_rsa {
++		compatible = "xlnx,zynqmp-rsa";
++	};
+diff --git a/drivers/crypto/Kconfig b/drivers/crypto/Kconfig
+index c761952f0..d4c69abfb 100644
+--- a/drivers/crypto/Kconfig
++++ b/drivers/crypto/Kconfig
+@@ -658,6 +658,28 @@ config CRYPTO_DEV_ROCKCHIP_DEBUG
+ 	  This will create /sys/kernel/debug/rk3288_crypto/stats for displaying
+ 	  the number of requests per algorithm and other internal stats.
+ 
++config CRYPTO_DEV_XILINX_ECDSA
++	tristate "Support for Xilinx ECDSA hardware accelerator"
++	depends on ARCH_ZYNQMP || COMPILE_TEST
++	select CRYPTO_ENGINE
++	select CRYPTO_AKCIPHER
++	select CRYPTO_ECDSA
++	help
++	  Xilinx processors have ECDSA hardware accelerator used for signature
++	  and key generation and verification. This driver interfaces with
++	  ECDSA hardware accelerator. Select this if you want to use the Versal
++	  module for ECDSA algorithms.
++
++config CRYPTO_DEV_XILINX_RSA
++	tristate "Support for Xilinx ZynqMP RSA hw accelerator"
++	depends on ARCH_ZYNQMP || COMPILE_TEST
++	select CRYPTO_AES
++	select CRYPTO_BLKCIPHER
++	help
++	  Xilinx processors have RSA hw accelerator used for signature
++	  generation and verification. This driver interfaces with RSA
++	  hw accelerator. Select this if you want to use the ZynqMP module
++	  for RSA algorithms.
+ 
+ config CRYPTO_DEV_ZYNQMP_AES
+ 	tristate "Support for Xilinx ZynqMP AES hw accelerator"
+@@ -665,6 +687,8 @@ config CRYPTO_DEV_ZYNQMP_AES
+ 	select CRYPTO_AES
+ 	select CRYPTO_ENGINE
+ 	select CRYPTO_AEAD
++	select CRYPTO_GCM
++	select CRYPTO_USER_API_AEAD
+ 	help
+ 	  Xilinx ZynqMP has AES-GCM engine used for symmetric key
+ 	  encryption and decryption. This driver interfaces with AES hw
+@@ -681,6 +705,18 @@ config CRYPTO_DEV_ZYNQMP_SHA3
+ 	  Select this if you want to use the ZynqMP module
+ 	  for SHA3 hash computation.
+ 
++config CRYPTO_DEV_XILINX_RSA_AKCIPHER
++	tristate "Support for Xilinx RSA hw accelerator"
++	depends on ARCH_ZYNQMP || COMPILE_TEST
++	select CRYPTO_ENGINE
++	select CRYPTO_RSA
++	select CRYPTO_AKCIPHER
++	help
++	  Xilinx processors have RSA hw accelerator used for signature
++	  generation and verification. This driver interfaces with RSA
++	  hw accelerator. Select this if you want to use the Versal module
++	  for RSA algorithms.
++
+ source "drivers/crypto/chelsio/Kconfig"
+ 
+ source "drivers/crypto/virtio/Kconfig"
+diff --git a/drivers/crypto/xilinx/Makefile b/drivers/crypto/xilinx/Makefile
+index 730feff5b..9973ed639 100644
+--- a/drivers/crypto/xilinx/Makefile
++++ b/drivers/crypto/xilinx/Makefile
+@@ -1,3 +1,9 @@
+ # SPDX-License-Identifier: GPL-2.0-only
++$(obj)/xilinx_ecdsasig.asn1.o: $(obj)/xilinx_ecdsasig.asn1.c $(obj)/xilinx_ecdsasig.asn1.h
++xilinx-ecds-y += xilinx_ecdsasig.asn1.o
++xilinx-ecds-y += xilinx-ecdsa.o
++obj-$(CONFIG_CRYPTO_DEV_XILINX_ECDSA) += xilinx-ecds.o
+ obj-$(CONFIG_CRYPTO_DEV_ZYNQMP_AES) += zynqmp-aes-gcm.o
+ obj-$(CONFIG_CRYPTO_DEV_ZYNQMP_SHA3) += zynqmp-sha.o
++obj-$(CONFIG_CRYPTO_DEV_XILINX_RSA) += zynqmp-rsa.o
++obj-$(CONFIG_CRYPTO_DEV_XILINX_RSA_AKCIPHER) += xilinx-rsa.o
+diff --git a/drivers/crypto/xilinx/xilinx-ecdsa.c b/drivers/crypto/xilinx/xilinx-ecdsa.c
+new file mode 100644
+index 000000000..dca361d10
+--- /dev/null
++++ b/drivers/crypto/xilinx/xilinx-ecdsa.c
+@@ -0,0 +1,507 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * AMD Versal ECDSA Driver.
++ * Copyright (C) 2022 - 2024, Advanced Micro Devices, Inc.
++ */
++
++#include <crypto/ecdh.h>
++#include <crypto/engine.h>
++#include <crypto/internal/akcipher.h>
++#include <crypto/internal/ecc.h>
++#include <crypto/ecdsa.h>
++#include <linux/asn1_decoder.h>
++#include <linux/crypto.h>
++#include <linux/device.h>
++#include <linux/dma-mapping.h>
++#include <linux/firmware/xlnx-zynqmp.h>
++#include <linux/kernel.h>
++#include <linux/of_device.h>
++#include "xilinx_ecdsasig.asn1.h"
++
++/* PLM supports 32-bit addresses only */
++#define VERSAL_DMA_BIT_MASK			32U
++
++/* PLM can process HASH and signature in multiples of 8 bytes */
++#define ECDSA_P521_CURVE_ALIGN_BYTES		2U
++/* Includes size for x and y coordinate. */
++#define ECDSA_MAX_KEY_SIZE (ECC_MAX_BYTES << 1)
++
++struct xilinx_sign_gen_params {
++	u64 hash_addr;
++	u64 privkey_addr;
++	u64 eprivkey_addr;
++	u32 curve_type;
++	u32 size;
++};
++
++struct xilinx_sign_verify_params {
++	u64 hash_addr;
++	u64 pubkey_addr;
++	u64 sign_addr;
++	u32 curve_type;
++	u32 size;
++};
++
++enum xilinx_crv_typ {
++	XSECURE_ECC_NIST_P384 = 4,
++	XSECURE_ECC_NIST_P521 = 5,
++};
++
++enum xilinx_crv_class {
++	XSECURE_ECDSA_PRIME = 0,
++	XSECURE_ECDSA_BINARY = 1,
++};
++
++struct xilinx_ecdsa_drv_ctx {
++	struct crypto_engine *engine;
++	struct akcipher_engine_alg alg;
++	struct device *dev;
++};
++
++enum xilinx_akcipher_op {
++	XILINX_ECDSA_DECRYPT = 0,
++	XILINX_ECDSA_ENCRYPT
++};
++
++struct xilinx_ecdsa_tfm_ctx {
++	dma_addr_t priv_key_addr, pub_key_addr;
++	struct crypto_akcipher *fbk_cipher;
++	const struct ecc_curve *curve;
++	unsigned int curve_id;
++	struct device *dev;
++	size_t key_size;
++	char *pub_kbuf;
++};
++
++struct xilinx_ecdsa_req_ctx {
++	enum xilinx_akcipher_op op;
++};
++
++static int xilinx_ecdsa_sign(struct akcipher_request *req)
++{
++	return 0;
++}
++
++int xilinx_ecdsa_get_signature_r(void *context, size_t hdrlen, unsigned char tag,
++				 const void *value, size_t vlen)
++{
++	struct ecdsa_signature_ctx *sig = context;
++
++	return ecdsa_get_signature_rs(sig->r, hdrlen, tag, value, vlen,
++				      sig->curve->g.ndigits);
++}
++
++int xilinx_ecdsa_get_signature_s(void *context, size_t hdrlen, unsigned char tag,
++				 const void *value, size_t vlen)
++{
++	struct ecdsa_signature_ctx *sig = context;
++
++	return ecdsa_get_signature_rs(sig->s, hdrlen, tag, value, vlen,
++				      sig->curve->g.ndigits);
++}
++
++static int xilinx_ecdsa_verify(struct akcipher_request *req)
++{
++	struct crypto_akcipher *tfm = crypto_akcipher_reqtfm(req);
++	struct xilinx_ecdsa_tfm_ctx *ctx = akcipher_tfm_ctx(tfm);
++	size_t keylen = ctx->curve->g.ndigits * sizeof(u64);
++	dma_addr_t dma_addr, dma_addr1, dma_addr2;
++	struct xilinx_sign_verify_params *para;
++	char *hash_buf, *sign_buf;
++	u8 rawhash[ECC_MAX_BYTES];
++	unsigned char *buffer;
++	ssize_t diff;
++	int ret;
++	struct ecdsa_signature_ctx sig_ctx = {
++		.curve = ctx->curve,
++	};
++
++	buffer = kmalloc(req->src_len + req->dst_len, GFP_KERNEL);
++	if (!buffer)
++		return -ENOMEM;
++
++	sg_pcopy_to_buffer(req->src,
++			   sg_nents_for_len(req->src,
++					    req->src_len + req->dst_len),
++			   buffer, req->src_len + req->dst_len, 0);
++
++	ret = asn1_ber_decoder(&xilinx_ecdsasig_decoder, &sig_ctx,
++			       buffer, req->src_len);
++	if (ret < 0)
++		goto error;
++
++	/*
++	 * If the hash is shorter then we will add leading zeros
++	 * to fit to ndigits
++	 */
++	diff = keylen - req->dst_len;
++	if (diff >= 0) {
++		if (diff)
++			memset(rawhash, 0, diff);
++		memcpy(&rawhash[diff], buffer + req->src_len, req->dst_len);
++	} else {
++		/* Given hash is longer, we take the left-most bytes */
++		memcpy(&rawhash, buffer + req->src_len, keylen);
++	}
++
++	para = dma_alloc_coherent(ctx->dev,
++				  sizeof(struct xilinx_sign_verify_params),
++				  &dma_addr, GFP_KERNEL);
++	if (!para) {
++		ret = -ENOMEM;
++		goto error;
++	}
++
++	if (ctx->curve_id == XSECURE_ECC_NIST_P521)
++		keylen = ((ctx->curve->g.ndigits - 1) * sizeof(u64)) + ECDSA_P521_CURVE_ALIGN_BYTES;
++	/* ecc_swap_digits operates on u64 size data buffer */
++	hash_buf = dma_alloc_coherent(ctx->dev, round_up(keylen, sizeof(u64)),
++				      &dma_addr1, GFP_KERNEL);
++	if (!hash_buf) {
++		ret = -ENOMEM;
++		goto hash_fail;
++	}
++
++	sign_buf = dma_alloc_coherent(ctx->dev, ctx->key_size,
++				      &dma_addr2, GFP_KERNEL);
++	if (!sign_buf) {
++		ret = -ENOMEM;
++		goto sign_fail;
++	}
++
++	para->pubkey_addr = ctx->pub_key_addr;
++	para->curve_type = ctx->curve_id;
++	para->sign_addr = dma_addr2;
++	para->hash_addr = dma_addr1;
++	para->size = keylen;
++
++	memcpy(sign_buf, sig_ctx.r, keylen);
++	memcpy(sign_buf + keylen, sig_ctx.s, keylen);
++
++	ecc_swap_digits((u64 *)rawhash, (u64 *)hash_buf,
++			ctx->curve->g.ndigits);
++
++	ret = versal_pm_ecdsa_verify_sign(dma_addr);
++
++	dma_free_coherent(ctx->dev, ctx->key_size, sign_buf, dma_addr2);
++
++sign_fail:
++	dma_free_coherent(ctx->dev, round_up(keylen, sizeof(u64)), hash_buf, dma_addr1);
++
++hash_fail:
++	dma_free_coherent(ctx->dev, sizeof(struct xilinx_sign_verify_params),
++			  para, dma_addr);
++
++error:
++	kfree(buffer);
++
++	return ret;
++}
++
++static int xilinx_ecdsa_ctx_init(struct xilinx_ecdsa_tfm_ctx *ctx,
++				 unsigned int curve_id)
++{
++	if (curve_id == ECC_CURVE_NIST_P384)
++		ctx->curve_id = XSECURE_ECC_NIST_P384;
++	else
++		ctx->curve_id = XSECURE_ECC_NIST_P521;
++
++	ctx->curve = ecc_get_curve(curve_id);
++	if (!ctx->curve)
++		return -EINVAL;
++
++	return 0;
++}
++
++/*
++ * Set the public key given the raw uncompressed key data from an X509
++ * certificate. The key data contain the concatenated X and Y coordinates of
++ * the public key.
++ */
++static int xilinx_ecdsa_set_pub_key(struct crypto_akcipher *tfm,
++				    const void *key, unsigned int keylen)
++{
++	struct xilinx_ecdsa_tfm_ctx *ctx = akcipher_tfm_ctx(tfm);
++	unsigned int ndigits, key_size;
++	const unsigned char *d = key;
++
++	if (keylen < 1 || ((keylen - 1) & 1) != 0)
++		return -EINVAL;
++
++	/* The key should be in uncompressed format indicated by '4' */
++	if (d[0] != 4)
++		return -EINVAL;
++
++	keylen--;
++	ctx->key_size = keylen;
++
++	key_size = keylen >> 1;
++	ndigits = DIV_ROUND_UP(key_size, sizeof(u64));
++	if (ndigits != ctx->curve->g.ndigits)
++		return -EINVAL;
++	d++;
++
++	ecc_digits_from_bytes(d, key_size, (u64 *)ctx->pub_kbuf, ndigits);
++	ecc_digits_from_bytes(&d[key_size], key_size, (u64 *)(ctx->pub_kbuf + key_size), ndigits);
++
++	return versal_pm_ecdsa_validate_key(ctx->pub_key_addr, ctx->curve_id);
++}
++
++static void xilinx_ecdsa_exit_tfm(struct crypto_akcipher *tfm)
++{
++	struct xilinx_ecdsa_tfm_ctx *ctx = akcipher_tfm_ctx(tfm);
++
++	if (ctx->fbk_cipher) {
++		crypto_free_akcipher(ctx->fbk_cipher);
++		ctx->fbk_cipher = NULL;
++	}
++
++	if (ctx->pub_kbuf) {
++		dma_free_coherent(ctx->dev, ECDSA_MAX_KEY_SIZE,
++				  ctx->pub_kbuf, ctx->pub_key_addr);
++	}
++
++	memzero_explicit(ctx, sizeof(struct xilinx_ecdsa_tfm_ctx));
++}
++
++static unsigned int xilinx_ecdsa_max_size(struct crypto_akcipher *tfm)
++{
++	const struct xilinx_ecdsa_tfm_ctx *ctx = akcipher_tfm_ctx(tfm);
++
++	return DIV_ROUND_UP(ctx->curve->nbits, 8);
++}
++
++static int xilinx_ecdsa_init_tfm(struct crypto_akcipher *tfm)
++{
++	struct xilinx_ecdsa_tfm_ctx *tfm_ctx =
++		(struct xilinx_ecdsa_tfm_ctx *)akcipher_tfm_ctx(tfm);
++	struct akcipher_alg *cipher_alg = crypto_akcipher_alg(tfm);
++	struct xilinx_ecdsa_drv_ctx *drv_ctx;
++
++	drv_ctx = container_of(cipher_alg, struct xilinx_ecdsa_drv_ctx, alg.base);
++	tfm_ctx->dev = drv_ctx->dev;
++
++	tfm_ctx->pub_kbuf = dma_alloc_coherent(tfm_ctx->dev, ECDSA_MAX_KEY_SIZE,
++					       &tfm_ctx->pub_key_addr, GFP_KERNEL);
++	if (!tfm_ctx->pub_kbuf)
++		return -ENOMEM;
++
++	tfm_ctx->fbk_cipher = crypto_alloc_akcipher(drv_ctx->alg.base.base.cra_name,
++						    0,
++						    CRYPTO_ALG_NEED_FALLBACK);
++	if (IS_ERR(tfm_ctx->fbk_cipher)) {
++		pr_err("%s() Error: failed to allocate fallback for %s\n",
++		       __func__, drv_ctx->alg.base.base.cra_name);
++		dma_free_coherent(tfm_ctx->dev, ECDSA_MAX_KEY_SIZE,
++				  tfm_ctx->pub_kbuf, tfm_ctx->pub_key_addr);
++		return PTR_ERR(tfm_ctx->fbk_cipher);
++	}
++
++	akcipher_set_reqsize(tfm, max(sizeof(struct xilinx_ecdsa_req_ctx),
++				      sizeof(struct akcipher_request) +
++				      crypto_akcipher_reqsize(tfm_ctx->fbk_cipher)));
++
++	if (strcmp(drv_ctx->alg.base.base.cra_name, "ecdsa-nist-p384") == 0)
++		return xilinx_ecdsa_ctx_init(tfm_ctx, ECC_CURVE_NIST_P384);
++	else
++		return xilinx_ecdsa_ctx_init(tfm_ctx, ECC_CURVE_NIST_P521);
++}
++
++static int handle_ecdsa_req(struct crypto_engine *engine, void *req)
++{
++	struct akcipher_request *areq = container_of(req,
++						     struct akcipher_request,
++						     base);
++	struct crypto_akcipher *akcipher = crypto_akcipher_reqtfm(req);
++	const struct xilinx_ecdsa_tfm_ctx *tfm_ctx = akcipher_tfm_ctx(akcipher);
++	const struct xilinx_ecdsa_req_ctx *rq_ctx = akcipher_request_ctx(areq);
++	struct akcipher_request *subreq = akcipher_request_ctx(req);
++	int err;
++
++	akcipher_request_set_tfm(subreq, tfm_ctx->fbk_cipher);
++
++	akcipher_request_set_callback(subreq, areq->base.flags, NULL, NULL);
++	akcipher_request_set_crypt(subreq, areq->src, areq->dst,
++				   areq->src_len, areq->dst_len);
++
++	if (rq_ctx->op == XILINX_ECDSA_ENCRYPT)
++		err = crypto_akcipher_encrypt(subreq);
++	else if (rq_ctx->op == XILINX_ECDSA_DECRYPT)
++		err = crypto_akcipher_decrypt(subreq);
++	else
++		err = -EOPNOTSUPP;
++
++	crypto_finalize_akcipher_request(engine, areq, err);
++
++	return 0;
++}
++
++static struct xilinx_ecdsa_drv_ctx versal_ecdsa_drv_ctx[] = {
++	{
++	.alg.base = {
++		.verify = xilinx_ecdsa_verify,
++		.set_pub_key = xilinx_ecdsa_set_pub_key,
++		.max_size = xilinx_ecdsa_max_size,
++		.init = xilinx_ecdsa_init_tfm,
++		.exit = xilinx_ecdsa_exit_tfm,
++		.sign = xilinx_ecdsa_sign,
++		.base = {
++			.cra_name = "ecdsa-nist-p384",
++			.cra_driver_name = "xilinx-ecdsa-nist-p384",
++			.cra_priority = 100,
++			.cra_flags = CRYPTO_ALG_TYPE_AKCIPHER |
++				     CRYPTO_ALG_KERN_DRIVER_ONLY |
++				     CRYPTO_ALG_ALLOCATES_MEMORY |
++				     CRYPTO_ALG_NEED_FALLBACK,
++			.cra_module = THIS_MODULE,
++			.cra_ctxsize = sizeof(struct xilinx_ecdsa_tfm_ctx),
++		},
++	},
++	.alg.op = {
++		.do_one_request = handle_ecdsa_req,
++	}
++	},
++	{
++	.alg.base = {
++		.verify = xilinx_ecdsa_verify,
++		.set_pub_key = xilinx_ecdsa_set_pub_key,
++		.max_size = xilinx_ecdsa_max_size,
++		.init = xilinx_ecdsa_init_tfm,
++		.exit = xilinx_ecdsa_exit_tfm,
++		.sign = xilinx_ecdsa_sign,
++		.base = {
++			.cra_name = "ecdsa-nist-p521",
++			.cra_driver_name = "xilinx-ecdsa-nist-p521",
++			.cra_priority = 100,
++			.cra_flags = CRYPTO_ALG_TYPE_AKCIPHER |
++				     CRYPTO_ALG_KERN_DRIVER_ONLY |
++				     CRYPTO_ALG_ALLOCATES_MEMORY |
++				     CRYPTO_ALG_NEED_FALLBACK,
++			.cra_module = THIS_MODULE,
++			.cra_ctxsize = sizeof(struct xilinx_ecdsa_tfm_ctx),
++		},
++	},
++	.alg.op = {
++		.do_one_request = handle_ecdsa_req,
++	},
++	}
++};
++
++static struct xlnx_feature ecdsa_feature_map[] = {
++	{
++		.family = VERSAL_FAMILY_CODE,
++		.subfamily = VERSAL_SUB_FAMILY_CODE,
++		.feature_id = XSECURE_API_ELLIPTIC_VALIDATE_KEY,
++		.data = &versal_ecdsa_drv_ctx,
++	},
++	{ /* sentinel */ }
++};
++
++static int xilinx_ecdsa_probe(struct platform_device *pdev)
++{
++	struct xilinx_ecdsa_drv_ctx *ecdsa_drv_ctx;
++	struct device *dev = &pdev->dev;
++	int ret, i;
++
++	/* Verify the hardware is present */
++	ecdsa_drv_ctx = xlnx_get_crypto_dev_data(ecdsa_feature_map);
++	if (IS_ERR(ecdsa_drv_ctx)) {
++		dev_err(dev, "ECDSA is not supported on the platform\n");
++		return PTR_ERR(ecdsa_drv_ctx);
++	}
++
++	ret = dma_set_mask_and_coherent(&pdev->dev,
++					DMA_BIT_MASK(VERSAL_DMA_BIT_MASK));
++	if (ret < 0) {
++		dev_err(dev, "no usable DMA configuration");
++		return ret;
++	}
++
++	ecdsa_drv_ctx->engine = crypto_engine_alloc_init(dev, 1);
++	if (!ecdsa_drv_ctx->engine) {
++		dev_err(dev, "Cannot alloc ECDSA engine\n");
++		return -ENOMEM;
++	}
++
++	ret = crypto_engine_start(ecdsa_drv_ctx->engine);
++	if (ret) {
++		dev_err(dev, "Cannot start ECDSA engine\n");
++		return ret;
++	}
++
++	platform_set_drvdata(pdev, ecdsa_drv_ctx);
++
++	for (i = 0; i < ARRAY_SIZE(versal_ecdsa_drv_ctx); i++) {
++		ecdsa_drv_ctx[i].dev = dev;
++		ret = crypto_engine_register_akcipher(&ecdsa_drv_ctx[i].alg);
++
++		if (ret) {
++			dev_err(dev, "failed to register %s (%d)!\n",
++				ecdsa_drv_ctx[i].alg.base.base.cra_name, ret);
++			goto crypto_engine_cleanup;
++		}
++	}
++
++	return 0;
++
++crypto_engine_cleanup:
++	for (--i; i >= 0; --i)
++		crypto_engine_unregister_akcipher(&ecdsa_drv_ctx[i].alg);
++
++	crypto_engine_exit(ecdsa_drv_ctx->engine);
++
++	return ret;
++}
++
++static int xilinx_ecdsa_remove(struct platform_device *pdev)
++{
++	struct xilinx_ecdsa_drv_ctx *ecdsa_drv_ctx;
++
++	ecdsa_drv_ctx = platform_get_drvdata(pdev);
++
++	for (int i = 0; i < ARRAY_SIZE(versal_ecdsa_drv_ctx); i++)
++		crypto_engine_unregister_akcipher(&ecdsa_drv_ctx[i].alg);
++
++	return 0;
++}
++
++static struct platform_driver xilinx_ecdsa_driver = {
++	.probe = xilinx_ecdsa_probe,
++	.remove = xilinx_ecdsa_remove,
++	.driver = {
++		.name = "xilinx_ecdsa",
++	},
++};
++
++static struct platform_device *platform_dev;
++
++static int __init ecdsa_driver_init(void)
++{
++	int ret;
++
++	ret = platform_driver_register(&xilinx_ecdsa_driver);
++	if (ret)
++		return ret;
++
++	platform_dev = platform_device_register_simple(xilinx_ecdsa_driver.driver.name,
++						       0, NULL, 0);
++	if (IS_ERR(platform_dev)) {
++		ret = PTR_ERR(platform_dev);
++		platform_driver_unregister(&xilinx_ecdsa_driver);
++	}
++
++	return ret;
++}
++
++static void __exit ecdsa_driver_exit(void)
++{
++	platform_device_unregister(platform_dev);
++	platform_driver_unregister(&xilinx_ecdsa_driver);
++}
++
++module_init(ecdsa_driver_init)
++module_exit(ecdsa_driver_exit);
++
++MODULE_DESCRIPTION("Versal ECDSA hw acceleration support.");
++MODULE_LICENSE("GPL");
++MODULE_AUTHOR("Harsha <harsha.harsha@amd.com>");
+diff --git a/drivers/crypto/xilinx/xilinx-rsa.c b/drivers/crypto/xilinx/xilinx-rsa.c
+new file mode 100644
+index 000000000..61431581e
+--- /dev/null
++++ b/drivers/crypto/xilinx/xilinx-rsa.c
+@@ -0,0 +1,597 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright (C) 2022 - 2024, Advanced Micro Devices, Inc.
++ */
++
++#include <linux/crypto.h>
++#include <linux/device.h>
++#include <linux/dma-mapping.h>
++#include <linux/firmware/xlnx-zynqmp.h>
++#include <linux/io.h>
++#include <linux/kernel.h>
++#include <linux/platform_device.h>
++#include <crypto/engine.h>
++#include <crypto/internal/akcipher.h>
++#include <crypto/internal/rsa.h>
++#include <crypto/scatterwalk.h>
++
++#define XILINX_DMA_BIT_MASK	32U
++#define XILINX_RSA_MAX_KEY_SIZE	1024
++#define XILINX_RSA_BLOCKSIZE	64
++
++/* Key size in bytes */
++#define XSECURE_RSA_2048_KEY_SIZE	(2048U / 8U)
++#define XSECURE_RSA_3072_KEY_SIZE	(3072U / 8U)
++#define XSECURE_RSA_4096_KEY_SIZE	(4096U / 8U)
++
++enum xilinx_akcipher_op {
++	XILINX_RSA_DECRYPT = 0,
++	XILINX_RSA_ENCRYPT,
++	XILINX_RSA_SIGN,
++	XILINX_RSA_VERIFY
++};
++
++struct versal_rsa_in_param {
++	u64 key_addr;
++	u64 data_addr;
++	u32 size;
++};
++
++struct xilinx_rsa_drv_ctx {
++	struct akcipher_engine_alg alg;
++	struct device *dev;
++	struct crypto_engine *engine;
++	int (*xilinx_rsa_xcrypt)(struct akcipher_request *req);
++};
++
++struct xilinx_rsa_tfm_ctx {
++	struct device *dev;
++	struct crypto_akcipher *fbk_cipher;
++	u8 *e_buf;
++	u8 *n_buf;
++	u8 *d_buf;
++	unsigned int key_len; /* in bits */
++	unsigned int e_len;
++	unsigned int n_len;
++	unsigned int d_len;
++};
++
++struct xilinx_rsa_req_ctx {
++	enum xilinx_akcipher_op op;
++};
++
++static int zynqmp_rsa_xcrypt(struct akcipher_request *req)
++{
++	struct xilinx_rsa_req_ctx *rq_ctx = akcipher_request_ctx(req);
++	unsigned int len, offset, diff = req->dst_len - req->src_len;
++	struct crypto_akcipher *tfm = crypto_akcipher_reqtfm(req);
++	struct xilinx_rsa_tfm_ctx *tctx = akcipher_tfm_ctx(tfm);
++	dma_addr_t dma_addr;
++	char *kbuf;
++	const char *buf;
++	size_t dma_size;
++	u8 padding = 0;
++	int ret;
++
++	if (rq_ctx->op == XILINX_RSA_ENCRYPT) {
++		padding = tctx->e_len % 2;
++		buf = tctx->e_buf;
++		len = tctx->e_len;
++	} else {
++		buf = tctx->d_buf;
++		len = tctx->d_len;
++	}
++
++	dma_size = req->dst_len + tctx->n_len + len + padding;
++	offset = dma_size - len;
++
++	kbuf = dma_alloc_coherent(tctx->dev, dma_size, &dma_addr, GFP_KERNEL);
++	if (!kbuf)
++		return -ENOMEM;
++
++	scatterwalk_map_and_copy(kbuf + diff, req->src, 0, req->src_len, 0);
++	memcpy(kbuf + req->dst_len, tctx->n_buf, tctx->n_len);
++
++	memcpy(kbuf + offset, buf, len);
++
++	ret = zynqmp_pm_rsa(dma_addr, tctx->n_len, rq_ctx->op);
++	if (ret == 0) {
++		sg_copy_from_buffer(req->dst, sg_nents(req->dst), kbuf,
++				    req->dst_len);
++	}
++
++	dma_free_coherent(tctx->dev, dma_size, kbuf, dma_addr);
++
++	return ret;
++}
++
++static int versal_rsa_xcrypt(struct akcipher_request *req)
++{
++	const struct xilinx_rsa_req_ctx *rq_ctx = akcipher_request_ctx(req);
++	unsigned int len, offset, diff = req->dst_len - req->src_len;
++	struct crypto_akcipher *tfm = crypto_akcipher_reqtfm(req);
++	struct xilinx_rsa_tfm_ctx *tctx = akcipher_tfm_ctx(tfm);
++	struct versal_rsa_in_param *para;
++	dma_addr_t dma_addr, dma_addr1;
++	char *kbuf;
++	const char *buf;
++	size_t dma_size;
++	u8 padding = 0;
++	int ret = 0;
++
++	para = dma_alloc_coherent(tctx->dev,
++				  sizeof(struct versal_rsa_in_param),
++				  &dma_addr1, GFP_KERNEL);
++	if (!para)
++		return -ENOMEM;
++
++	if (rq_ctx->op == XILINX_RSA_ENCRYPT) {
++		padding = tctx->e_len % 2;
++		buf = tctx->e_buf;
++		len = tctx->e_len;
++	} else {
++		buf = tctx->d_buf;
++		len = tctx->d_len;
++	}
++
++	dma_size = req->dst_len + tctx->n_len + len + padding;
++	offset = dma_size - len;
++
++	kbuf = dma_alloc_coherent(tctx->dev, dma_size, &dma_addr, GFP_KERNEL);
++	if (!kbuf) {
++		ret = -ENOMEM;
++		goto kbuf_fail;
++	}
++
++	scatterwalk_map_and_copy(kbuf + diff, req->src, 0, req->src_len, 0);
++
++	memcpy(kbuf + req->dst_len, tctx->n_buf, tctx->n_len);
++
++	memcpy(kbuf + offset, buf, len);
++
++	para->key_addr = (u64)(dma_addr + req->dst_len);
++	para->data_addr = (u64)dma_addr;
++	para->size = req->dst_len;
++
++	if (rq_ctx->op == XILINX_RSA_ENCRYPT)
++		ret = versal_pm_rsa_encrypt(dma_addr1, dma_addr);
++	else
++		ret = versal_pm_rsa_decrypt(dma_addr1, dma_addr);
++
++	if (ret == 0) {
++		sg_copy_from_buffer(req->dst, sg_nents(req->dst), kbuf,
++				    req->dst_len);
++	}
++	dma_free_coherent(tctx->dev, dma_size, kbuf, dma_addr);
++
++kbuf_fail:
++	dma_free_coherent(tctx->dev, sizeof(struct versal_rsa_in_param),
++			  para, dma_addr1);
++
++	return ret;
++}
++
++static int xilinx_rsa_decrypt(struct akcipher_request *req)
++{
++	struct xilinx_rsa_req_ctx *rctx = akcipher_request_ctx(req);
++	struct crypto_akcipher *tfm = crypto_akcipher_reqtfm(req);
++	struct akcipher_alg *alg = crypto_akcipher_alg(tfm);
++	struct xilinx_rsa_drv_ctx *drv_ctx;
++
++	rctx->op = XILINX_RSA_DECRYPT;
++	drv_ctx = container_of(alg, struct xilinx_rsa_drv_ctx, alg.base);
++
++	return crypto_transfer_akcipher_request_to_engine(drv_ctx->engine, req);
++}
++
++static int xilinx_rsa_encrypt(struct akcipher_request *req)
++{
++	struct xilinx_rsa_req_ctx *rctx = akcipher_request_ctx(req);
++	struct crypto_akcipher *tfm = crypto_akcipher_reqtfm(req);
++	struct akcipher_alg *alg = crypto_akcipher_alg(tfm);
++	struct xilinx_rsa_drv_ctx *drv_ctx;
++
++	rctx->op = XILINX_RSA_ENCRYPT;
++	drv_ctx = container_of(alg, struct xilinx_rsa_drv_ctx, alg.base);
++
++	return crypto_transfer_akcipher_request_to_engine(drv_ctx->engine, req);
++}
++
++static unsigned int xilinx_rsa_max_size(struct crypto_akcipher *tfm)
++{
++	const struct xilinx_rsa_tfm_ctx *tctx = akcipher_tfm_ctx(tfm);
++
++	return tctx->n_len;
++}
++
++static inline int xilinx_copy_and_save_keypart(u8 **kpbuf, unsigned int *kplen,
++					       const u8 *buf, size_t sz)
++{
++	int nskip;
++
++	for (nskip = 0; nskip < sz; nskip++)
++		if (buf[nskip])
++			break;
++
++	*kplen = sz - nskip;
++	*kpbuf = kmemdup(buf + nskip, *kplen, GFP_KERNEL);
++	if (!*kpbuf)
++		return -ENOMEM;
++
++	return 0;
++}
++
++static int xilinx_check_key_length(unsigned int len)
++{
++	if (len < 8 || len > 4096)
++		return -EINVAL;
++	return 0;
++}
++
++static void xilinx_rsa_free_key_bufs(struct xilinx_rsa_tfm_ctx *ctx)
++{
++	/* Clean up old key data */
++	kfree_sensitive(ctx->e_buf);
++	ctx->e_buf = NULL;
++	ctx->e_len = 0;
++	kfree_sensitive(ctx->n_buf);
++	ctx->n_buf = NULL;
++	ctx->n_len = 0;
++	kfree_sensitive(ctx->d_buf);
++	ctx->d_buf = NULL;
++	ctx->d_len = 0;
++}
++
++static int xilinx_rsa_setkey(struct crypto_akcipher *tfm, const void *key,
++			     unsigned int keylen, bool private)
++{
++	struct xilinx_rsa_tfm_ctx *tctx = akcipher_tfm_ctx(tfm);
++	struct rsa_key raw_key;
++	int ret;
++
++	if (private)
++		ret = rsa_parse_priv_key(&raw_key, key, keylen);
++	else
++		ret = rsa_parse_pub_key(&raw_key, key, keylen);
++	if (ret)
++		return ret;
++
++	ret = xilinx_copy_and_save_keypart(&tctx->n_buf, &tctx->n_len,
++					   raw_key.n, raw_key.n_sz);
++	if (ret)
++		return ret;
++
++	/* convert to bits */
++	tctx->key_len = tctx->n_len << 3;
++	if (xilinx_check_key_length(tctx->key_len)) {
++		ret = -EINVAL;
++		goto key_err;
++	}
++
++	ret = xilinx_copy_and_save_keypart(&tctx->e_buf, &tctx->e_len,
++					   raw_key.e, raw_key.e_sz);
++	if (ret)
++		goto key_err;
++
++	if (private) {
++		ret = xilinx_copy_and_save_keypart(&tctx->d_buf, &tctx->d_len,
++						   raw_key.d, raw_key.d_sz);
++		if (ret)
++			goto key_err;
++	}
++
++	return 0;
++
++key_err:
++	xilinx_rsa_free_key_bufs(tctx);
++	return ret;
++}
++
++static int xilinx_rsa_set_priv_key(struct crypto_akcipher *tfm, const void *key,
++				   unsigned int keylen)
++{
++	struct xilinx_rsa_tfm_ctx *tfm_ctx = akcipher_tfm_ctx(tfm);
++	int ret;
++
++	tfm_ctx->fbk_cipher->base.crt_flags &= ~CRYPTO_TFM_REQ_MASK;
++	tfm_ctx->fbk_cipher->base.crt_flags |= (tfm->base.crt_flags &
++						CRYPTO_TFM_REQ_MASK);
++
++	ret = crypto_akcipher_set_priv_key(tfm_ctx->fbk_cipher, key, keylen);
++	if (ret)
++		return ret;
++
++	return xilinx_rsa_setkey(tfm, key, keylen, true);
++}
++
++static int xilinx_rsa_set_pub_key(struct crypto_akcipher *tfm, const void *key,
++				  unsigned int keylen)
++{
++	struct xilinx_rsa_tfm_ctx *tfm_ctx = akcipher_tfm_ctx(tfm);
++	int ret;
++
++	tfm_ctx->fbk_cipher->base.crt_flags &= ~CRYPTO_TFM_REQ_MASK;
++	tfm_ctx->fbk_cipher->base.crt_flags |= (tfm->base.crt_flags &
++						CRYPTO_TFM_REQ_MASK);
++
++	ret = crypto_akcipher_set_pub_key(tfm_ctx->fbk_cipher, key, keylen);
++	if (ret)
++		return ret;
++
++	return xilinx_rsa_setkey(tfm, key, keylen, false);
++}
++
++static int xilinx_fallback_check(const struct xilinx_rsa_tfm_ctx *tfm_ctx,
++				 const struct akcipher_request *areq)
++{
++	/* Return 1 if fallback to crypto engine for performing requested operation */
++	if (tfm_ctx->n_len != XSECURE_RSA_2048_KEY_SIZE &&
++	    tfm_ctx->n_len != XSECURE_RSA_3072_KEY_SIZE &&
++	    tfm_ctx->n_len != XSECURE_RSA_4096_KEY_SIZE)
++		return 1;
++
++	if (areq->src_len > areq->dst_len)
++		return 1;
++
++	return 0;
++}
++
++static int handle_rsa_req(struct crypto_engine *engine,
++			  void *req)
++{
++	struct akcipher_request *areq = container_of(req,
++						     struct akcipher_request,
++						     base);
++	struct crypto_akcipher *akcipher = crypto_akcipher_reqtfm(req);
++	struct akcipher_alg *cipher_alg = crypto_akcipher_alg(akcipher);
++	const struct xilinx_rsa_tfm_ctx *tfm_ctx = akcipher_tfm_ctx(akcipher);
++	const struct xilinx_rsa_req_ctx *rq_ctx = akcipher_request_ctx(areq);
++	struct akcipher_request *subreq = akcipher_request_ctx(req);
++	struct xilinx_rsa_drv_ctx *drv_ctx;
++	int need_fallback, err;
++
++	drv_ctx = container_of(cipher_alg, struct xilinx_rsa_drv_ctx, alg.base);
++
++	need_fallback = xilinx_fallback_check(tfm_ctx, areq);
++	if (need_fallback) {
++		akcipher_request_set_tfm(subreq, tfm_ctx->fbk_cipher);
++
++		akcipher_request_set_callback(subreq, areq->base.flags,
++					      NULL, NULL);
++		akcipher_request_set_crypt(subreq, areq->src, areq->dst,
++					   areq->src_len, areq->dst_len);
++
++		if (rq_ctx->op == XILINX_RSA_ENCRYPT)
++			err = crypto_akcipher_encrypt(subreq);
++		else if (rq_ctx->op == XILINX_RSA_DECRYPT)
++			err = crypto_akcipher_decrypt(subreq);
++		else
++			err = -EOPNOTSUPP;
++	} else {
++		err = drv_ctx->xilinx_rsa_xcrypt(areq);
++	}
++
++	crypto_finalize_akcipher_request(engine, areq, err);
++
++	return 0;
++}
++
++static int xilinx_rsa_init(struct crypto_akcipher *tfm)
++{
++	struct xilinx_rsa_tfm_ctx *tfm_ctx =
++		(struct xilinx_rsa_tfm_ctx *)akcipher_tfm_ctx(tfm);
++	struct akcipher_alg *cipher_alg = crypto_akcipher_alg(tfm);
++	struct xilinx_rsa_drv_ctx *drv_ctx;
++
++	drv_ctx = container_of(cipher_alg, struct xilinx_rsa_drv_ctx, alg.base);
++	tfm_ctx->dev = drv_ctx->dev;
++	tfm_ctx->fbk_cipher = crypto_alloc_akcipher(drv_ctx->alg.base.base.cra_name,
++						    0,
++						    CRYPTO_ALG_NEED_FALLBACK);
++	if (IS_ERR(tfm_ctx->fbk_cipher)) {
++		pr_err("%s() Error: failed to allocate fallback for %s\n",
++		       __func__, drv_ctx->alg.base.base.cra_name);
++		return PTR_ERR(tfm_ctx->fbk_cipher);
++	}
++
++	akcipher_set_reqsize(tfm, max(sizeof(struct xilinx_rsa_req_ctx),
++			     sizeof(struct akcipher_request) +
++			     crypto_akcipher_reqsize(tfm_ctx->fbk_cipher)));
++
++	return 0;
++}
++
++static void xilinx_rsa_exit(struct crypto_akcipher *tfm)
++{
++	struct xilinx_rsa_tfm_ctx *tfm_ctx =
++			(struct xilinx_rsa_tfm_ctx *)akcipher_tfm_ctx(tfm);
++
++	xilinx_rsa_free_key_bufs(tfm_ctx);
++
++	if (tfm_ctx->fbk_cipher) {
++		crypto_free_akcipher(tfm_ctx->fbk_cipher);
++		tfm_ctx->fbk_cipher = NULL;
++	}
++	memzero_explicit(tfm_ctx, sizeof(struct xilinx_rsa_tfm_ctx));
++}
++
++static struct xilinx_rsa_drv_ctx zynqmp_rsa_drv_ctx = {
++	.xilinx_rsa_xcrypt = zynqmp_rsa_xcrypt,
++	.alg.base = {
++		.init = xilinx_rsa_init,
++		.set_pub_key = xilinx_rsa_set_pub_key,
++		.set_priv_key = xilinx_rsa_set_priv_key,
++		.max_size = xilinx_rsa_max_size,
++		.decrypt = xilinx_rsa_decrypt,
++		.encrypt = xilinx_rsa_encrypt,
++		.sign = xilinx_rsa_decrypt,
++		.verify = xilinx_rsa_encrypt,
++		.exit = xilinx_rsa_exit,
++		.base = {
++			.cra_name = "rsa",
++			.cra_driver_name = "zynqmp-rsa",
++			.cra_priority = 200,
++			.cra_flags = CRYPTO_ALG_TYPE_AKCIPHER |
++				     CRYPTO_ALG_KERN_DRIVER_ONLY |
++				     CRYPTO_ALG_ALLOCATES_MEMORY |
++				     CRYPTO_ALG_NEED_FALLBACK,
++			.cra_blocksize = XILINX_RSA_BLOCKSIZE,
++			.cra_ctxsize = sizeof(struct xilinx_rsa_tfm_ctx),
++			.cra_alignmask = 15,
++			.cra_module = THIS_MODULE,
++		},
++	},
++	.alg.op = {
++		.do_one_request = handle_rsa_req,
++	},
++};
++
++static struct xilinx_rsa_drv_ctx versal_rsa_drv_ctx = {
++	.xilinx_rsa_xcrypt = versal_rsa_xcrypt,
++	.alg.base = {
++		.init = xilinx_rsa_init,
++		.set_pub_key = xilinx_rsa_set_pub_key,
++		.set_priv_key = xilinx_rsa_set_priv_key,
++		.max_size = xilinx_rsa_max_size,
++		.decrypt = xilinx_rsa_decrypt,
++		.encrypt = xilinx_rsa_encrypt,
++		.sign = xilinx_rsa_decrypt,
++		.verify = xilinx_rsa_encrypt,
++		.exit = xilinx_rsa_exit,
++		.base = {
++			.cra_name = "rsa",
++			.cra_driver_name = "versal-rsa",
++			.cra_priority = 200,
++			.cra_flags = CRYPTO_ALG_TYPE_AKCIPHER |
++				     CRYPTO_ALG_KERN_DRIVER_ONLY |
++				     CRYPTO_ALG_ALLOCATES_MEMORY |
++				     CRYPTO_ALG_NEED_FALLBACK,
++			.cra_blocksize = XILINX_RSA_BLOCKSIZE,
++			.cra_ctxsize = sizeof(struct xilinx_rsa_tfm_ctx),
++			.cra_alignmask = 15,
++			.cra_module = THIS_MODULE,
++		},
++	},
++	.alg.op = {
++		.do_one_request = handle_rsa_req,
++	},
++};
++
++static struct xlnx_feature rsa_feature_map[] = {
++	{
++		.family = ZYNQMP_FAMILY_CODE,
++		.subfamily = ALL_SUB_FAMILY_CODE,
++		.feature_id = PM_SECURE_RSA,
++		.data = &zynqmp_rsa_drv_ctx,
++	},
++	{
++		.family = VERSAL_FAMILY_CODE,
++		.subfamily = VERSAL_SUB_FAMILY_CODE,
++		.feature_id = XSECURE_API_RSA_PUBLIC_ENCRYPT,
++		.data = &versal_rsa_drv_ctx,
++	},
++	{ /* sentinel */ }
++};
++
++static int xilinx_rsa_probe(struct platform_device *pdev)
++{
++	struct xilinx_rsa_drv_ctx *rsa_drv_ctx;
++	struct device *dev = &pdev->dev;
++	int ret;
++
++	/* Verify the hardware is present */
++	rsa_drv_ctx = xlnx_get_crypto_dev_data(rsa_feature_map);
++	if (IS_ERR(rsa_drv_ctx)) {
++		dev_err(dev, "RSA is not supported on the platform\n");
++		return PTR_ERR(rsa_drv_ctx);
++	}
++
++	ret = dma_set_mask_and_coherent(dev,
++					DMA_BIT_MASK(XILINX_DMA_BIT_MASK));
++	if (ret < 0) {
++		dev_err(dev, "no usable DMA configuration");
++		return ret;
++	}
++
++	rsa_drv_ctx->engine = crypto_engine_alloc_init(dev, 1);
++	if (!rsa_drv_ctx->engine) {
++		dev_err(dev, "Cannot alloc RSA engine\n");
++		return -ENOMEM;
++	}
++
++	ret = crypto_engine_start(rsa_drv_ctx->engine);
++	if (ret) {
++		dev_err(dev, "Cannot start RSA engine\n");
++		goto out;
++	}
++
++	rsa_drv_ctx->dev = dev;
++	platform_set_drvdata(pdev, rsa_drv_ctx);
++
++	ret = crypto_engine_register_akcipher(&rsa_drv_ctx->alg);
++	if (ret < 0) {
++		dev_err(dev, "Failed to register akcipher alg.\n");
++		goto out;
++	}
++
++	return 0;
++
++out:
++	crypto_engine_exit(rsa_drv_ctx->engine);
++
++	return ret;
++}
++
++static int xilinx_rsa_remove(struct platform_device *pdev)
++{
++	struct xilinx_rsa_drv_ctx *rsa_drv_ctx;
++
++	rsa_drv_ctx = platform_get_drvdata(pdev);
++
++	crypto_engine_exit(rsa_drv_ctx->engine);
++
++	crypto_engine_unregister_akcipher(&rsa_drv_ctx->alg);
++
++	return 0;
++}
++
++static struct platform_driver xilinx_rsa_driver = {
++	.probe = xilinx_rsa_probe,
++	.remove = xilinx_rsa_remove,
++	.driver = {
++		.name = "xilinx_rsa",
++	},
++};
++
++static struct platform_device *platform_dev;
++
++static int __init xilinx_rsa_driver_init(void)
++{
++	int ret;
++
++	ret = platform_driver_register(&xilinx_rsa_driver);
++	if (ret)
++		return ret;
++
++	platform_dev = platform_device_register_simple(xilinx_rsa_driver.driver.name,
++					       0, NULL, 0);
++	if (IS_ERR(platform_dev)) {
++		ret = PTR_ERR(platform_dev);
++		platform_driver_unregister(&xilinx_rsa_driver);
++	}
++
++	return ret;
++}
++
++static void __exit xilinx_rsa_driver_exit(void)
++{
++	platform_device_unregister(platform_dev);
++	platform_driver_unregister(&xilinx_rsa_driver);
++}
++
++module_init(xilinx_rsa_driver_init);
++module_exit(xilinx_rsa_driver_exit);
++
++MODULE_DESCRIPTION("Xilinx RSA hw acceleration support.");
++MODULE_LICENSE("GPL");
++MODULE_AUTHOR("Harsha <harsha.harsha@amd.com>");
+diff --git a/drivers/crypto/xilinx/xilinx_ecdsasig.asn1 b/drivers/crypto/xilinx/xilinx_ecdsasig.asn1
+new file mode 100644
+index 000000000..ed447f8ed
+--- /dev/null
++++ b/drivers/crypto/xilinx/xilinx_ecdsasig.asn1
+@@ -0,0 +1,4 @@
++ECDSASignature ::= SEQUENCE {
++	r	INTEGER ({ xilinx_ecdsa_get_signature_r }),
++	s	INTEGER ({ xilinx_ecdsa_get_signature_s })
++}
+diff --git a/drivers/crypto/xilinx/zynqmp-aes-gcm.c b/drivers/crypto/xilinx/zynqmp-aes-gcm.c
+index 84103fc3f..308a8f759 100644
+--- a/drivers/crypto/xilinx/zynqmp-aes-gcm.c
++++ b/drivers/crypto/xilinx/zynqmp-aes-gcm.c
+@@ -1,7 +1,8 @@
+ // SPDX-License-Identifier: GPL-2.0
+ /*
+  * Xilinx ZynqMP AES Driver.
+- * Copyright (c) 2020 Xilinx Inc.
++ * Copyright (C) 2020 - 2022 Xilinx Inc.
++ * Copyright (C) 2022 - 2023, Advanced Micro Devices, Inc.
+  */
+ 
+ #include <crypto/aes.h>
+@@ -26,6 +27,8 @@
+ #define ZYNQMP_AES_BLK_SIZE		1U
+ #define ZYNQMP_AES_MIN_INPUT_BLK_SIZE	4U
+ #define ZYNQMP_AES_WORD_LEN		4U
++#define VERSAL_AES_QWORD_LEN		16U
++#define ZYNQMP_AES_DEVICE_LEY_LEN	1U
+ 
+ #define ZYNQMP_AES_GCM_TAG_MISMATCH_ERR		0x01
+ #define ZYNQMP_AES_WRONG_KEY_SRC_ERR		0x13
+@@ -42,12 +45,59 @@ enum zynqmp_aead_keysrc {
+ 	ZYNQMP_AES_PUF_KEY
+ };
+ 
+-struct zynqmp_aead_drv_ctx {
+-	union {
+-		struct aead_engine_alg aead;
+-	} alg;
++enum versal_aead_keysrc {
++	VERSAL_AES_BBRAM_KEY = 0,
++	VERSAL_AES_BBRAM_RED_KEY,
++	VERSAL_AES_BH_KEY,
++	VERSAL_AES_BH_RED_KEY,
++	VERSAL_AES_EFUSE_KEY,
++	VERSAL_AES_EFUSE_RED_KEY,
++	VERSAL_AES_EFUSE_USER_KEY_0,
++	VERSAL_AES_EFUSE_USER_KEY_1,
++	VERSAL_AES_EFUSE_USER_RED_KEY_0,
++	VERSAL_AES_EFUSE_USER_RED_KEY_1,
++	VERSAL_AES_KUP_KEY,
++	VERSAL_AES_PUF_KEY,
++	VERSAL_AES_USER_KEY_0,
++	VERSAL_AES_USER_KEY_1,
++	VERSAL_AES_USER_KEY_2,
++	VERSAL_AES_USER_KEY_3,
++	VERSAL_AES_USER_KEY_4,
++	VERSAL_AES_USER_KEY_5,
++	VERSAL_AES_USER_KEY_6,
++	VERSAL_AES_USER_KEY_7,
++	VERSAL_AES_EXPANDED_KEYS,
++	VERSAL_AES_ALL_KEYS,
++};
++
++enum versal_aead_op {
++	VERSAL_AES_ENCRYPT = 0,
++	VERSAL_AES_DECRYPT
++};
++
++enum versal_aes_keysize {
++	AES_KEY_SIZE_128 = 0,
++	AES_KEY_SIZE_256 = 2,
++};
++
++struct zynqmp_aead_tfm_ctx {
++	struct device *dev;
++	u8 key[ZYNQMP_AES_KEY_SIZE];
++	u8 *iv;
++	u32 keylen;
++	u32 authsize;
++	u8 keysrc;
++	struct crypto_aead *fbk_cipher;
++};
++
++struct xilinx_aead_drv_ctx {
++	struct aead_engine_alg aead;
+ 	struct device *dev;
+ 	struct crypto_engine *engine;
++	u8 keysrc;
++	int (*aes_aead_cipher)(struct aead_request *areq);
++	int (*fallback_check)(struct zynqmp_aead_tfm_ctx *ctx,
++			      struct aead_request *areq);
+ };
+ 
+ struct zynqmp_aead_hw_req {
+@@ -60,20 +110,23 @@ struct zynqmp_aead_hw_req {
+ 	u64 keysrc;
+ };
+ 
+-struct zynqmp_aead_tfm_ctx {
+-	struct device *dev;
+-	u8 key[ZYNQMP_AES_KEY_SIZE];
+-	u8 *iv;
+-	u32 keylen;
+-	u32 authsize;
+-	enum zynqmp_aead_keysrc keysrc;
+-	struct crypto_aead *fbk_cipher;
+-};
+-
+ struct zynqmp_aead_req_ctx {
+ 	enum zynqmp_aead_op op;
+ };
+ 
++struct versal_init_ops {
++	u64 iv;
++	u32 op;
++	u32 keysrc;
++	u32 size;
++};
++
++struct versal_in_params {
++	u64 in_data_addr;
++	u32 size;
++	u32 is_last;
++};
++
+ static int zynqmp_aes_aead_cipher(struct aead_request *req)
+ {
+ 	struct crypto_aead *aead = crypto_aead_reqtfm(req);
+@@ -174,46 +227,210 @@ static int zynqmp_aes_aead_cipher(struct aead_request *req)
+ 	return err;
+ }
+ 
++static int versal_aes_aead_cipher(struct aead_request *req)
++{
++	struct crypto_aead *aead = crypto_aead_reqtfm(req);
++	struct zynqmp_aead_tfm_ctx *tfm_ctx = crypto_aead_ctx(aead);
++	struct zynqmp_aead_req_ctx *rq_ctx = aead_request_ctx(req);
++	dma_addr_t dma_addr_data, dma_addr_hw_req, dma_addr_in;
++	u32 total_len = req->assoclen + req->cryptlen;
++	u32 key_offset = total_len + GCM_AES_IV_SIZE;
++	struct device *dev = tfm_ctx->dev;
++	struct versal_init_ops *hwreq;
++	struct versal_in_params *in;
++	u32 gcm_offset, out_len;
++	size_t dma_size;
++	char *kbuf;
++	int ret;
++
++	if (tfm_ctx->keylen != XSECURE_AES_KEY_SIZE_128 &&
++	    tfm_ctx->keylen != XSECURE_AES_KEY_SIZE_256) {
++		ret = -EINVAL;
++		goto err;
++	}
++
++	dma_size = key_offset;
++	/* Allocate keylen for volatile user keys */
++	if (tfm_ctx->keysrc >= VERSAL_AES_USER_KEY_0 && tfm_ctx->keysrc <= VERSAL_AES_USER_KEY_7)
++		dma_size += tfm_ctx->keylen;
++
++	kbuf = dma_alloc_coherent(dev, dma_size, &dma_addr_data, GFP_KERNEL);
++	if (!kbuf) {
++		ret = -ENOMEM;
++		goto err;
++	}
++
++	/*
++	 * Allocated separate memory as separate structure for init ops
++	 * Also to avoid big continuous memory allocation
++	 */
++	hwreq = dma_alloc_coherent(dev, sizeof(struct versal_init_ops),
++				   &dma_addr_hw_req, GFP_KERNEL);
++	if (!hwreq) {
++		ret = -ENOMEM;
++		goto hwreq_fail;
++	}
++
++	/*
++	 * Allocated separate memory as separate structure for in params
++	 * Also to avoid big continuous memory allocation
++	 */
++	in = dma_alloc_coherent(dev, sizeof(struct versal_in_params),
++				&dma_addr_in, GFP_KERNEL);
++	if (!in) {
++		ret = -ENOMEM;
++		goto in_fail;
++	}
++
++	scatterwalk_map_and_copy(kbuf, req->src, 0, total_len, 0);
++	memcpy(kbuf + total_len, req->iv, GCM_AES_IV_SIZE);
++	hwreq->iv = dma_addr_data + total_len;
++	hwreq->keysrc = tfm_ctx->keysrc;
++
++	if (rq_ctx->op == ZYNQMP_AES_ENCRYPT) {
++		hwreq->op = VERSAL_AES_ENCRYPT;
++		out_len = total_len + ZYNQMP_AES_AUTH_SIZE;
++		in->size = req->cryptlen;
++	} else {
++		hwreq->op = VERSAL_AES_DECRYPT;
++		out_len = total_len - ZYNQMP_AES_AUTH_SIZE;
++		in->size = req->cryptlen - ZYNQMP_AES_AUTH_SIZE;
++	}
++
++	if (tfm_ctx->keylen == XSECURE_AES_KEY_SIZE_128)
++		hwreq->size = AES_KEY_SIZE_128;
++	else if (tfm_ctx->keylen == XSECURE_AES_KEY_SIZE_256)
++		hwreq->size = AES_KEY_SIZE_256;
++
++	/* Request aes key write for volatile user keys */
++	if (hwreq->keysrc >= VERSAL_AES_USER_KEY_0 && hwreq->keysrc <= VERSAL_AES_USER_KEY_7) {
++		memcpy(kbuf + key_offset, tfm_ctx->key, tfm_ctx->keylen);
++		ret = versal_pm_aes_key_write(hwreq->size, hwreq->keysrc,
++					      dma_addr_data + key_offset);
++		if (ret)
++			goto key_fail;
++	}
++
++	ret = versal_pm_aes_op_init(dma_addr_hw_req);
++	if (ret)
++		goto clearkey;
++
++	if (req->assoclen > 0) {
++		/* Currently GMAC is OFF by default */
++		ret = versal_pm_aes_update_aad(dma_addr_data, req->assoclen);
++		if (ret)
++			goto clearkey;
++	}
++
++	in->in_data_addr = dma_addr_data + req->assoclen;
++	in->is_last = 1;
++	gcm_offset = req->assoclen + in->size;
++
++	if (rq_ctx->op == ZYNQMP_AES_ENCRYPT) {
++		ret = versal_pm_aes_enc_update(dma_addr_in,
++					       dma_addr_data + req->assoclen);
++		if (ret)
++			goto clearkey;
++
++		ret = versal_pm_aes_enc_final(dma_addr_data + gcm_offset);
++		if (ret)
++			goto clearkey;
++	} else {
++		ret = versal_pm_aes_dec_update(dma_addr_in,
++					       dma_addr_data + req->assoclen);
++		if (ret)
++			goto clearkey;
++
++		ret = versal_pm_aes_dec_final(dma_addr_data + gcm_offset);
++		if (ret) {
++			ret = -EBADMSG;
++			goto clearkey;
++		}
++	}
++
++	sg_copy_from_buffer(req->dst, sg_nents(req->dst),
++			    kbuf, out_len);
++
++clearkey:
++	if (hwreq->keysrc >= VERSAL_AES_USER_KEY_0 && hwreq->keysrc <= VERSAL_AES_USER_KEY_7)
++		versal_pm_aes_key_zero(hwreq->keysrc);
++key_fail:
++	dma_free_coherent(dev, sizeof(struct versal_in_params), in, dma_addr_in);
++in_fail:
++	memzero_explicit(hwreq, sizeof(struct versal_init_ops));
++	dma_free_coherent(dev, sizeof(struct versal_init_ops), hwreq, dma_addr_hw_req);
++hwreq_fail:
++	memzero_explicit(kbuf, dma_size);
++	dma_free_coherent(dev, dma_size, kbuf, dma_addr_data);
++err:
++	return ret;
++}
++
+ static int zynqmp_fallback_check(struct zynqmp_aead_tfm_ctx *tfm_ctx,
+ 				 struct aead_request *req)
+ {
+-	int need_fallback = 0;
+ 	struct zynqmp_aead_req_ctx *rq_ctx = aead_request_ctx(req);
+ 
+-	if (tfm_ctx->authsize != ZYNQMP_AES_AUTH_SIZE)
+-		need_fallback = 1;
++	if ((tfm_ctx->keysrc == ZYNQMP_AES_KUP_KEY &&
++	     tfm_ctx->keylen != ZYNQMP_AES_KEY_SIZE) ||
++	    (tfm_ctx->keysrc == ZYNQMP_AES_DEV_KEY &&
++	     tfm_ctx->keylen != ZYNQMP_AES_DEVICE_LEY_LEN))
++		return 1;
+ 
+-	if (tfm_ctx->keysrc == ZYNQMP_AES_KUP_KEY &&
+-	    tfm_ctx->keylen != ZYNQMP_AES_KEY_SIZE) {
+-		need_fallback = 1;
+-	}
+ 	if (req->assoclen != 0 ||
+-	    req->cryptlen < ZYNQMP_AES_MIN_INPUT_BLK_SIZE) {
+-		need_fallback = 1;
+-	}
++	    req->cryptlen < ZYNQMP_AES_MIN_INPUT_BLK_SIZE)
++		return 1;
++
+ 	if ((req->cryptlen % ZYNQMP_AES_WORD_LEN) != 0)
+-		need_fallback = 1;
++		return 1;
+ 
+ 	if (rq_ctx->op == ZYNQMP_AES_DECRYPT &&
+-	    req->cryptlen <= ZYNQMP_AES_AUTH_SIZE) {
+-		need_fallback = 1;
+-	}
+-	return need_fallback;
++	    req->cryptlen <= ZYNQMP_AES_AUTH_SIZE)
++		return 1;
++
++	return 0;
+ }
+ 
+-static int zynqmp_handle_aes_req(struct crypto_engine *engine,
+-				 void *req)
++static int versal_fallback_check(struct zynqmp_aead_tfm_ctx *tfm_ctx,
++				 struct aead_request *req)
++{
++	struct zynqmp_aead_req_ctx *rq_ctx = aead_request_ctx(req);
++
++	if (tfm_ctx->authsize != ZYNQMP_AES_AUTH_SIZE)
++		return 1;
++
++	if (tfm_ctx->keylen != XSECURE_AES_KEY_SIZE_128 &&
++	    tfm_ctx->keylen != XSECURE_AES_KEY_SIZE_256)
++		return 1;
++
++	if (req->cryptlen < ZYNQMP_AES_MIN_INPUT_BLK_SIZE ||
++	    req->cryptlen % ZYNQMP_AES_WORD_LEN ||
++	    req->assoclen % VERSAL_AES_QWORD_LEN)
++		return 1;
++
++	if (rq_ctx->op == ZYNQMP_AES_DECRYPT &&
++	    req->cryptlen <= ZYNQMP_AES_AUTH_SIZE)
++		return 1;
++
++	return 0;
++}
++
++static int handle_aes_req(struct crypto_engine *engine, void *req)
+ {
+ 	struct aead_request *areq =
+ 				container_of(req, struct aead_request, base);
+ 	struct crypto_aead *aead = crypto_aead_reqtfm(req);
+ 	struct zynqmp_aead_tfm_ctx *tfm_ctx = crypto_aead_ctx(aead);
++	struct aead_alg *alg = crypto_aead_alg(aead);
++	struct xilinx_aead_drv_ctx *drv_ctx;
++
+ 	struct zynqmp_aead_req_ctx *rq_ctx = aead_request_ctx(areq);
+ 	struct aead_request *subreq = aead_request_ctx(req);
+ 	int need_fallback;
+ 	int err;
+ 
+-	need_fallback = zynqmp_fallback_check(tfm_ctx, areq);
++	drv_ctx = container_of(alg, struct xilinx_aead_drv_ctx, aead.base);
++	need_fallback = drv_ctx->fallback_check(tfm_ctx, areq);
+ 
+ 	if (need_fallback) {
+ 		aead_request_set_tfm(subreq, tfm_ctx->fbk_cipher);
+@@ -228,7 +445,7 @@ static int zynqmp_handle_aes_req(struct crypto_engine *engine,
+ 		else
+ 			err = crypto_aead_decrypt(subreq);
+ 	} else {
+-		err = zynqmp_aes_aead_cipher(areq);
++		err = drv_ctx->aes_aead_cipher(areq);
+ 	}
+ 
+ 	local_bh_disable();
+@@ -251,10 +468,10 @@ static int zynqmp_aes_aead_setkey(struct crypto_aead *aead, const u8 *key,
+ 		if (keysrc == ZYNQMP_AES_KUP_KEY ||
+ 		    keysrc == ZYNQMP_AES_DEV_KEY ||
+ 		    keysrc == ZYNQMP_AES_PUF_KEY) {
+-			tfm_ctx->keysrc = (enum zynqmp_aead_keysrc)keysrc;
+-		} else {
++			tfm_ctx->keysrc = keysrc;
+ 			tfm_ctx->keylen = keylen;
+ 		}
++		return 0;
+ 	} else {
+ 		tfm_ctx->keylen = keylen;
+ 		if (keylen == ZYNQMP_AES_KEY_SIZE) {
+@@ -270,6 +487,48 @@ static int zynqmp_aes_aead_setkey(struct crypto_aead *aead, const u8 *key,
+ 	return crypto_aead_setkey(tfm_ctx->fbk_cipher, key, keylen);
+ }
+ 
++static int versal_aes_aead_setkey(struct crypto_aead *aead, const u8 *key,
++				  unsigned int keylen)
++{
++	struct crypto_tfm *tfm = crypto_aead_tfm(aead);
++	struct zynqmp_aead_tfm_ctx *tfm_ctx =
++			(struct zynqmp_aead_tfm_ctx *)crypto_tfm_ctx(tfm);
++
++	if (keylen == ZYNQMP_KEY_SRC_SEL_KEY_LEN) {
++		unsigned char keysrc = VERSAL_AES_EFUSE_USER_KEY_0;
++
++		keysrc = *key;
++		if ((keysrc >= VERSAL_AES_EFUSE_USER_KEY_0 &&
++		     keysrc  <= VERSAL_AES_USER_KEY_7) &&
++		     keysrc != VERSAL_AES_KUP_KEY) {
++			tfm_ctx->keysrc = keysrc;
++			return 0;
++		}
++		return -EINVAL;
++	} else {
++		tfm_ctx->keylen = keylen;
++		if (keylen == XSECURE_AES_KEY_SIZE_256 ||
++		    keylen == XSECURE_AES_KEY_SIZE_128) {
++			if (tfm_ctx->keysrc >= VERSAL_AES_USER_KEY_0 &&
++			    tfm_ctx->keysrc <= VERSAL_AES_USER_KEY_7) {
++				memcpy(tfm_ctx->key, key, keylen);
++			}
++		}
++
++		if (tfm_ctx->keysrc < VERSAL_AES_EFUSE_USER_KEY_0 ||
++		    tfm_ctx->keysrc > VERSAL_AES_USER_KEY_7 ||
++		    tfm_ctx->keysrc ==  VERSAL_AES_KUP_KEY) {
++			tfm_ctx->keysrc = VERSAL_AES_USER_KEY_0;
++		}
++	}
++
++	tfm_ctx->fbk_cipher->base.crt_flags &= ~CRYPTO_TFM_REQ_MASK;
++	tfm_ctx->fbk_cipher->base.crt_flags |= (aead->base.crt_flags &
++					CRYPTO_TFM_REQ_MASK);
++
++	return crypto_aead_setkey(tfm_ctx->fbk_cipher, key, keylen);
++}
++
+ static int zynqmp_aes_aead_setauthsize(struct crypto_aead *aead,
+ 				       unsigned int authsize)
+ {
+@@ -283,48 +542,49 @@ static int zynqmp_aes_aead_setauthsize(struct crypto_aead *aead,
+ 
+ static int zynqmp_aes_aead_encrypt(struct aead_request *req)
+ {
+-	struct zynqmp_aead_drv_ctx *drv_ctx;
++	struct xilinx_aead_drv_ctx *drv_ctx;
+ 	struct crypto_aead *aead = crypto_aead_reqtfm(req);
+ 	struct aead_alg *alg = crypto_aead_alg(aead);
+ 	struct zynqmp_aead_req_ctx *rq_ctx = aead_request_ctx(req);
+ 
+ 	rq_ctx->op = ZYNQMP_AES_ENCRYPT;
+-	drv_ctx = container_of(alg, struct zynqmp_aead_drv_ctx, alg.aead.base);
++	drv_ctx = container_of(alg, struct xilinx_aead_drv_ctx, aead.base);
+ 
+ 	return crypto_transfer_aead_request_to_engine(drv_ctx->engine, req);
+ }
+ 
+ static int zynqmp_aes_aead_decrypt(struct aead_request *req)
+ {
+-	struct zynqmp_aead_drv_ctx *drv_ctx;
++	struct xilinx_aead_drv_ctx *drv_ctx;
+ 	struct crypto_aead *aead = crypto_aead_reqtfm(req);
+ 	struct aead_alg *alg = crypto_aead_alg(aead);
+ 	struct zynqmp_aead_req_ctx *rq_ctx = aead_request_ctx(req);
+ 
+ 	rq_ctx->op = ZYNQMP_AES_DECRYPT;
+-	drv_ctx = container_of(alg, struct zynqmp_aead_drv_ctx, alg.aead.base);
++	drv_ctx = container_of(alg, struct xilinx_aead_drv_ctx, aead.base);
+ 
+ 	return crypto_transfer_aead_request_to_engine(drv_ctx->engine, req);
+ }
+ 
+-static int zynqmp_aes_aead_init(struct crypto_aead *aead)
++static int aes_aead_init(struct crypto_aead *aead)
+ {
+ 	struct crypto_tfm *tfm = crypto_aead_tfm(aead);
+ 	struct zynqmp_aead_tfm_ctx *tfm_ctx =
+ 		(struct zynqmp_aead_tfm_ctx *)crypto_tfm_ctx(tfm);
+-	struct zynqmp_aead_drv_ctx *drv_ctx;
++	struct xilinx_aead_drv_ctx *drv_ctx;
+ 	struct aead_alg *alg = crypto_aead_alg(aead);
+ 
+-	drv_ctx = container_of(alg, struct zynqmp_aead_drv_ctx, alg.aead.base);
++	drv_ctx = container_of(alg, struct xilinx_aead_drv_ctx, aead.base);
+ 	tfm_ctx->dev = drv_ctx->dev;
++	tfm_ctx->keysrc = drv_ctx->keysrc;
+ 
+-	tfm_ctx->fbk_cipher = crypto_alloc_aead(drv_ctx->alg.aead.base.base.cra_name,
++	tfm_ctx->fbk_cipher = crypto_alloc_aead(drv_ctx->aead.base.base.cra_name,
+ 						0,
+ 						CRYPTO_ALG_NEED_FALLBACK);
+ 
+ 	if (IS_ERR(tfm_ctx->fbk_cipher)) {
+ 		pr_err("%s() Error: failed to allocate fallback for %s\n",
+-		       __func__, drv_ctx->alg.aead.base.base.cra_name);
++		       __func__, drv_ctx->aead.base.base.cra_name);
+ 		return PTR_ERR(tfm_ctx->fbk_cipher);
+ 	}
+ 
+@@ -348,20 +608,23 @@ static void zynqmp_aes_aead_exit(struct crypto_aead *aead)
+ 	memzero_explicit(tfm_ctx, sizeof(struct zynqmp_aead_tfm_ctx));
+ }
+ 
+-static struct zynqmp_aead_drv_ctx aes_drv_ctx = {
+-	.alg.aead.base = {
++static struct xilinx_aead_drv_ctx zynqmp_aes_drv_ctx = {
++	.fallback_check = zynqmp_fallback_check,
++	.aes_aead_cipher = zynqmp_aes_aead_cipher,
++	.keysrc = ZYNQMP_AES_KUP_KEY,
++	.aead.base = {
+ 		.setkey		= zynqmp_aes_aead_setkey,
+ 		.setauthsize	= zynqmp_aes_aead_setauthsize,
+ 		.encrypt	= zynqmp_aes_aead_encrypt,
+ 		.decrypt	= zynqmp_aes_aead_decrypt,
+-		.init		= zynqmp_aes_aead_init,
++		.init		= aes_aead_init,
+ 		.exit		= zynqmp_aes_aead_exit,
+ 		.ivsize		= GCM_AES_IV_SIZE,
+ 		.maxauthsize	= ZYNQMP_AES_AUTH_SIZE,
+ 		.base = {
+ 		.cra_name		= "gcm(aes)",
+-		.cra_driver_name	= "xilinx-zynqmp-aes-gcm",
+-		.cra_priority		= 200,
++		.cra_driver_name	= "zynqmp-aes-gcm",
++		.cra_priority		= 300,
+ 		.cra_flags		= CRYPTO_ALG_TYPE_AEAD |
+ 					  CRYPTO_ALG_ASYNC |
+ 					  CRYPTO_ALG_ALLOCATES_MEMORY |
+@@ -372,80 +635,160 @@ static struct zynqmp_aead_drv_ctx aes_drv_ctx = {
+ 		.cra_module		= THIS_MODULE,
+ 		}
+ 	},
+-	.alg.aead.op = {
+-		.do_one_request = zynqmp_handle_aes_req,
++	.aead.op = {
++		.do_one_request = handle_aes_req,
+ 	},
+ };
+ 
++static struct xilinx_aead_drv_ctx versal_aes_drv_ctx = {
++	.fallback_check		= versal_fallback_check,
++	.aes_aead_cipher	= versal_aes_aead_cipher,
++	.keysrc = VERSAL_AES_USER_KEY_0,
++	.aead.base = {
++		.setkey		= versal_aes_aead_setkey,
++		.setauthsize	= zynqmp_aes_aead_setauthsize,
++		.encrypt	= zynqmp_aes_aead_encrypt,
++		.decrypt	= zynqmp_aes_aead_decrypt,
++		.init		= aes_aead_init,
++		.exit		= zynqmp_aes_aead_exit,
++		.ivsize		= GCM_AES_IV_SIZE,
++		.maxauthsize	= ZYNQMP_AES_AUTH_SIZE,
++		.base = {
++		.cra_name		= "gcm(aes)",
++		.cra_driver_name	= "versal-aes-gcm",
++		.cra_priority		= 300,
++		.cra_flags		= CRYPTO_ALG_TYPE_AEAD |
++					  CRYPTO_ALG_ASYNC |
++					  CRYPTO_ALG_ALLOCATES_MEMORY |
++					  CRYPTO_ALG_KERN_DRIVER_ONLY |
++					  CRYPTO_ALG_NEED_FALLBACK,
++		.cra_blocksize		= ZYNQMP_AES_BLK_SIZE,
++		.cra_ctxsize		= sizeof(struct zynqmp_aead_tfm_ctx),
++		.cra_module		= THIS_MODULE,
++		}
++	},
++	.aead.op = {
++		.do_one_request = handle_aes_req,
++	},
++};
++
++static struct xlnx_feature aes_feature_map[] = {
++	{
++		.family = ZYNQMP_FAMILY_CODE,
++		.subfamily = ALL_SUB_FAMILY_CODE,
++		.feature_id = PM_SECURE_AES,
++		.data = &zynqmp_aes_drv_ctx,
++	},
++	{
++		.family = VERSAL_FAMILY_CODE,
++		.subfamily = VERSAL_SUB_FAMILY_CODE,
++		.feature_id = XSECURE_API_AES_OP_INIT,
++		.data = &versal_aes_drv_ctx,
++	},
++	{ /* sentinel */ }
++};
++
+ static int zynqmp_aes_aead_probe(struct platform_device *pdev)
+ {
++	struct xilinx_aead_drv_ctx *aes_drv_ctx;
+ 	struct device *dev = &pdev->dev;
+ 	int err;
+ 
++	/* Verify the hardware is present */
++	aes_drv_ctx = xlnx_get_crypto_dev_data(aes_feature_map);
++	if (IS_ERR(aes_drv_ctx)) {
++		dev_err(dev, "AES is not supported on the platform\n");
++		return PTR_ERR(aes_drv_ctx);
++	}
++
+ 	/* ZynqMP AES driver supports only one instance */
+-	if (!aes_drv_ctx.dev)
+-		aes_drv_ctx.dev = dev;
++	if (!aes_drv_ctx->dev)
++		aes_drv_ctx->dev = dev;
+ 	else
+ 		return -ENODEV;
+ 
++	platform_set_drvdata(pdev, aes_drv_ctx);
++
+ 	err = dma_set_mask_and_coherent(dev, DMA_BIT_MASK(ZYNQMP_DMA_BIT_MASK));
+ 	if (err < 0) {
+ 		dev_err(dev, "No usable DMA configuration\n");
+ 		return err;
+ 	}
+ 
+-	aes_drv_ctx.engine = crypto_engine_alloc_init(dev, 1);
+-	if (!aes_drv_ctx.engine) {
++	aes_drv_ctx->engine = crypto_engine_alloc_init(dev, 1);
++	if (!aes_drv_ctx->engine) {
+ 		dev_err(dev, "Cannot alloc AES engine\n");
+ 		err = -ENOMEM;
+ 		goto err_engine;
+ 	}
+ 
+-	err = crypto_engine_start(aes_drv_ctx.engine);
++	err = crypto_engine_start(aes_drv_ctx->engine);
+ 	if (err) {
+ 		dev_err(dev, "Cannot start AES engine\n");
+ 		goto err_engine;
+ 	}
+ 
+-	err = crypto_engine_register_aead(&aes_drv_ctx.alg.aead);
++	err = crypto_engine_register_aead(&aes_drv_ctx->aead);
+ 	if (err < 0) {
+ 		dev_err(dev, "Failed to register AEAD alg.\n");
+-		goto err_aead;
++		goto err_engine;
+ 	}
+ 	return 0;
+ 
+-err_aead:
+-	crypto_engine_unregister_aead(&aes_drv_ctx.alg.aead);
+-
+ err_engine:
+-	if (aes_drv_ctx.engine)
+-		crypto_engine_exit(aes_drv_ctx.engine);
++	if (aes_drv_ctx->engine)
++		crypto_engine_exit(aes_drv_ctx->engine);
+ 
+ 	return err;
+ }
+ 
+ static int zynqmp_aes_aead_remove(struct platform_device *pdev)
+ {
+-	crypto_engine_exit(aes_drv_ctx.engine);
+-	crypto_engine_unregister_aead(&aes_drv_ctx.alg.aead);
++	struct xilinx_aead_drv_ctx *aes_drv_ctx;
++
++	aes_drv_ctx = platform_get_drvdata(pdev);
++
++	crypto_engine_exit(aes_drv_ctx->engine);
++	crypto_engine_unregister_aead(&aes_drv_ctx->aead);
+ 
+ 	return 0;
+ }
+ 
+-static const struct of_device_id zynqmp_aes_dt_ids[] = {
+-	{ .compatible = "xlnx,zynqmp-aes" },
+-	{ /* sentinel */ }
+-};
+-MODULE_DEVICE_TABLE(of, zynqmp_aes_dt_ids);
+-
+ static struct platform_driver zynqmp_aes_driver = {
+ 	.probe	= zynqmp_aes_aead_probe,
+ 	.remove = zynqmp_aes_aead_remove,
+ 	.driver = {
+ 		.name		= "zynqmp-aes",
+-		.of_match_table = zynqmp_aes_dt_ids,
+ 	},
+ };
+ 
+-module_platform_driver(zynqmp_aes_driver);
++static struct platform_device *platform_dev;
++
++static int __init aes_driver_init(void)
++{
++	int ret;
++
++	ret = platform_driver_register(&zynqmp_aes_driver);
++	if (ret)
++		return ret;
++
++	platform_dev = platform_device_register_simple(zynqmp_aes_driver.driver.name,
++						       0, NULL, 0);
++	if (IS_ERR(platform_dev)) {
++		ret = PTR_ERR(platform_dev);
++		platform_driver_unregister(&zynqmp_aes_driver);
++	}
++
++	return ret;
++}
++
++static void __exit aes_driver_exit(void)
++{
++	platform_device_unregister(platform_dev);
++	platform_driver_unregister(&zynqmp_aes_driver);
++}
++
++device_initcall(aes_driver_init);
++module_exit(aes_driver_exit);
++
+ MODULE_LICENSE("GPL");
+diff --git a/drivers/crypto/xilinx/zynqmp-rsa.c b/drivers/crypto/xilinx/zynqmp-rsa.c
+new file mode 100644
+index 000000000..21d75d697
+--- /dev/null
++++ b/drivers/crypto/xilinx/zynqmp-rsa.c
+@@ -0,0 +1,276 @@
++// SPDX-License-Identifier: GPL-2.0+
++/*
++ * Copyright (C) 2017 - 2022 Xilinx, Inc.
++ * Copyright (C) 2022 - 2023, Advanced Micro Devices, Inc.
++ */
++
++#include <linux/module.h>
++#include <linux/kernel.h>
++#include <linux/crypto.h>
++#include <linux/spinlock.h>
++#include <crypto/algapi.h>
++#include <crypto/aes.h>
++#include <crypto/internal/skcipher.h>
++#include <linux/io.h>
++#include <linux/device.h>
++#include <linux/of_device.h>
++#include <linux/platform_device.h>
++#include <linux/dma-mapping.h>
++#include <linux/scatterlist.h>
++#include <crypto/scatterwalk.h>
++#include <linux/firmware/xlnx-zynqmp.h>
++
++#define ZYNQMP_RSA_QUEUE_LENGTH	1
++#define ZYNQMP_RSA_MAX_KEY_SIZE	1024
++#define ZYNQMP_RSA_BLOCKSIZE	64
++
++/* Key size in bytes */
++#define XSECURE_RSA_2048_KEY_SIZE	(2048U / 8U)
++#define XSECURE_RSA_3072_KEY_SIZE	(3072U / 8U)
++#define XSECURE_RSA_4096_KEY_SIZE	(4096U / 8U)
++
++static struct zynqmp_rsa_dev *rsa_dd;
++
++struct zynqmp_rsa_op {
++	struct zynqmp_rsa_dev    *dd;
++	void *src;
++	void *dst;
++	int len;
++	u8 key[ZYNQMP_RSA_MAX_KEY_SIZE];
++	u8 *iv;
++	u32 keylen;
++};
++
++struct zynqmp_rsa_dev {
++	struct list_head        list;
++	struct device           *dev;
++	/* the lock protects queue and dev list*/
++	spinlock_t              lock;
++	struct crypto_queue     queue;
++	struct skcipher_alg	*alg;
++};
++
++struct zynqmp_rsa_drv {
++	struct list_head        dev_list;
++	/* the lock protects queue and dev list*/
++	spinlock_t              lock;
++};
++
++static struct zynqmp_rsa_drv zynqmp_rsa = {
++	.dev_list = LIST_HEAD_INIT(zynqmp_rsa.dev_list),
++	.lock = __SPIN_LOCK_UNLOCKED(zynqmp_rsa.lock),
++};
++
++static struct zynqmp_rsa_dev *zynqmp_rsa_find_dev(struct zynqmp_rsa_op *ctx)
++{
++	struct zynqmp_rsa_dev *dd = rsa_dd;
++
++	spin_lock_bh(&zynqmp_rsa.lock);
++	if (!ctx->dd)
++		ctx->dd = dd;
++	else
++		dd = ctx->dd;
++	spin_unlock_bh(&zynqmp_rsa.lock);
++
++	return dd;
++}
++
++static int zynqmp_setkey_blk(struct crypto_skcipher *tfm, const u8 *key,
++			     unsigned int len)
++{
++	struct zynqmp_rsa_op *op = crypto_skcipher_ctx(tfm);
++
++	op->keylen = len;
++	memcpy(op->key, key, len);
++	return 0;
++}
++
++static int zynqmp_rsa_xcrypt(struct skcipher_request *req, unsigned int flags)
++{
++	struct crypto_skcipher *tfm = crypto_skcipher_reqtfm(req);
++	struct zynqmp_rsa_op *op = crypto_skcipher_ctx(tfm);
++	struct zynqmp_rsa_dev *dd = zynqmp_rsa_find_dev(op);
++	int err, datasize, src_data = 0, dst_data = 0;
++	struct skcipher_walk walk = {0};
++	unsigned int nbytes;
++	char *kbuf;
++	size_t dma_size;
++	dma_addr_t dma_addr;
++
++	nbytes = req->cryptlen;
++	if (nbytes != XSECURE_RSA_2048_KEY_SIZE &&
++	    nbytes != XSECURE_RSA_3072_KEY_SIZE &&
++	    nbytes != XSECURE_RSA_4096_KEY_SIZE) {
++		return -EOPNOTSUPP;
++	}
++
++	dma_size = nbytes + op->keylen;
++	kbuf = dma_alloc_coherent(dd->dev, dma_size, &dma_addr, GFP_KERNEL);
++	if (!kbuf)
++		return -ENOMEM;
++
++	err = skcipher_walk_virt(&walk, req, false);
++	if (err)
++		goto out;
++
++	while ((datasize = walk.nbytes)) {
++		op->src = walk.src.virt.addr;
++		memcpy(kbuf + src_data, op->src, datasize);
++		src_data = src_data + datasize;
++		err = skcipher_walk_done(&walk, 0);
++		if (err)
++			goto out;
++	}
++	memcpy(kbuf + nbytes, op->key, op->keylen);
++
++	zynqmp_pm_rsa(dma_addr, nbytes, flags);
++
++	err = skcipher_walk_virt(&walk, req, false);
++	if (err)
++		goto out;
++
++	while ((datasize = walk.nbytes)) {
++		memcpy(walk.dst.virt.addr, kbuf + dst_data, datasize);
++		dst_data = dst_data + datasize;
++		err = skcipher_walk_done(&walk, 0);
++		if (err)
++			goto out;
++	}
++
++out:
++	dma_free_coherent(dd->dev, dma_size, kbuf, dma_addr);
++	return err;
++}
++
++static int zynqmp_rsa_decrypt(struct skcipher_request *req)
++{
++	return zynqmp_rsa_xcrypt(req, 0);
++}
++
++static int zynqmp_rsa_encrypt(struct skcipher_request *req)
++{
++	return zynqmp_rsa_xcrypt(req, 1);
++}
++
++static struct skcipher_alg zynqmp_alg = {
++	.base.cra_name		=	"xilinx-zynqmp-rsa",
++	.base.cra_driver_name	=	"zynqmp-rsa",
++	.base.cra_priority	=	400,
++	.base.cra_flags		=	CRYPTO_ALG_TYPE_SKCIPHER |
++					CRYPTO_ALG_KERN_DRIVER_ONLY,
++	.base.cra_blocksize	=	ZYNQMP_RSA_BLOCKSIZE,
++	.base.cra_ctxsize	=	sizeof(struct zynqmp_rsa_op),
++	.base.cra_alignmask	=	15,
++	.base.cra_module	=	THIS_MODULE,
++	.min_keysize		=	0,
++	.max_keysize		=	ZYNQMP_RSA_MAX_KEY_SIZE,
++	.setkey			=	zynqmp_setkey_blk,
++	.encrypt		=	zynqmp_rsa_encrypt,
++	.decrypt		=	zynqmp_rsa_decrypt,
++	.ivsize			=	1,
++};
++
++static struct xlnx_feature rsa_feature_map[] = {
++	{
++		.family = ZYNQMP_FAMILY_CODE,
++		.subfamily = ALL_SUB_FAMILY_CODE,
++		.feature_id = PM_SECURE_RSA,
++		.data = &zynqmp_alg,
++	},
++	{ /* sentinel */ }
++};
++
++static int zynqmp_rsa_probe(struct platform_device *pdev)
++{
++	struct device *dev = &pdev->dev;
++	int ret;
++
++	rsa_dd = devm_kzalloc(&pdev->dev, sizeof(*rsa_dd), GFP_KERNEL);
++	if (!rsa_dd)
++		return -ENOMEM;
++
++	rsa_dd->alg = xlnx_get_crypto_dev_data(rsa_feature_map);
++	if (IS_ERR(rsa_dd->alg)) {
++		dev_err(dev, "RSA is not supported on the platform\n");
++		return PTR_ERR(rsa_dd->alg);
++	}
++
++	rsa_dd->dev = dev;
++	platform_set_drvdata(pdev, rsa_dd);
++
++	ret = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(32));
++	if (ret < 0)
++		dev_err(dev, "no usable DMA configuration");
++
++	INIT_LIST_HEAD(&rsa_dd->list);
++	spin_lock_init(&rsa_dd->lock);
++	crypto_init_queue(&rsa_dd->queue, ZYNQMP_RSA_QUEUE_LENGTH);
++	spin_lock(&zynqmp_rsa.lock);
++	list_add_tail(&rsa_dd->list, &zynqmp_rsa.dev_list);
++	spin_unlock(&zynqmp_rsa.lock);
++
++	ret = crypto_register_skcipher(rsa_dd->alg);
++	if (ret)
++		goto err_algs;
++
++	return 0;
++
++err_algs:
++	spin_lock(&zynqmp_rsa.lock);
++	list_del(&rsa_dd->list);
++	spin_unlock(&zynqmp_rsa.lock);
++	dev_err(dev, "initialization failed.\n");
++	return ret;
++}
++
++static int zynqmp_rsa_remove(struct platform_device *pdev)
++{
++	struct zynqmp_rsa_dev *drv_ctx;
++
++	drv_ctx = platform_get_drvdata(pdev);
++
++	crypto_unregister_skcipher(drv_ctx->alg);
++
++	return 0;
++}
++
++static struct platform_driver xilinx_rsa_driver = {
++	.probe = zynqmp_rsa_probe,
++	.remove = zynqmp_rsa_remove,
++	.driver = {
++		.name = "zynqmp_rsa",
++	},
++};
++
++static struct platform_device *platform_dev;
++
++static int __init rsa_driver_init(void)
++{
++	int ret;
++
++	ret = platform_driver_register(&xilinx_rsa_driver);
++	if (ret)
++		return ret;
++
++	platform_dev = platform_device_register_simple(xilinx_rsa_driver.driver.name,
++					       0, NULL, 0);
++	if (IS_ERR(platform_dev)) {
++		ret = PTR_ERR(platform_dev);
++		platform_driver_unregister(&xilinx_rsa_driver);
++	}
++
++	return ret;
++}
++
++static void __exit rsa_driver_exit(void)
++{
++	platform_device_unregister(platform_dev);
++	platform_driver_unregister(&xilinx_rsa_driver);
++}
++
++device_initcall(rsa_driver_init);
++module_exit(rsa_driver_exit);
++
++MODULE_DESCRIPTION("ZynqMP RSA hw acceleration support.");
++MODULE_LICENSE("GPL");
++MODULE_AUTHOR("Nava kishore Manne <navam@xilinx.com>");
+diff --git a/drivers/crypto/xilinx/zynqmp-sha.c b/drivers/crypto/xilinx/zynqmp-sha.c
+index 426bf1a72..76dd6ea41 100644
+--- a/drivers/crypto/xilinx/zynqmp-sha.c
++++ b/drivers/crypto/xilinx/zynqmp-sha.c
+@@ -2,6 +2,7 @@
+ /*
+  * Xilinx ZynqMP SHA Driver.
+  * Copyright (c) 2022 Xilinx Inc.
++ * Copyright (C) 2022-2023, Advanced Micro Devices, Inc.
+  */
+ #include <linux/cacheflush.h>
+ #include <crypto/hash.h>
+@@ -17,6 +18,11 @@
+ #include <linux/module.h>
+ #include <linux/platform_device.h>
+ 
++#define CONTINUE_PACKET		BIT(31)
++#define FIRST_PACKET		BIT(30)
++#define FINAL_PACKET		0
++#define RESET			0
++
+ #define ZYNQMP_DMA_BIT_MASK		32U
+ #define ZYNQMP_DMA_ALLOC_FIXED_SIZE	0x1000U
+ 
+@@ -26,7 +32,7 @@ enum zynqmp_sha_op {
+ 	ZYNQMP_SHA3_FINAL = 4,
+ };
+ 
+-struct zynqmp_sha_drv_ctx {
++struct xilinx_sha_drv_ctx {
+ 	struct shash_alg sha3_384;
+ 	struct device *dev;
+ };
+@@ -49,9 +55,9 @@ static int zynqmp_sha_init_tfm(struct crypto_shash *hash)
+ 	struct zynqmp_sha_tfm_ctx *tfm_ctx = crypto_shash_ctx(hash);
+ 	struct shash_alg *alg = crypto_shash_alg(hash);
+ 	struct crypto_shash *fallback_tfm;
+-	struct zynqmp_sha_drv_ctx *drv_ctx;
++	struct xilinx_sha_drv_ctx *drv_ctx;
+ 
+-	drv_ctx = container_of(alg, struct zynqmp_sha_drv_ctx, sha3_384);
++	drv_ctx = container_of(alg, struct xilinx_sha_drv_ctx, sha3_384);
+ 	tfm_ctx->dev = drv_ctx->dev;
+ 
+ 	/* Allocate a fallback and abort if it failed. */
+@@ -159,7 +165,48 @@ static int zynqmp_sha_digest(struct shash_desc *desc, const u8 *data, unsigned i
+ 	return ret;
+ }
+ 
+-static struct zynqmp_sha_drv_ctx sha3_drv_ctx = {
++static int versal_sha_digest(struct shash_desc *desc, const u8 *data,
++			     unsigned int len, u8 *out)
++{
++	int update_size, ret, flag = FIRST_PACKET;
++	unsigned int remaining_len = len;
++
++	while (remaining_len != 0) {
++		memzero_explicit(ubuf, ZYNQMP_DMA_ALLOC_FIXED_SIZE);
++		if (remaining_len >= ZYNQMP_DMA_ALLOC_FIXED_SIZE) {
++			update_size = ZYNQMP_DMA_ALLOC_FIXED_SIZE;
++			remaining_len -= ZYNQMP_DMA_ALLOC_FIXED_SIZE;
++		} else {
++			update_size = remaining_len;
++			remaining_len = 0;
++		}
++
++		memcpy(ubuf, data, update_size);
++		flush_icache_range((unsigned long)ubuf,
++				   (unsigned long)ubuf + update_size);
++
++		flag |= CONTINUE_PACKET;
++		ret = versal_pm_sha_hash(update_dma_addr, 0,
++					 update_size | flag);
++		if (ret)
++			return ret;
++
++		data += update_size;
++		flag = RESET;
++	}
++
++	flag |= FINAL_PACKET;
++	ret = versal_pm_sha_hash(0, final_dma_addr, flag);
++	if (ret)
++		return ret;
++
++	memcpy(out, fbuf, SHA3_384_DIGEST_SIZE);
++	memzero_explicit(fbuf, SHA3_384_DIGEST_SIZE);
++
++	return 0;
++}
++
++static struct xilinx_sha_drv_ctx zynqmp_sha3_drv_ctx = {
+ 	.sha3_384 = {
+ 		.init = zynqmp_sha_init,
+ 		.update = zynqmp_sha_update,
+@@ -188,17 +235,63 @@ static struct zynqmp_sha_drv_ctx sha3_drv_ctx = {
+ 	}
+ };
+ 
++static struct xilinx_sha_drv_ctx versal_sha3_drv_ctx = {
++	.sha3_384 = {
++		.init = zynqmp_sha_init,
++		.update = zynqmp_sha_update,
++		.final = zynqmp_sha_final,
++		.finup = zynqmp_sha_finup,
++		.export = zynqmp_sha_export,
++		.import = zynqmp_sha_import,
++		.digest = versal_sha_digest,
++		.init_tfm = zynqmp_sha_init_tfm,
++		.exit_tfm = zynqmp_sha_exit_tfm,
++		.descsize = sizeof(struct zynqmp_sha_desc_ctx),
++		.statesize = sizeof(struct sha3_state),
++		.digestsize = SHA3_384_DIGEST_SIZE,
++		.base = {
++			.cra_name = "sha3-384",
++			.cra_driver_name = "versal-sha3-384",
++			.cra_priority = 300,
++			.cra_flags = CRYPTO_ALG_KERN_DRIVER_ONLY |
++				CRYPTO_ALG_ALLOCATES_MEMORY |
++				CRYPTO_ALG_NEED_FALLBACK,
++			.cra_blocksize = SHA3_384_BLOCK_SIZE,
++			.cra_ctxsize = sizeof(struct zynqmp_sha_tfm_ctx),
++			.cra_alignmask = 3,
++			.cra_module = THIS_MODULE,
++		}
++	}
++};
++
++static struct xlnx_feature sha_feature_map[] = {
++	{
++		.family = ZYNQMP_FAMILY_CODE,
++		.subfamily = ALL_SUB_FAMILY_CODE,
++		.feature_id = PM_SECURE_SHA,
++		.data = &zynqmp_sha3_drv_ctx,
++	},
++	{
++		.family = VERSAL_FAMILY_CODE,
++		.subfamily = VERSAL_SUB_FAMILY_CODE,
++		.feature_id = XSECURE_API_SHA3_UPDATE,
++		.data = &versal_sha3_drv_ctx,
++	},
++	{ /* sentinel */ }
++};
++
+ static int zynqmp_sha_probe(struct platform_device *pdev)
+ {
++	struct xilinx_sha_drv_ctx *sha3_drv_ctx;
+ 	struct device *dev = &pdev->dev;
+ 	int err;
+-	u32 v;
+ 
+ 	/* Verify the hardware is present */
+-	err = zynqmp_pm_get_api_version(&v);
+-	if (err)
+-		return err;
+-
++	sha3_drv_ctx = xlnx_get_crypto_dev_data(sha_feature_map);
++	if (IS_ERR(sha3_drv_ctx)) {
++		dev_err(dev, "SHA is not supported on the platform\n");
++		return PTR_ERR(sha3_drv_ctx);
++	}
+ 
+ 	err = dma_set_mask_and_coherent(dev, DMA_BIT_MASK(ZYNQMP_DMA_BIT_MASK));
+ 	if (err < 0) {
+@@ -206,19 +299,13 @@ static int zynqmp_sha_probe(struct platform_device *pdev)
+ 		return err;
+ 	}
+ 
+-	err = crypto_register_shash(&sha3_drv_ctx.sha3_384);
+-	if (err < 0) {
+-		dev_err(dev, "Failed to register shash alg.\n");
+-		return err;
+-	}
+-
+-	sha3_drv_ctx.dev = dev;
+-	platform_set_drvdata(pdev, &sha3_drv_ctx);
++	sha3_drv_ctx->dev = dev;
++	platform_set_drvdata(pdev, sha3_drv_ctx);
+ 
+ 	ubuf = dma_alloc_coherent(dev, ZYNQMP_DMA_ALLOC_FIXED_SIZE, &update_dma_addr, GFP_KERNEL);
+ 	if (!ubuf) {
+ 		err = -ENOMEM;
+-		goto err_shash;
++		return err;
+ 	}
+ 
+ 	fbuf = dma_alloc_coherent(dev, SHA3_384_DIGEST_SIZE, &final_dma_addr, GFP_KERNEL);
+@@ -227,24 +314,33 @@ static int zynqmp_sha_probe(struct platform_device *pdev)
+ 		goto err_mem;
+ 	}
+ 
++	err = crypto_register_shash(&sha3_drv_ctx->sha3_384);
++	if (err < 0) {
++		dev_err(dev, "Failed to register shash alg.\n");
++		goto err_mem1;
++	}
+ 	return 0;
+ 
+-err_mem:
+-	dma_free_coherent(sha3_drv_ctx.dev, ZYNQMP_DMA_ALLOC_FIXED_SIZE, ubuf, update_dma_addr);
++err_mem1:
++	dma_free_coherent(dev, SHA3_384_DIGEST_SIZE, fbuf, final_dma_addr);
+ 
+-err_shash:
+-	crypto_unregister_shash(&sha3_drv_ctx.sha3_384);
++err_mem:
++	dma_free_coherent(dev, ZYNQMP_DMA_ALLOC_FIXED_SIZE, ubuf, update_dma_addr);
+ 
+ 	return err;
+ }
+ 
+ static int zynqmp_sha_remove(struct platform_device *pdev)
+ {
+-	sha3_drv_ctx.dev = platform_get_drvdata(pdev);
++	struct xilinx_sha_drv_ctx *sha3_drv_ctx;
++
++	sha3_drv_ctx = platform_get_drvdata(pdev);
+ 
+-	dma_free_coherent(sha3_drv_ctx.dev, ZYNQMP_DMA_ALLOC_FIXED_SIZE, ubuf, update_dma_addr);
+-	dma_free_coherent(sha3_drv_ctx.dev, SHA3_384_DIGEST_SIZE, fbuf, final_dma_addr);
+-	crypto_unregister_shash(&sha3_drv_ctx.sha3_384);
++	dma_free_coherent(sha3_drv_ctx->dev,
++			  ZYNQMP_DMA_ALLOC_FIXED_SIZE, ubuf, update_dma_addr);
++	dma_free_coherent(sha3_drv_ctx->dev,
++			  SHA3_384_DIGEST_SIZE, fbuf, final_dma_addr);
++	crypto_unregister_shash(&sha3_drv_ctx->sha3_384);
+ 
+ 	return 0;
+ }
+@@ -257,7 +353,35 @@ static struct platform_driver zynqmp_sha_driver = {
+ 	},
+ };
+ 
+-module_platform_driver(zynqmp_sha_driver);
++static struct platform_device *platform_dev;
++
++static int __init sha_driver_init(void)
++{
++	int ret;
++
++	ret = platform_driver_register(&zynqmp_sha_driver);
++	if (ret)
++		return ret;
++
++	platform_dev = platform_device_register_simple(zynqmp_sha_driver.driver.name,
++						       0, NULL, 0);
++	if (IS_ERR(platform_dev)) {
++		ret = PTR_ERR(platform_dev);
++		platform_driver_unregister(&zynqmp_sha_driver);
++	}
++
++	return ret;
++}
++
++static void __exit sha_driver_exit(void)
++{
++	platform_device_unregister(platform_dev);
++	platform_driver_unregister(&zynqmp_sha_driver);
++}
++
++device_initcall(sha_driver_init);
++module_exit(sha_driver_exit);
++
+ MODULE_DESCRIPTION("ZynqMP SHA3 hardware acceleration support.");
+ MODULE_LICENSE("GPL v2");
+ MODULE_AUTHOR("Harsha <harsha.harsha@xilinx.com>");
+diff --git a/include/crypto/ecc_curve.h b/include/crypto/ecc_curve.h
+index 70964781e..7d90c5e82 100644
+--- a/include/crypto/ecc_curve.h
++++ b/include/crypto/ecc_curve.h
+@@ -23,6 +23,7 @@ struct ecc_point {
+  * struct ecc_curve - definition of elliptic curve
+  *
+  * @name:	Short name of the curve.
++ * @nbits:	The number of bits of a curve.
+  * @g:		Generator point of the curve.
+  * @p:		Prime number, if Barrett's reduction is used for this curve
+  *		pre-calculated value 'mu' is appended to the @p after ndigits.
+@@ -34,6 +35,7 @@ struct ecc_point {
+  */
+ struct ecc_curve {
+ 	char *name;
++	u32 nbits;
+ 	struct ecc_point g;
+ 	u64 *p;
+ 	u64 *n;
+diff --git a/include/crypto/ecdh.h b/include/crypto/ecdh.h
+index a9f98078d..9784ecdd2 100644
+--- a/include/crypto/ecdh.h
++++ b/include/crypto/ecdh.h
+@@ -26,6 +26,7 @@
+ #define ECC_CURVE_NIST_P192	0x0001
+ #define ECC_CURVE_NIST_P256	0x0002
+ #define ECC_CURVE_NIST_P384	0x0003
++#define ECC_CURVE_NIST_P521	0x0004
+ 
+ /**
+  * struct ecdh - define an ECDH private key
+diff --git a/include/crypto/ecdsa.h b/include/crypto/ecdsa.h
+new file mode 100644
+index 000000000..657824561
+--- /dev/null
++++ b/include/crypto/ecdsa.h
+@@ -0,0 +1,14 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef _CRYPTO_ECDSA_H
++#define _CRYPTO_ECDSA_H
++
++struct ecdsa_signature_ctx {
++	const struct ecc_curve *curve;
++	u64 r[ECC_MAX_DIGITS];
++	u64 s[ECC_MAX_DIGITS];
++};
++
++int ecdsa_get_signature_rs(u64 *dest, size_t hdrlen, unsigned char tag,
++			   const void *value, size_t vlen, unsigned int ndigits);
++
++#endif /* _CRYPTO_ECDSA_H */
+diff --git a/include/crypto/hash.h b/include/crypto/hash.h
+index f7c2a22cd..1ad0f4554 100644
+--- a/include/crypto/hash.h
++++ b/include/crypto/hash.h
+@@ -180,10 +180,10 @@ struct shash_desc {
+ #define HASH_MAX_DIGESTSIZE	 64
+ 
+ /*
+- * Worst case is hmac(sha3-224-generic).  Its context is a nested 'shash_desc'
+- * containing a 'struct sha3_state'.
++ * Worst case is hmac(versal-sha3-384). Its context is a nested 'shash_desc'
++ * containing a 'struct sha3_state' plus fallback shash_desc.
+  */
+-#define HASH_MAX_DESCSIZE	(sizeof(struct shash_desc) + 360)
++#define HASH_MAX_DESCSIZE	((sizeof(struct shash_desc) * 2) + 360)
+ 
+ #define SHASH_DESC_ON_STACK(shash, ctx)					     \
+ 	char __##shash##_desc[sizeof(struct shash_desc) + HASH_MAX_DESCSIZE] \
+diff --git a/include/crypto/internal/ecc.h b/include/crypto/internal/ecc.h
+index c0b8be63c..886932181 100644
+--- a/include/crypto/internal/ecc.h
++++ b/include/crypto/internal/ecc.h
+@@ -33,7 +33,8 @@
+ #define ECC_CURVE_NIST_P192_DIGITS  3
+ #define ECC_CURVE_NIST_P256_DIGITS  4
+ #define ECC_CURVE_NIST_P384_DIGITS  6
+-#define ECC_MAX_DIGITS              (512 / 64) /* due to ecrdsa */
++#define ECC_CURVE_NIST_P521_DIGITS  9
++#define ECC_MAX_DIGITS              DIV_ROUND_UP(521, 64) /* NIST P521 */
+ 
+ #define ECC_DIGITS_TO_BYTES_SHIFT 3
+ 
+@@ -66,6 +67,27 @@ static inline void ecc_swap_digits(const void *in, u64 *out, unsigned int ndigit
+ void ecc_digits_from_bytes(const u8 *in, unsigned int nbytes,
+ 			   u64 *out, unsigned int ndigits);
+ 
++/**
++ * ecc_digits_from_bytes() - Create ndigits-sized digits array from byte array
++ * @in:       Input byte array
++ * @nbytes    Size of input byte array
++ * @out       Output digits array
++ * @ndigits:  Number of digits to create from byte array
++ */
++static inline void ecc_digits_from_bytes(const u8 *in, unsigned int nbytes,
++					 u64 *out, unsigned int ndigits)
++{
++	unsigned int o = nbytes & 7;
++	__be64 msd = 0;
++
++	if (o) {
++		memcpy((u8 *)&msd + sizeof(msd) - o, in, o);
++		out[--ndigits] = be64_to_cpu(msd);
++		in += o;
++	}
++	ecc_swap_digits(in, out, ndigits);
++}
++
+ /**
+  * ecc_is_key_valid() - Validate a given ECDH private key
+  *

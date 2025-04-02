@@ -1,0 +1,1875 @@
+diff --git a/Documentation/ABI/testing/sysfs-bus-cdx b/Documentation/ABI/testing/sysfs-bus-cdx
+index 7af477f49..e84277531 100644
+--- a/Documentation/ABI/testing/sysfs-bus-cdx
++++ b/Documentation/ABI/testing/sysfs-bus-cdx
+@@ -28,14 +28,57 @@ Description:
+ 		of a device manufacturer.
+ 		Combination of Vendor ID and Device ID identifies a device.
+ 
++What:		/sys/bus/cdx/devices/.../subsystem_vendor
++Date:		July 2023
++Contact:	puneet.gupta@amd.com
++Description:
++		Subsystem Vendor ID for this CDX device, in hexadecimal.
++		Subsystem Vendor ID is 16 bit identifier specific to the
++		card manufacturer.
++
++What:		/sys/bus/cdx/devices/.../subsystem_device
++Date:		July 2023
++Contact:	puneet.gupta@amd.com
++Description:
++		Subsystem Device ID for this CDX device, in hexadecimal
++		Subsystem Device ID is 16 bit identifier specific to the
++		card manufacturer.
++
++What:		/sys/bus/cdx/devices/.../class
++Date:		July 2023
++Contact:	puneet.gupta@amd.com
++Description:
++		This file contains the class of the CDX device, in hexadecimal.
++		Class is 24 bit identifier specifies the functionality of the device.
++
++What:		/sys/bus/cdx/devices/.../revision
++Date:		July 2023
++Contact:	puneet.gupta@amd.com
++Description:
++		This file contains the revision field of the CDX device, in hexadecimal.
++		Revision is 8 bit revision identifier of the device.
++
++What:		/sys/bus/cdx/devices/.../enable
++Date:		October 2023
++Contact:	abhijit.gangurde@amd.com
++Description:
++		CDX bus should be disabled before updating the devices in FPGA.
++		Writing n/0/off will attempt to disable the CDX bus and.
++		writing y/1/on will attempt to enable the CDX bus. Reading this file
++		gives the current state of the bus, 1 for enabled and 0 for disabled.
++
++		For example::
++
++		  # echo 1 > /sys/bus/cdx/.../enable
++
+ What:		/sys/bus/cdx/devices/.../reset
+ Date:		March 2023
+ Contact:	nipun.gupta@amd.com
+ Description:
+-		Writing y/1/on to this file resets the CDX device.
+-		On resetting the device, the corresponding driver is notified
+-		twice, once before the device is being reset, and again after
+-		the reset has been complete.
++		Writing y/1/on to this file resets the CDX device or all devices
++		on the bus. On resetting the device, the corresponding driver is
++		notified twice, once before the device is being reset, and again
++		after the reset has been complete.
+ 
+ 		For example::
+ 
+@@ -54,3 +97,25 @@ Description:
+ 		For example::
+ 
+ 		  # echo 1 > /sys/bus/cdx/devices/.../remove
++
++What:		/sys/bus/cdx/devices/.../resource<N>
++Date:		July 2023
++Contact:	puneet.gupta@amd.com
++Description:
++		The resource binary file contains the content of the memory
++		regions. These files can be m'maped from userspace.
++
++What:		/sys/bus/cdx/devices/.../modalias
++Date:		July 2023
++Contact:	nipun.gupta@amd.com
++Description:
++		This attribute indicates the CDX ID of the device.
++		That is in the format:
++		cdx:vXXXXdXXXXsvXXXXsdXXXXcXXXXXX,
++		where:
++
++		    - vXXXX contains the vendor ID;
++		    - dXXXX contains the device ID;
++		    - svXXXX contains the subsystem vendor ID;
++		    - sdXXXX contains the subsystem device ID;
++		    - cXXXXXX contains the device class.
+diff --git a/drivers/cdx/Kconfig b/drivers/cdx/Kconfig
+index a08958485..86df7ccb7 100644
+--- a/drivers/cdx/Kconfig
++++ b/drivers/cdx/Kconfig
+@@ -8,6 +8,7 @@
+ config CDX_BUS
+ 	bool "CDX Bus driver"
+ 	depends on OF && ARM64
++	select GENERIC_MSI_IRQ_DOMAIN
+ 	help
+ 	  Driver to enable Composable DMA Transfer(CDX) Bus. CDX bus
+ 	  exposes Fabric devices which uses composable DMA IP to the
+diff --git a/drivers/cdx/Makefile b/drivers/cdx/Makefile
+index 0324e4914..ab91c6dcd 100644
+--- a/drivers/cdx/Makefile
++++ b/drivers/cdx/Makefile
+@@ -5,4 +5,6 @@
+ # Copyright (C) 2022-2023, Advanced Micro Devices, Inc.
+ #
+ 
+-obj-$(CONFIG_CDX_BUS) += cdx.o controller/
++ccflags-y += -DDEFAULT_SYMBOL_NAMESPACE=CDX_BUS
++
++obj-$(CONFIG_CDX_BUS) += cdx.o cdx_msi.o controller/
+diff --git a/drivers/cdx/cdx.c b/drivers/cdx/cdx.c
+index d2cad4c67..686894e28 100644
+--- a/drivers/cdx/cdx.c
++++ b/drivers/cdx/cdx.c
+@@ -56,22 +56,35 @@
+  */
+ 
+ #include <linux/init.h>
++#include <linux/irqdomain.h>
+ #include <linux/kernel.h>
++#include <linux/of.h>
+ #include <linux/of_device.h>
++#include <linux/of_platform.h>
++#include <linux/platform_device.h>
+ #include <linux/slab.h>
+ #include <linux/mm.h>
+-#include <linux/xarray.h>
++#include <linux/idr.h>
+ #include <linux/cdx/cdx_bus.h>
+ #include <linux/iommu.h>
+ #include <linux/dma-map-ops.h>
++#include <linux/debugfs.h>
+ #include "cdx.h"
+ 
+ /* Default DMA mask for devices on a CDX bus */
+ #define CDX_DEFAULT_DMA_MASK	(~0ULL)
+ #define MAX_CDX_CONTROLLERS 16
+ 
+-/* CDX controllers registered with the CDX bus */
+-static DEFINE_XARRAY_ALLOC(cdx_controllers);
++/* IDA for CDX controllers registered with the CDX bus */
++static DEFINE_IDA(cdx_controller_ida);
++/* Lock to protect controller ops */
++static DEFINE_MUTEX(cdx_controller_lock);
++/* Debugfs dir for cdx bus */
++static struct dentry *cdx_debugfs_dir;
++
++static char *compat_node_name = "xlnx,versal-net-cdx";
++
++static void cdx_destroy_res_attr(struct cdx_device *cdx_dev, int num);
+ 
+ /**
+  * cdx_dev_reset - Reset a CDX device
+@@ -106,6 +119,20 @@ int cdx_dev_reset(struct device *dev)
+ }
+ EXPORT_SYMBOL_GPL(cdx_dev_reset);
+ 
++/**
++ * reset_cdx_device - Reset a CDX device
++ * @dev: CDX device
++ * @data: This is always passed as NULL, and is not used in this API,
++ *    but is required here as the device_for_each_child() API expects
++ *    the passed function to have this as an argument.
++ *
++ * Return: -errno on failure, 0 on success.
++ */
++static int reset_cdx_device(struct device *dev, void *data)
++{
++	return cdx_dev_reset(dev);
++}
++
+ /**
+  * cdx_unregister_device - Unregister a CDX device
+  * @dev: CDX device
+@@ -120,9 +147,19 @@ static int cdx_unregister_device(struct device *dev,
+ 				 void *data)
+ {
+ 	struct cdx_device *cdx_dev = to_cdx_device(dev);
++	struct cdx_controller *cdx = cdx_dev->cdx;
++
++	if (cdx_dev->is_bus) {
++		device_for_each_child(dev, NULL, cdx_unregister_device);
++		if (cdx_dev->enabled && cdx->ops->bus_disable)
++			cdx->ops->bus_disable(cdx, cdx_dev->bus_num);
++	} else {
++		cdx_destroy_res_attr(cdx_dev, MAX_CDX_DEV_RESOURCES);
++		debugfs_remove_recursive(cdx_dev->debugfs_dir);
++		kfree(cdx_dev->driver_override);
++		cdx_dev->driver_override = NULL;
++	}
+ 
+-	kfree(cdx_dev->driver_override);
+-	cdx_dev->driver_override = NULL;
+ 	/*
+ 	 * Do not free cdx_dev here as it would be freed in
+ 	 * cdx_device_release() called from within put_device().
+@@ -153,7 +190,10 @@ cdx_match_one_device(const struct cdx_device_id *id,
+ {
+ 	/* Use vendor ID and device ID for matching */
+ 	if ((id->vendor == CDX_ANY_ID || id->vendor == dev->vendor) &&
+-	    (id->device == CDX_ANY_ID || id->device == dev->device))
++	    (id->device == CDX_ANY_ID || id->device == dev->device) &&
++	    (id->subvendor == CDX_ANY_ID || id->subvendor == dev->subsystem_vendor) &&
++	    (id->subdevice == CDX_ANY_ID || id->subdevice == dev->subsystem_device) &&
++	    !((id->class ^ dev->class) & id->class_mask))
+ 		return id;
+ 	return NULL;
+ }
+@@ -182,6 +222,38 @@ cdx_match_id(const struct cdx_device_id *ids, struct cdx_device *dev)
+ 	return NULL;
+ }
+ 
++int cdx_set_master(struct cdx_device *cdx_dev)
++{
++	struct cdx_controller *cdx = cdx_dev->cdx;
++	struct cdx_device_config dev_config;
++	int ret = -EOPNOTSUPP;
++
++	dev_config.type = CDX_DEV_BUS_MASTER_CONF;
++	dev_config.bus_master_enable = true;
++	if (cdx->ops->dev_configure)
++		ret = cdx->ops->dev_configure(cdx, cdx_dev->bus_num,
++					      cdx_dev->dev_num, &dev_config);
++
++	return ret;
++}
++EXPORT_SYMBOL_GPL(cdx_set_master);
++
++int cdx_clear_master(struct cdx_device *cdx_dev)
++{
++	struct cdx_controller *cdx = cdx_dev->cdx;
++	struct cdx_device_config dev_config;
++	int ret = -EOPNOTSUPP;
++
++	dev_config.type = CDX_DEV_BUS_MASTER_CONF;
++	dev_config.bus_master_enable = false;
++	if (cdx->ops->dev_configure)
++		ret = cdx->ops->dev_configure(cdx, cdx_dev->bus_num,
++					      cdx_dev->dev_num, &dev_config);
++
++	return ret;
++}
++EXPORT_SYMBOL_GPL(cdx_clear_master);
++
+ /**
+  * cdx_bus_match - device to driver matching callback
+  * @dev: the cdx device to match against
+@@ -197,6 +269,9 @@ static int cdx_bus_match(struct device *dev, struct device_driver *drv)
+ 	const struct cdx_device_id *found_id = NULL;
+ 	const struct cdx_device_id *ids;
+ 
++	if (cdx_dev->is_bus)
++		return false;
++
+ 	ids = cdx_drv->match_id_table;
+ 
+ 	/* When driver_override is set, only bind to the matching driver */
+@@ -261,10 +336,11 @@ static int cdx_dma_configure(struct device *dev)
+ {
+ 	struct cdx_driver *cdx_drv = to_cdx_driver(dev->driver);
+ 	struct cdx_device *cdx_dev = to_cdx_device(dev);
++	struct cdx_controller *cdx = cdx_dev->cdx;
+ 	u32 input_id = cdx_dev->req_id;
+ 	int ret;
+ 
+-	ret = of_dma_configure_id(dev, dev->parent->of_node, 0, &input_id);
++	ret = of_dma_configure_id(dev, cdx->dev->of_node, 0, &input_id);
+ 	if (ret && ret != -EPROBE_DEFER) {
+ 		dev_err(dev, "of_dma_configure_id() failed\n");
+ 		return ret;
+@@ -299,6 +375,10 @@ static DEVICE_ATTR_RO(field)
+ 
+ cdx_config_attr(vendor, "0x%04x\n");
+ cdx_config_attr(device, "0x%04x\n");
++cdx_config_attr(subsystem_vendor, "0x%04x\n");
++cdx_config_attr(subsystem_device, "0x%04x\n");
++cdx_config_attr(revision, "0x%02x\n");
++cdx_config_attr(class, "0x%06x\n");
+ 
+ static ssize_t remove_store(struct device *dev,
+ 			    struct device_attribute *attr,
+@@ -327,6 +407,7 @@ static DEVICE_ATTR_WO(remove);
+ static ssize_t reset_store(struct device *dev, struct device_attribute *attr,
+ 			   const char *buf, size_t count)
+ {
++	struct cdx_device *cdx_dev = to_cdx_device(dev);
+ 	bool val;
+ 	int ret;
+ 
+@@ -336,14 +417,27 @@ static ssize_t reset_store(struct device *dev, struct device_attribute *attr,
+ 	if (!val)
+ 		return -EINVAL;
+ 
+-	ret = cdx_dev_reset(dev);
+-	if (ret)
+-		return ret;
++	if (cdx_dev->is_bus)
++		/* Reset all the devices attached to cdx bus */
++		ret = device_for_each_child(dev, NULL, reset_cdx_device);
++	else
++		ret = cdx_dev_reset(dev);
+ 
+-	return count;
++	return ret < 0 ? ret : count;
+ }
+ static DEVICE_ATTR_WO(reset);
+ 
++static ssize_t modalias_show(struct device *dev, struct device_attribute *attr,
++			     char *buf)
++{
++	struct cdx_device *cdx_dev = to_cdx_device(dev);
++
++	return sprintf(buf, "cdx:v%04Xd%04Xsv%04Xsd%04Xc%06X\n", cdx_dev->vendor,
++			cdx_dev->device, cdx_dev->subsystem_vendor, cdx_dev->subsystem_device,
++			cdx_dev->class);
++}
++static DEVICE_ATTR_RO(modalias);
++
+ static ssize_t driver_override_store(struct device *dev,
+ 				     struct device_attribute *attr,
+ 				     const char *buf, size_t count)
+@@ -370,21 +464,132 @@ static ssize_t driver_override_show(struct device *dev,
+ }
+ static DEVICE_ATTR_RW(driver_override);
+ 
++static ssize_t enable_store(struct device *dev, struct device_attribute *attr,
++			    const char *buf, size_t count)
++{
++	struct cdx_device *cdx_dev = to_cdx_device(dev);
++	struct cdx_controller *cdx = cdx_dev->cdx;
++	bool enable;
++	int ret;
++
++	if (kstrtobool(buf, &enable) < 0)
++		return -EINVAL;
++
++	if (enable == cdx_dev->enabled)
++		return count;
++
++	if (enable && cdx->ops->bus_enable)
++		ret = cdx->ops->bus_enable(cdx, cdx_dev->bus_num);
++	else if (!enable && cdx->ops->bus_disable)
++		ret = cdx->ops->bus_disable(cdx, cdx_dev->bus_num);
++	else
++		ret = -EOPNOTSUPP;
++
++	if (!ret)
++		cdx_dev->enabled = enable;
++
++	return ret < 0 ? ret : count;
++}
++
++static ssize_t enable_show(struct device *dev, struct device_attribute *attr, char *buf)
++{
++	struct cdx_device *cdx_dev = to_cdx_device(dev);
++
++	return sysfs_emit(buf, "%u\n", cdx_dev->enabled);
++}
++static DEVICE_ATTR_RW(enable);
++
++static umode_t cdx_dev_attrs_are_visible(struct kobject *kobj, struct attribute *a, int n)
++{
++	struct device *dev = kobj_to_dev(kobj);
++	struct cdx_device *cdx_dev;
++
++	cdx_dev = to_cdx_device(dev);
++	if (!cdx_dev->is_bus)
++		return a->mode;
++
++	return 0;
++}
++
++static umode_t cdx_bus_attrs_are_visible(struct kobject *kobj, struct attribute *a, int n)
++{
++	struct device *dev = kobj_to_dev(kobj);
++	struct cdx_device *cdx_dev;
++
++	cdx_dev = to_cdx_device(dev);
++	if (cdx_dev->is_bus)
++		return a->mode;
++
++	return 0;
++}
++
+ static struct attribute *cdx_dev_attrs[] = {
+ 	&dev_attr_remove.attr,
+ 	&dev_attr_reset.attr,
+ 	&dev_attr_vendor.attr,
+ 	&dev_attr_device.attr,
++	&dev_attr_subsystem_vendor.attr,
++	&dev_attr_subsystem_device.attr,
++	&dev_attr_class.attr,
++	&dev_attr_revision.attr,
++	&dev_attr_modalias.attr,
+ 	&dev_attr_driver_override.attr,
+ 	NULL,
+ };
+-ATTRIBUTE_GROUPS(cdx_dev);
++
++static const struct attribute_group cdx_dev_group = {
++	.attrs = cdx_dev_attrs,
++	.is_visible = cdx_dev_attrs_are_visible,
++};
++
++static struct attribute *cdx_bus_dev_attrs[] = {
++	&dev_attr_enable.attr,
++	&dev_attr_reset.attr,
++	NULL,
++};
++
++static const struct attribute_group cdx_bus_dev_group = {
++	.attrs = cdx_bus_dev_attrs,
++	.is_visible = cdx_bus_attrs_are_visible,
++};
++
++static const struct attribute_group *cdx_dev_groups[] = {
++	&cdx_dev_group,
++	&cdx_bus_dev_group,
++	NULL,
++};
++
++static int cdx_debug_resource_show(struct seq_file *s, void *data)
++{
++	struct cdx_device *cdx_dev = s->private;
++	int i;
++
++	for (i = 0; i < MAX_CDX_DEV_RESOURCES; i++) {
++		struct resource *res =  &cdx_dev->res[i];
++
++		seq_printf(s, "%pr\n", res);
++	}
++
++	return 0;
++}
++DEFINE_SHOW_ATTRIBUTE(cdx_debug_resource);
++
++static void cdx_device_debugfs_init(struct cdx_device *cdx_dev)
++{
++	cdx_dev->debugfs_dir = debugfs_create_dir(dev_name(&cdx_dev->dev), cdx_debugfs_dir);
++	if (IS_ERR(cdx_dev->debugfs_dir))
++		return;
++
++	debugfs_create_file("resource", 0444, cdx_dev->debugfs_dir, cdx_dev,
++			    &cdx_debug_resource_fops);
++}
+ 
+ static ssize_t rescan_store(const struct bus_type *bus,
+ 			    const char *buf, size_t count)
+ {
+ 	struct cdx_controller *cdx;
+-	unsigned long index;
++	struct platform_device *pd;
++	struct device_node *np;
+ 	bool val;
+ 
+ 	if (kstrtobool(buf, &val) < 0)
+@@ -393,18 +598,30 @@ static ssize_t rescan_store(const struct bus_type *bus,
+ 	if (!val)
+ 		return -EINVAL;
+ 
++	mutex_lock(&cdx_controller_lock);
++
+ 	/* Unregister all the devices on the bus */
+ 	cdx_unregister_devices(&cdx_bus_type);
+ 
+ 	/* Rescan all the devices */
+-	xa_for_each(&cdx_controllers, index, cdx) {
+-		int ret;
++	for_each_compatible_node(np, NULL, compat_node_name) {
++		pd = of_find_device_by_node(np);
++		if (!pd) {
++			of_node_put(np);
++			count = -EINVAL;
++			goto unlock;
++		}
+ 
+-		ret = cdx->ops->scan(cdx);
+-		if (ret)
+-			dev_err(cdx->dev, "cdx bus scanning failed\n");
++		cdx = platform_get_drvdata(pd);
++		if (cdx && cdx->controller_registered && cdx->ops->scan)
++			cdx->ops->scan(cdx);
++
++		put_device(&pd->dev);
+ 	}
+ 
++unlock:
++	mutex_unlock(&cdx_controller_lock);
++
+ 	return count;
+ }
+ static BUS_ATTR_WO(rescan);
+@@ -460,12 +677,105 @@ static void cdx_device_release(struct device *dev)
+ 	kfree(cdx_dev);
+ }
+ 
++static const struct vm_operations_struct cdx_phys_vm_ops = {
++#ifdef CONFIG_HAVE_IOREMAP_PROT
++	.access = generic_access_phys,
++#endif
++};
++
++/**
++ * cdx_mmap_resource - map a CDX resource into user memory space
++ * @fp: File pointer. Not used in this function, but required where
++ *      this API is registered as a callback.
++ * @kobj: kobject for mapping
++ * @attr: struct bin_attribute for the file being mapped
++ * @vma: struct vm_area_struct passed into the mmap
++ *
++ * Use the regular CDX mapping routines to map a CDX resource into userspace.
++ *
++ * Return: true on success, false otherwise.
++ */
++static int cdx_mmap_resource(struct file *fp, struct kobject *kobj,
++			     struct bin_attribute *attr,
++			     struct vm_area_struct *vma)
++{
++	struct cdx_device *cdx_dev = to_cdx_device(kobj_to_dev(kobj));
++	int num = (unsigned long)attr->private;
++	struct resource *res;
++	unsigned long size;
++
++	res = &cdx_dev->res[num];
++	if (iomem_is_exclusive(res->start))
++		return -EINVAL;
++
++	/* Make sure the caller is mapping a valid resource for this device */
++	size = ((cdx_resource_len(cdx_dev, num) - 1) >> PAGE_SHIFT) + 1;
++	if (vma->vm_pgoff + vma_pages(vma) > size)
++		return -EINVAL;
++
++	/*
++	 * Map memory region and vm->vm_pgoff is expected to be an
++	 * offset within that region.
++	 */
++	vma->vm_page_prot = pgprot_device(vma->vm_page_prot);
++	vma->vm_pgoff += (cdx_resource_start(cdx_dev, num) >> PAGE_SHIFT);
++	vma->vm_ops = &cdx_phys_vm_ops;
++	return io_remap_pfn_range(vma, vma->vm_start, vma->vm_pgoff,
++				  vma->vm_end - vma->vm_start,
++				  vma->vm_page_prot);
++}
++
++static void cdx_destroy_res_attr(struct cdx_device *cdx_dev, int num)
++{
++	int i;
++
++	/* removing the bin attributes */
++	for (i = 0; i < num; i++) {
++		struct bin_attribute *res_attr;
++
++		res_attr = cdx_dev->res_attr[i];
++		if (res_attr) {
++			sysfs_remove_bin_file(&cdx_dev->dev.kobj, res_attr);
++			kfree(res_attr);
++		}
++	}
++}
++
++#define CDX_RES_ATTR_NAME_LEN	10
++static int cdx_create_res_attr(struct cdx_device *cdx_dev, int num)
++{
++	struct bin_attribute *res_attr;
++	char *res_attr_name;
++	int ret;
++
++	res_attr = kzalloc(sizeof(*res_attr) + CDX_RES_ATTR_NAME_LEN, GFP_ATOMIC);
++	if (!res_attr)
++		return -ENOMEM;
++
++	res_attr_name = (char *)(res_attr + 1);
++
++	sysfs_bin_attr_init(res_attr);
++
++	cdx_dev->res_attr[num] = res_attr;
++	sprintf(res_attr_name, "resource%d", num);
++
++	res_attr->mmap = cdx_mmap_resource;
++	res_attr->attr.name = res_attr_name;
++	res_attr->attr.mode = 0600;
++	res_attr->size = cdx_resource_len(cdx_dev, num);
++	res_attr->private = (void *)(unsigned long)num;
++	ret = sysfs_create_bin_file(&cdx_dev->dev.kobj, res_attr);
++	if (ret)
++		kfree(res_attr);
++
++	return ret;
++}
++
+ int cdx_device_add(struct cdx_dev_params *dev_params)
+ {
+ 	struct cdx_controller *cdx = dev_params->cdx;
+-	struct device *parent = cdx->dev;
+ 	struct cdx_device *cdx_dev;
+-	int ret;
++	int ret, i;
+ 
+ 	cdx_dev = kzalloc(sizeof(*cdx_dev), GFP_KERNEL);
+ 	if (!cdx_dev)
+@@ -478,8 +788,13 @@ int cdx_device_add(struct cdx_dev_params *dev_params)
+ 
+ 	/* Populate CDX dev params */
+ 	cdx_dev->req_id = dev_params->req_id;
++	cdx_dev->msi_dev_id = dev_params->msi_dev_id;
+ 	cdx_dev->vendor = dev_params->vendor;
+ 	cdx_dev->device = dev_params->device;
++	cdx_dev->subsystem_vendor = dev_params->subsys_vendor;
++	cdx_dev->subsystem_device = dev_params->subsys_device;
++	cdx_dev->class = dev_params->class;
++	cdx_dev->revision = dev_params->revision;
+ 	cdx_dev->bus_num = dev_params->bus_num;
+ 	cdx_dev->dev_num = dev_params->dev_num;
+ 	cdx_dev->cdx = dev_params->cdx;
+@@ -487,16 +802,23 @@ int cdx_device_add(struct cdx_dev_params *dev_params)
+ 
+ 	/* Initialize generic device */
+ 	device_initialize(&cdx_dev->dev);
+-	cdx_dev->dev.parent = parent;
++	cdx_dev->dev.parent = dev_params->parent;
+ 	cdx_dev->dev.bus = &cdx_bus_type;
+ 	cdx_dev->dev.dma_mask = &cdx_dev->dma_mask;
+ 	cdx_dev->dev.release = cdx_device_release;
++	cdx_dev->msi_write_pending = false;
++	mutex_init(&cdx_dev->irqchip_lock);
+ 
+ 	/* Set Name */
+ 	dev_set_name(&cdx_dev->dev, "cdx-%02x:%02x",
+ 		     ((cdx->id << CDX_CONTROLLER_ID_SHIFT) | (cdx_dev->bus_num & CDX_BUS_NUM_MASK)),
+ 		     cdx_dev->dev_num);
+ 
++	if (cdx->msi_domain) {
++		cdx_dev->num_msi = dev_params->num_msi;
++		dev_set_msi_domain(&cdx_dev->dev, cdx->msi_domain);
++	}
++
+ 	ret = device_add(&cdx_dev->dev);
+ 	if (ret) {
+ 		dev_err(&cdx_dev->dev,
+@@ -504,7 +826,28 @@ int cdx_device_add(struct cdx_dev_params *dev_params)
+ 		goto fail;
+ 	}
+ 
++	/* Create resource<N> attributes */
++	for (i = 0; i < MAX_CDX_DEV_RESOURCES; i++) {
++		if (cdx_resource_flags(cdx_dev, i) & IORESOURCE_MEM) {
++			/* skip empty resources */
++			if (!cdx_resource_len(cdx_dev, i))
++				continue;
++
++			ret = cdx_create_res_attr(cdx_dev, i);
++			if (ret != 0) {
++				dev_err(&cdx_dev->dev,
++					"cdx device resource<%d> file creation failed: %d", i, ret);
++				goto resource_create_fail;
++			}
++		}
++	}
++
++	cdx_device_debugfs_init(cdx_dev);
++
+ 	return 0;
++resource_create_fail:
++	cdx_destroy_res_attr(cdx_dev, i);
++	device_del(&cdx_dev->dev);
+ fail:
+ 	/*
+ 	 * Do not free cdx_dev here as it would be freed in
+@@ -514,40 +857,103 @@ int cdx_device_add(struct cdx_dev_params *dev_params)
+ 
+ 	return ret;
+ }
+-EXPORT_SYMBOL_GPL(cdx_device_add);
++EXPORT_SYMBOL_NS_GPL(cdx_device_add, CDX_BUS_CONTROLLER);
+ 
+-int cdx_register_controller(struct cdx_controller *cdx)
++struct device *cdx_bus_add(struct cdx_controller *cdx, u8 bus_num)
+ {
++	struct cdx_device *cdx_dev;
+ 	int ret;
+ 
+-	ret = xa_alloc(&cdx_controllers, &cdx->id, cdx,
+-		       XA_LIMIT(0, MAX_CDX_CONTROLLERS - 1), GFP_KERNEL);
++	cdx_dev = kzalloc(sizeof(*cdx_dev), GFP_KERNEL);
++	if (!cdx_dev)
++		return NULL;
++
++	device_initialize(&cdx_dev->dev);
++	cdx_dev->cdx = cdx;
++
++	cdx_dev->dev.parent = cdx->dev;
++	cdx_dev->dev.bus = &cdx_bus_type;
++	cdx_dev->dev.release = cdx_device_release;
++	cdx_dev->is_bus = true;
++	cdx_dev->bus_num = bus_num;
++
++	dev_set_name(&cdx_dev->dev, "cdx-%02x",
++		     ((cdx->id << CDX_CONTROLLER_ID_SHIFT) | (bus_num & CDX_BUS_NUM_MASK)));
++
++	ret = device_add(&cdx_dev->dev);
+ 	if (ret) {
++		dev_err(&cdx_dev->dev, "cdx bus device add failed: %d\n", ret);
++		goto device_add_fail;
++	}
++
++	if (cdx->ops->bus_enable) {
++		ret = cdx->ops->bus_enable(cdx, bus_num);
++		if (ret && ret != -EALREADY) {
++			dev_err(cdx->dev, "cdx bus enable failed: %d\n", ret);
++			goto bus_enable_fail;
++		}
++	}
++
++	cdx_dev->enabled = true;
++	return &cdx_dev->dev;
++
++bus_enable_fail:
++	device_del(&cdx_dev->dev);
++device_add_fail:
++	put_device(&cdx_dev->dev);
++
++	return NULL;
++}
++EXPORT_SYMBOL_NS_GPL(cdx_bus_add, CDX_BUS_CONTROLLER);
++
++int cdx_register_controller(struct cdx_controller *cdx)
++{
++	int ret;
++
++	ret = ida_alloc_range(&cdx_controller_ida, 0,  MAX_CDX_CONTROLLERS - 1, GFP_KERNEL);
++	if (ret < 0) {
+ 		dev_err(cdx->dev,
+ 			"No free index available. Maximum controllers already registered\n");
+ 		cdx->id = (u8)MAX_CDX_CONTROLLERS;
+ 		return ret;
+ 	}
+ 
++	mutex_lock(&cdx_controller_lock);
++	cdx->id = ret;
++
+ 	/* Scan all the devices */
+-	cdx->ops->scan(cdx);
++	if (cdx->ops->scan)
++		cdx->ops->scan(cdx);
++	cdx->controller_registered = true;
++	mutex_unlock(&cdx_controller_lock);
+ 
+ 	return 0;
+ }
+-EXPORT_SYMBOL_GPL(cdx_register_controller);
++EXPORT_SYMBOL_NS_GPL(cdx_register_controller, CDX_BUS_CONTROLLER);
+ 
+ void cdx_unregister_controller(struct cdx_controller *cdx)
+ {
+ 	if (cdx->id >= MAX_CDX_CONTROLLERS)
+ 		return;
+ 
++	mutex_lock(&cdx_controller_lock);
++
++	cdx->controller_registered = false;
+ 	device_for_each_child(cdx->dev, NULL, cdx_unregister_device);
+-	xa_erase(&cdx_controllers, cdx->id);
++	ida_free(&cdx_controller_ida, cdx->id);
++
++	mutex_unlock(&cdx_controller_lock);
+ }
+-EXPORT_SYMBOL_GPL(cdx_unregister_controller);
++EXPORT_SYMBOL_NS_GPL(cdx_unregister_controller, CDX_BUS_CONTROLLER);
+ 
+ static int __init cdx_bus_init(void)
+ {
+-	return bus_register(&cdx_bus_type);
++	int ret;
++
++	ret = bus_register(&cdx_bus_type);
++	if (!ret)
++		cdx_debugfs_dir = debugfs_create_dir(cdx_bus_type.name, NULL);
++
++	return ret;
+ }
+ postcore_initcall(cdx_bus_init);
+diff --git a/drivers/cdx/cdx.h b/drivers/cdx/cdx.h
+index c436ac7ac..7baf05ceb 100644
+--- a/drivers/cdx/cdx.h
++++ b/drivers/cdx/cdx.h
+@@ -13,24 +13,37 @@
+ /**
+  * struct cdx_dev_params - CDX device parameters
+  * @cdx: CDX controller associated with the device
+- * @parent: Associated CDX controller
++ * @parent: Associated CDX Bus device
+  * @vendor: Vendor ID for CDX device
+  * @device: Device ID for CDX device
++ * @subsys_vendor: Sub vendor ID for CDX device
++ * @subsys_device: Sub device ID for CDX device
+  * @bus_num: Bus number for this CDX device
+  * @dev_num: Device number for this device
+  * @res: array of MMIO region entries
+  * @res_count: number of valid MMIO regions
+  * @req_id: Requestor ID associated with CDX device
++ * @msi_dev_id: MSI device ID associated with CDX device
++ * @num_msi: Number of MSI's supported by the device
++ * @class: Class of the CDX Device
++ * @revision: Revision of the CDX device
+  */
+ struct cdx_dev_params {
+ 	struct cdx_controller *cdx;
++	struct device *parent;
+ 	u16 vendor;
+ 	u16 device;
++	u16 subsys_vendor;
++	u16 subsys_device;
+ 	u8 bus_num;
+ 	u8 dev_num;
+ 	struct resource res[MAX_CDX_DEV_RESOURCES];
+ 	u8 res_count;
+ 	u32 req_id;
++	u32 msi_dev_id;
++	u32 num_msi;
++	u32 class;
++	u8 revision;
+ };
+ 
+ /**
+@@ -59,4 +72,23 @@ void cdx_unregister_controller(struct cdx_controller *cdx);
+  */
+ int cdx_device_add(struct cdx_dev_params *dev_params);
+ 
++/**
++ * cdx_msi_domain_init - Init the CDX bus MSI domain.
++ * @dev: Device of the CDX bus controller
++ *
++ * Return: CDX MSI domain, NULL on failure
++ */
++struct irq_domain *cdx_msi_domain_init(struct device *dev);
++
++/**
++ * cdx_bus_add - Add a CDX bus. This function adds a bus on the CDX bus
++ *		subsystem. It creates a CDX device for the corresponding bus and
++ *		also registers an associated Linux generic device.
++ * @cdx: Associated CDX controller
++ * @us_num: Bus number
++ *
++ * Return: associated Linux generic device pointer on success or NULL on failure.
++ */
++struct device *cdx_bus_add(struct cdx_controller *cdx, u8 bus_num);
++
+ #endif /* _CDX_H_ */
+diff --git a/drivers/cdx/cdx_msi.c b/drivers/cdx/cdx_msi.c
+new file mode 100644
+index 000000000..550e86b37
+--- /dev/null
++++ b/drivers/cdx/cdx_msi.c
+@@ -0,0 +1,215 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * AMD CDX bus driver MSI support
++ *
++ * Copyright (C) 2022-2023, Advanced Micro Devices, Inc.
++ */
++
++#include <linux/of.h>
++#include <linux/of_device.h>
++#include <linux/of_address.h>
++#include <linux/of_irq.h>
++#include <linux/irq.h>
++#include <linux/irqdomain.h>
++#include <linux/msi.h>
++#include <linux/cdx/cdx_bus.h>
++
++#include "cdx.h"
++
++static void cdx_msi_write_msg(struct irq_data *irq_data,
++			      struct msi_msg *msg)
++{
++	struct msi_desc *msi_desc = irq_data_get_msi_desc(irq_data);
++	struct cdx_device *cdx_dev = to_cdx_device(msi_desc->dev);
++
++	/* We would not operate on msg here rather we wait for
++	 * irq_bus_sync_unlock() to be called from preemptible
++	 * task context.
++	 */
++	msi_desc->msg = *msg;
++	cdx_dev->msi_write_pending = true;
++}
++
++static void cdx_msi_write_irq_lock(struct irq_data *irq_data)
++{
++	struct msi_desc *msi_desc = irq_data_get_msi_desc(irq_data);
++	struct cdx_device *cdx_dev = to_cdx_device(msi_desc->dev);
++
++	mutex_lock(&cdx_dev->irqchip_lock);
++}
++
++static void cdx_msi_write_irq_unlock(struct irq_data *irq_data)
++{
++	struct msi_desc *msi_desc = irq_data_get_msi_desc(irq_data);
++	struct cdx_device *cdx_dev = to_cdx_device(msi_desc->dev);
++	struct cdx_controller *cdx = cdx_dev->cdx;
++	struct cdx_device_config dev_config;
++	int ret;
++
++	if (!cdx_dev->msi_write_pending) {
++		mutex_unlock(&cdx_dev->irqchip_lock);
++		return;
++	}
++
++	cdx_dev->msi_write_pending = false;
++	mutex_unlock(&cdx_dev->irqchip_lock);
++
++	dev_config.msi.msi_index = msi_desc->msi_index;
++	dev_config.msi.data = msi_desc->msg.data;
++	dev_config.msi.addr = ((u64)(msi_desc->msg.address_hi) << 32) |
++			      msi_desc->msg.address_lo;
++
++	dev_config.type = CDX_DEV_MSI_CONF;
++	ret = cdx->ops->dev_configure(cdx, cdx_dev->bus_num, cdx_dev->dev_num,
++				      &dev_config);
++	if (ret)
++		dev_err(&cdx_dev->dev, "Write MSI failed to CDX controller\n");
++}
++
++int cdx_enable_msi(struct cdx_device *cdx_dev)
++{
++	struct cdx_controller *cdx = cdx_dev->cdx;
++	struct cdx_device_config dev_config;
++	int ret;
++
++	dev_config.type = CDX_DEV_MSI_ENABLE;
++	dev_config.msi_enable = true;
++	ret = cdx->ops->dev_configure(cdx, cdx_dev->bus_num, cdx_dev->dev_num,
++				      &dev_config);
++	if (ret)
++		dev_err(&cdx_dev->dev, "MSI enable failed\n");
++
++	return ret;
++}
++EXPORT_SYMBOL_GPL(cdx_enable_msi);
++
++void cdx_disable_msi(struct cdx_device *cdx_dev)
++{
++	struct cdx_controller *cdx = cdx_dev->cdx;
++	struct cdx_device_config dev_config;
++	int ret;
++
++	dev_config.type = CDX_DEV_MSI_ENABLE;
++	dev_config.msi_enable = false;
++	ret = cdx->ops->dev_configure(cdx, cdx_dev->bus_num, cdx_dev->dev_num,
++				      &dev_config);
++	if (ret)
++		dev_err(&cdx_dev->dev, "MSI disable failed\n");
++}
++EXPORT_SYMBOL_GPL(cdx_disable_msi);
++
++static struct irq_chip cdx_msi_irq_chip = {
++	.name			= "CDX-MSI",
++	.irq_mask		= irq_chip_mask_parent,
++	.irq_unmask		= irq_chip_unmask_parent,
++	.irq_eoi		= irq_chip_eoi_parent,
++	.irq_set_affinity	= msi_domain_set_affinity,
++	.irq_write_msi_msg	= cdx_msi_write_msg,
++	.irq_bus_lock		= cdx_msi_write_irq_lock,
++	.irq_bus_sync_unlock	= cdx_msi_write_irq_unlock
++};
++
++int cdx_msi_domain_alloc_irqs(struct device *dev, unsigned int irq_count)
++{
++	int ret;
++
++	ret = msi_setup_device_data(dev);
++	if (ret)
++		return ret;
++
++	ret = msi_domain_alloc_irqs_range(dev, MSI_DEFAULT_DOMAIN,
++					  0, irq_count - 1);
++	if (ret)
++		dev_err(dev, "Failed to allocate IRQs: %d\n", ret);
++
++	return ret;
++}
++EXPORT_SYMBOL_GPL(cdx_msi_domain_alloc_irqs);
++
++/* Convert an msi_desc to a globally unique identifier. */
++static irq_hw_number_t cdx_domain_calc_hwirq(struct cdx_device *dev,
++					     struct msi_desc *desc)
++{
++	return ((irq_hw_number_t)dev->msi_dev_id << 10) | desc->msi_index;
++}
++
++static void cdx_msi_set_desc(msi_alloc_info_t *arg,
++			     struct msi_desc *desc)
++{
++	arg->desc = desc;
++	arg->hwirq = cdx_domain_calc_hwirq(to_cdx_device(desc->dev), desc);
++}
++
++static int cdx_msi_prepare(struct irq_domain *msi_domain,
++			   struct device *dev,
++			   int nvec, msi_alloc_info_t *info)
++{
++	struct cdx_device *cdx_dev = to_cdx_device(dev);
++	struct device *parent = cdx_dev->cdx->dev;
++	struct msi_domain_info *msi_info;
++	u32 dev_id = 0;
++	int ret;
++
++	/* Retrieve device ID from requestor ID using parent device */
++	ret = of_map_id(parent->of_node, cdx_dev->msi_dev_id, "msi-map",
++			"msi-map-mask", NULL, &dev_id);
++	if (ret) {
++		dev_err(dev, "of_map_id failed for MSI: %d\n", ret);
++		return ret;
++	}
++
++	/* Set the device Id to be passed to the GIC-ITS */
++	info->scratchpad[0].ul = dev_id;
++
++	msi_info = msi_get_domain_info(msi_domain->parent);
++
++	return msi_info->ops->msi_prepare(msi_domain->parent, dev, nvec, info);
++}
++
++static struct msi_domain_ops cdx_msi_ops = {
++	.msi_prepare	= cdx_msi_prepare,
++	.set_desc	= cdx_msi_set_desc
++};
++
++static struct msi_domain_info cdx_msi_domain_info = {
++	.ops	= &cdx_msi_ops,
++	.chip	= &cdx_msi_irq_chip,
++	.flags	= MSI_FLAG_USE_DEF_DOM_OPS | MSI_FLAG_USE_DEF_CHIP_OPS |
++		  MSI_FLAG_ALLOC_SIMPLE_MSI_DESCS | MSI_FLAG_FREE_MSI_DESCS
++};
++
++struct irq_domain *cdx_msi_domain_init(struct device *dev)
++{
++	struct device_node *np = dev->of_node;
++	struct fwnode_handle *fwnode_handle;
++	struct irq_domain *cdx_msi_domain;
++	struct device_node *parent_node;
++	struct irq_domain *parent;
++
++	fwnode_handle = of_node_to_fwnode(np);
++
++	parent_node = of_parse_phandle(np, "msi-map", 1);
++	if (!parent_node) {
++		dev_err(dev, "msi-map not present on cdx controller\n");
++		return NULL;
++	}
++
++	parent = irq_find_matching_fwnode(of_node_to_fwnode(parent_node),
++					  DOMAIN_BUS_NEXUS);
++	if (!parent || !msi_get_domain_info(parent)) {
++		dev_err(dev, "unable to locate ITS domain\n");
++		return NULL;
++	}
++
++	cdx_msi_domain = msi_create_irq_domain(fwnode_handle, &cdx_msi_domain_info,
++					       parent);
++	if (!cdx_msi_domain) {
++		dev_err(dev, "unable to create CDX-MSI domain\n");
++		return NULL;
++	}
++
++	dev_dbg(dev, "CDX-MSI domain created\n");
++
++	return cdx_msi_domain;
++}
++EXPORT_SYMBOL_NS_GPL(cdx_msi_domain_init, CDX_BUS_CONTROLLER);
+diff --git a/drivers/cdx/controller/cdx_controller.c b/drivers/cdx/controller/cdx_controller.c
+index bb4ae7970..1a4782c56 100644
+--- a/drivers/cdx/controller/cdx_controller.c
++++ b/drivers/cdx/controller/cdx_controller.c
+@@ -9,6 +9,7 @@
+ #include <linux/platform_device.h>
+ #include <linux/slab.h>
+ #include <linux/cdx/cdx_bus.h>
++#include <linux/irqdomain.h>
+ 
+ #include "cdx_controller.h"
+ #include "../cdx.h"
+@@ -33,6 +34,16 @@ static const struct cdx_mcdi_ops mcdi_ops = {
+ 	.mcdi_request = cdx_mcdi_request,
+ };
+ 
++static int cdx_bus_enable(struct cdx_controller *cdx, u8 bus_num)
++{
++	return cdx_mcdi_bus_enable(cdx->priv, bus_num);
++}
++
++static int cdx_bus_disable(struct cdx_controller *cdx, u8 bus_num)
++{
++	return cdx_mcdi_bus_disable(cdx->priv, bus_num);
++}
++
+ void cdx_rpmsg_post_probe(struct cdx_controller *cdx)
+ {
+ 	/* Register CDX controller with CDX bus driver */
+@@ -50,12 +61,31 @@ static int cdx_configure_device(struct cdx_controller *cdx,
+ 				u8 bus_num, u8 dev_num,
+ 				struct cdx_device_config *dev_config)
+ {
++	u16 msi_index;
+ 	int ret = 0;
++	u32 data;
++	u64 addr;
+ 
+ 	switch (dev_config->type) {
++	case CDX_DEV_MSI_CONF:
++		msi_index = dev_config->msi.msi_index;
++		data = dev_config->msi.data;
++		addr = dev_config->msi.addr;
++
++		ret = cdx_mcdi_write_msi(cdx->priv, bus_num, dev_num,
++					 msi_index, addr, data);
++		break;
+ 	case CDX_DEV_RESET_CONF:
+ 		ret = cdx_mcdi_reset_device(cdx->priv, bus_num, dev_num);
+ 		break;
++	case CDX_DEV_BUS_MASTER_CONF:
++		ret = cdx_mcdi_bus_master_enable(cdx->priv, bus_num, dev_num,
++						 dev_config->bus_master_enable);
++		break;
++	case CDX_DEV_MSI_ENABLE:
++		ret = cdx_mcdi_msi_enable(cdx->priv, bus_num, dev_num,
++					  dev_config->msi_enable);
++		break;
+ 	default:
+ 		ret = -EINVAL;
+ 	}
+@@ -79,8 +109,14 @@ static int cdx_scan_devices(struct cdx_controller *cdx)
+ 	num_cdx_bus = (u8)ret;
+ 
+ 	for (bus_num = 0; bus_num < num_cdx_bus; bus_num++) {
++		struct device *bus_dev;
+ 		u8 num_cdx_dev;
+ 
++		/* Add the bus on cdx subsystem */
++		bus_dev = cdx_bus_add(cdx, bus_num);
++		if (!bus_dev)
++			continue;
++
+ 		/* MCDI FW Read: Fetch the number of devices present */
+ 		ret = cdx_mcdi_get_num_devs(cdx_mcdi, bus_num);
+ 		if (ret < 0) {
+@@ -103,6 +139,7 @@ static int cdx_scan_devices(struct cdx_controller *cdx)
+ 				continue;
+ 			}
+ 			dev_params.cdx = cdx;
++			dev_params.parent = bus_dev;
+ 
+ 			/* Add the device to the cdx bus */
+ 			ret = cdx_device_add(&dev_params);
+@@ -121,6 +158,8 @@ static int cdx_scan_devices(struct cdx_controller *cdx)
+ }
+ 
+ static struct cdx_ops cdx_ops = {
++	.bus_enable		= cdx_bus_enable,
++	.bus_disable	= cdx_bus_disable,
+ 	.scan		= cdx_scan_devices,
+ 	.dev_configure	= cdx_configure_device,
+ };
+@@ -155,6 +194,14 @@ static int xlnx_cdx_probe(struct platform_device *pdev)
+ 	cdx->priv = cdx_mcdi;
+ 	cdx->ops = &cdx_ops;
+ 
++	/* Create MSI domain */
++	cdx->msi_domain = cdx_msi_domain_init(&pdev->dev);
++	if (!cdx->msi_domain) {
++		dev_err(&pdev->dev, "cdx_msi_domain_init() failed");
++		ret = -ENODEV;
++		goto cdx_msi_fail;
++	}
++
+ 	ret = cdx_setup_rpmsg(pdev);
+ 	if (ret) {
+ 		if (ret != -EPROBE_DEFER)
+@@ -166,6 +213,8 @@ static int xlnx_cdx_probe(struct platform_device *pdev)
+ 	return 0;
+ 
+ cdx_rpmsg_fail:
++	irq_domain_remove(cdx->msi_domain);
++cdx_msi_fail:
+ 	kfree(cdx);
+ cdx_alloc_fail:
+ 	cdx_mcdi_finish(cdx_mcdi);
+@@ -182,6 +231,7 @@ static int xlnx_cdx_remove(struct platform_device *pdev)
+ 
+ 	cdx_destroy_rpmsg(pdev);
+ 
++	irq_domain_remove(cdx->msi_domain);
+ 	kfree(cdx);
+ 
+ 	cdx_mcdi_finish(cdx_mcdi);
+@@ -229,3 +279,4 @@ module_exit(cdx_controller_exit);
+ MODULE_AUTHOR("AMD Inc.");
+ MODULE_DESCRIPTION("CDX controller for AMD devices");
+ MODULE_LICENSE("GPL");
++MODULE_IMPORT_NS(CDX_BUS_CONTROLLER);
+diff --git a/drivers/cdx/controller/mc_cdx_pcol.h b/drivers/cdx/controller/mc_cdx_pcol.h
+index 4ccb7b529..832a44af9 100644
+--- a/drivers/cdx/controller/mc_cdx_pcol.h
++++ b/drivers/cdx/controller/mc_cdx_pcol.h
+@@ -455,6 +455,66 @@
+ #define MC_CMD_CDX_BUS_GET_DEVICE_CONFIG_OUT_REQUESTER_ID_OFST			84
+ #define MC_CMD_CDX_BUS_GET_DEVICE_CONFIG_OUT_REQUESTER_ID_LEN			4
+ 
++/* MC_CMD_CDX_BUS_GET_DEVICE_CONFIG_OUT_V2 msgresponse */
++#define MC_CMD_CDX_BUS_GET_DEVICE_CONFIG_OUT_V2_LEN				92
++/* Requester ID used by device for GIC ITS DeviceID */
++#define MC_CMD_CDX_BUS_GET_DEVICE_CONFIG_OUT_V2_REQUESTER_DEVICE_ID_OFST	88
++#define MC_CMD_CDX_BUS_GET_DEVICE_CONFIG_OUT_V2_REQUESTER_DEVICE_ID_LEN		4
++
++/***********************************/
++/*
++ * MC_CMD_CDX_BUS_DOWN
++ * Asserting reset on the CDX bus causes all devices on the bus to be quiesced.
++ * DMA bus mastering is disabled and any pending DMA request are flushed. Once
++ * the response is returned, the devices are guaranteed to no longer issue DMA
++ * requests or raise MSI interrupts. Further device MMIO accesses may have
++ * undefined results. While the bus reset is asserted, any of the enumeration
++ * or device configuration MCDIs will fail with EAGAIN. It is only legal to
++ * reload the relevant PL region containing CDX devices if the corresponding CDX
++ * bus is in reset. Depending on the implementation, the firmware may or may
++ * not enforce this restriction and it is up to the caller to make sure this
++ * requirement is satisfied.
++ */
++#define MC_CMD_CDX_BUS_DOWN					0x4
++#define MC_CMD_CDX_BUS_DOWN_MSGSET			0x4
++
++/* MC_CMD_CDX_BUS_DOWN_IN msgrequest */
++#define MC_CMD_CDX_BUS_DOWN_IN_LEN			4
++/* Bus number to put in reset, in range 0 to BUS_COUNT-1 */
++#define MC_CMD_CDX_BUS_DOWN_IN_BUS_OFST		0
++#define MC_CMD_CDX_BUS_DOWN_IN_BUS_LEN		4
++
++/*
++ * MC_CMD_CDX_BUS_DOWN_OUT msgresponse: The bus is quiesced, no further
++ * upstream traffic for devices on this bus.
++ */
++#define MC_CMD_CDX_BUS_DOWN_OUT_LEN			0
++
++/***********************************/
++/*
++ * MC_CMD_CDX_BUS_UP
++ * After bus reset is de-asserted, devices are in a state which is functionally
++ * equivalent to each device having been reset with MC_CMD_CDX_DEVICE_RESET. In
++ * other words, device logic is reset in a hardware-specific way, MMIO accesses
++ * are forwarded to the device, DMA bus mastering is disabled and needs to be
++ * re-enabled with MC_CMD_CDX_DEVICE_DMA_ENABLE once the driver is ready to
++ * start servicing DMA. If the underlying number of devices or device resources
++ * changed (e.g. if PL was reloaded) while the bus was in reset, the bus driver
++ * is expected to re-enumerate the bus. Returns EALREADY if the bus was already
++ * up before the call.
++ */
++#define MC_CMD_CDX_BUS_UP					0x5
++#define MC_CMD_CDX_BUS_UP_MSGSET			0x5
++
++/* MC_CMD_CDX_BUS_UP_IN msgrequest */
++#define MC_CMD_CDX_BUS_UP_IN_LEN			4
++/* Bus number to take out of reset, in range 0 to BUS_COUNT-1 */
++#define MC_CMD_CDX_BUS_UP_IN_BUS_OFST		0
++#define MC_CMD_CDX_BUS_UP_IN_BUS_LEN		4
++
++/* MC_CMD_CDX_BUS_UP_OUT msgresponse: The bus can now be enumerated. */
++#define MC_CMD_CDX_BUS_UP_OUT_LEN			0
++
+ /***********************************/
+ /*
+  * MC_CMD_CDX_DEVICE_RESET
+@@ -562,6 +622,64 @@
+ #define MC_CMD_CDX_DEVICE_CONTROL_GET_OUT_MMIO_REGIONS_ENABLE_LBN	2
+ #define MC_CMD_CDX_DEVICE_CONTROL_GET_OUT_MMIO_REGIONS_ENABLE_WIDTH	1
+ 
++/***********************************/
++/*
++ * MC_CMD_CDX_DEVICE_WRITE_MSI_MSG
++ * Populates the MSI message to be used by the hardware to raise the specified
++ * interrupt vector. Versal-net implementation specific limitations are that
++ * only 4 CDX devices with MSI interrupt capability are supported and all
++ * vectors within a device must use the same write address. The command will
++ * return EINVAL if any of these limitations is violated.
++ */
++#define MC_CMD_CDX_DEVICE_WRITE_MSI_MSG					0x9
++#define MC_CMD_CDX_DEVICE_WRITE_MSI_MSG_MSGSET				0x9
++#undef MC_CMD_0x9_PRIVILEGE_CTG
++
++#define MC_CMD_0x9_PRIVILEGE_CTG SRIOV_CTG_ADMIN
++
++/* MC_CMD_CDX_DEVICE_WRITE_MSI_MSG_IN msgrequest */
++#define MC_CMD_CDX_DEVICE_WRITE_MSI_MSG_IN_LEN				28
++/* Device bus number, in range 0 to BUS_COUNT-1 */
++#define MC_CMD_CDX_DEVICE_WRITE_MSI_MSG_IN_BUS_OFST			0
++#define MC_CMD_CDX_DEVICE_WRITE_MSI_MSG_IN_BUS_LEN			4
++/* Device number relative to the bus, in range 0 to DEVICE_COUNT-1 for that bus */
++#define MC_CMD_CDX_DEVICE_WRITE_MSI_MSG_IN_DEVICE_OFST			4
++#define MC_CMD_CDX_DEVICE_WRITE_MSI_MSG_IN_DEVICE_LEN			4
++/*
++ * Device-relative MSI vector number. Must be < MSI_COUNT reported for the
++ * device.
++ */
++#define MC_CMD_CDX_DEVICE_WRITE_MSI_MSG_IN_MSI_VECTOR_OFST		8
++#define MC_CMD_CDX_DEVICE_WRITE_MSI_MSG_IN_MSI_VECTOR_LEN		4
++/* Reserved (alignment) */
++#define MC_CMD_CDX_DEVICE_WRITE_MSI_MSG_IN_RESERVED_OFST		12
++#define MC_CMD_CDX_DEVICE_WRITE_MSI_MSG_IN_RESERVED_LEN			4
++/*
++ * MSI address to be used by the hardware. Typically, on ARM systems this
++ * address is translated by the IOMMU (if enabled) and it is the responsibility
++ * of the entity managing the IOMMU (APU kernel) to supply the correct IOVA
++ * here.
++ */
++#define MC_CMD_CDX_DEVICE_WRITE_MSI_MSG_IN_MSI_ADDRESS_OFST		16
++#define MC_CMD_CDX_DEVICE_WRITE_MSI_MSG_IN_MSI_ADDRESS_LEN		8
++#define MC_CMD_CDX_DEVICE_WRITE_MSI_MSG_IN_MSI_ADDRESS_LO_OFST		16
++#define MC_CMD_CDX_DEVICE_WRITE_MSI_MSG_IN_MSI_ADDRESS_LO_LEN		4
++#define MC_CMD_CDX_DEVICE_WRITE_MSI_MSG_IN_MSI_ADDRESS_LO_LBN		128
++#define MC_CMD_CDX_DEVICE_WRITE_MSI_MSG_IN_MSI_ADDRESS_LO_WIDTH		32
++#define MC_CMD_CDX_DEVICE_WRITE_MSI_MSG_IN_MSI_ADDRESS_HI_OFST		20
++#define MC_CMD_CDX_DEVICE_WRITE_MSI_MSG_IN_MSI_ADDRESS_HI_LEN		4
++#define MC_CMD_CDX_DEVICE_WRITE_MSI_MSG_IN_MSI_ADDRESS_HI_LBN		160
++#define MC_CMD_CDX_DEVICE_WRITE_MSI_MSG_IN_MSI_ADDRESS_HI_WIDTH		32
++/*
++ * MSI data to be used by the hardware. On versal-net, only the lower 16-bits
++ * are used, the remaining bits are ignored and should be set to zero.
++ */
++#define MC_CMD_CDX_DEVICE_WRITE_MSI_MSG_IN_MSI_DATA_OFST		24
++#define MC_CMD_CDX_DEVICE_WRITE_MSI_MSG_IN_MSI_DATA_LEN			4
++
++/* MC_CMD_CDX_DEVICE_WRITE_MSI_MSG_OUT msgresponse */
++#define MC_CMD_CDX_DEVICE_WRITE_MSI_MSG_OUT_LEN				0
++
+ /***********************************/
+ /* MC_CMD_V2_EXTN - Encapsulation for a v2 extended command */
+ #define MC_CMD_V2_EXTN					0x7f
+diff --git a/drivers/cdx/controller/mcdi_functions.c b/drivers/cdx/controller/mcdi_functions.c
+index 0158f2653..311debdc8 100644
+--- a/drivers/cdx/controller/mcdi_functions.c
++++ b/drivers/cdx/controller/mcdi_functions.c
+@@ -49,7 +49,7 @@ int cdx_mcdi_get_dev_config(struct cdx_mcdi *cdx,
+ 			    u8 bus_num, u8 dev_num,
+ 			    struct cdx_dev_params *dev_params)
+ {
+-	MCDI_DECLARE_BUF(outbuf, MC_CMD_CDX_BUS_GET_DEVICE_CONFIG_OUT_LEN);
++	MCDI_DECLARE_BUF(outbuf, MC_CMD_CDX_BUS_GET_DEVICE_CONFIG_OUT_V2_LEN);
+ 	MCDI_DECLARE_BUF(inbuf, MC_CMD_CDX_BUS_GET_DEVICE_CONFIG_IN_LEN);
+ 	struct resource *res = &dev_params->res[0];
+ 	size_t outlen;
+@@ -64,7 +64,7 @@ int cdx_mcdi_get_dev_config(struct cdx_mcdi *cdx,
+ 	if (ret)
+ 		return ret;
+ 
+-	if (outlen != MC_CMD_CDX_BUS_GET_DEVICE_CONFIG_OUT_LEN)
++	if (outlen != MC_CMD_CDX_BUS_GET_DEVICE_CONFIG_OUT_V2_LEN)
+ 		return -EIO;
+ 
+ 	dev_params->bus_num = bus_num;
+@@ -73,6 +73,9 @@ int cdx_mcdi_get_dev_config(struct cdx_mcdi *cdx,
+ 	req_id = MCDI_DWORD(outbuf, CDX_BUS_GET_DEVICE_CONFIG_OUT_REQUESTER_ID);
+ 	dev_params->req_id = req_id;
+ 
++	dev_params->msi_dev_id = MCDI_DWORD(outbuf,
++					    CDX_BUS_GET_DEVICE_CONFIG_OUT_V2_REQUESTER_DEVICE_ID);
++
+ 	dev_params->res_count = 0;
+ 	if (MCDI_QWORD(outbuf, CDX_BUS_GET_DEVICE_CONFIG_OUT_MMIO_REGION0_SIZE) != 0) {
+ 		res[dev_params->res_count].start =
+@@ -120,10 +123,60 @@ int cdx_mcdi_get_dev_config(struct cdx_mcdi *cdx,
+ 
+ 	dev_params->vendor = MCDI_WORD(outbuf, CDX_BUS_GET_DEVICE_CONFIG_OUT_VENDOR_ID);
+ 	dev_params->device = MCDI_WORD(outbuf, CDX_BUS_GET_DEVICE_CONFIG_OUT_DEVICE_ID);
++	dev_params->num_msi = MCDI_DWORD(outbuf, CDX_BUS_GET_DEVICE_CONFIG_OUT_MSI_COUNT);
++	dev_params->subsys_vendor = MCDI_WORD(outbuf,
++					      CDX_BUS_GET_DEVICE_CONFIG_OUT_SUBSYS_VENDOR_ID);
++	dev_params->subsys_device = MCDI_WORD(outbuf,
++					      CDX_BUS_GET_DEVICE_CONFIG_OUT_SUBSYS_DEVICE_ID);
++	dev_params->class = MCDI_DWORD(outbuf,
++				       CDX_BUS_GET_DEVICE_CONFIG_OUT_DEVICE_CLASS) & 0xFFFFFF;
++	dev_params->revision = MCDI_BYTE(outbuf, CDX_BUS_GET_DEVICE_CONFIG_OUT_DEVICE_REVISION);
+ 
+ 	return 0;
+ }
+ 
++int cdx_mcdi_write_msi(struct cdx_mcdi *cdx, u8 bus_num, u8 dev_num,
++		       u32 msi_vector, u64 msi_address, u32 msi_data)
++{
++	MCDI_DECLARE_BUF(inbuf, MC_CMD_CDX_DEVICE_WRITE_MSI_MSG_IN_LEN);
++	int ret;
++
++	MCDI_SET_DWORD(inbuf, CDX_DEVICE_WRITE_MSI_MSG_IN_BUS, bus_num);
++	MCDI_SET_DWORD(inbuf, CDX_DEVICE_WRITE_MSI_MSG_IN_DEVICE, dev_num);
++	MCDI_SET_DWORD(inbuf, CDX_DEVICE_WRITE_MSI_MSG_IN_MSI_VECTOR, msi_vector);
++	MCDI_SET_QWORD(inbuf, CDX_DEVICE_WRITE_MSI_MSG_IN_MSI_ADDRESS, msi_address);
++	MCDI_SET_DWORD(inbuf, CDX_DEVICE_WRITE_MSI_MSG_IN_MSI_DATA, msi_data);
++
++	ret = cdx_mcdi_rpc(cdx, MC_CMD_CDX_DEVICE_WRITE_MSI_MSG, inbuf, sizeof(inbuf),
++			   NULL, 0, NULL);
++
++	return ret;
++}
++
++int cdx_mcdi_bus_enable(struct cdx_mcdi *cdx, u8 bus_num)
++{
++	MCDI_DECLARE_BUF(inbuf, MC_CMD_CDX_BUS_UP_IN_LEN);
++	int ret;
++
++	MCDI_SET_DWORD(inbuf, CDX_BUS_UP_IN_BUS, bus_num);
++	ret = cdx_mcdi_rpc(cdx, MC_CMD_CDX_BUS_UP, inbuf, sizeof(inbuf),
++			   NULL, 0, NULL);
++
++	return ret;
++}
++
++int cdx_mcdi_bus_disable(struct cdx_mcdi *cdx, u8 bus_num)
++{
++	MCDI_DECLARE_BUF(inbuf, MC_CMD_CDX_BUS_DOWN_IN_LEN);
++	int ret;
++
++	MCDI_SET_DWORD(inbuf, CDX_BUS_DOWN_IN_BUS, bus_num);
++	ret = cdx_mcdi_rpc(cdx, MC_CMD_CDX_BUS_DOWN, inbuf, sizeof(inbuf),
++			   NULL, 0, NULL);
++
++	return ret;
++}
++
+ int cdx_mcdi_reset_device(struct cdx_mcdi *cdx, u8 bus_num, u8 dev_num)
+ {
+ 	MCDI_DECLARE_BUF(inbuf, MC_CMD_CDX_DEVICE_RESET_IN_LEN);
+@@ -137,3 +190,68 @@ int cdx_mcdi_reset_device(struct cdx_mcdi *cdx, u8 bus_num, u8 dev_num)
+ 
+ 	return ret;
+ }
++
++static int cdx_mcdi_ctrl_flag_get(struct cdx_mcdi *cdx, u8 bus_num,
++				  u8 dev_num, u32 *flags)
++{
++	MCDI_DECLARE_BUF(inbuf, MC_CMD_CDX_DEVICE_CONTROL_GET_IN_LEN);
++	MCDI_DECLARE_BUF(outbuf, MC_CMD_CDX_DEVICE_CONTROL_GET_OUT_LEN);
++	size_t outlen;
++	int ret;
++
++	MCDI_SET_DWORD(inbuf, CDX_DEVICE_CONTROL_GET_IN_BUS, bus_num);
++	MCDI_SET_DWORD(inbuf, CDX_DEVICE_CONTROL_GET_IN_DEVICE, dev_num);
++	ret = cdx_mcdi_rpc(cdx, MC_CMD_CDX_DEVICE_CONTROL_GET, inbuf,
++			   sizeof(inbuf), outbuf, sizeof(outbuf), &outlen);
++	if (ret)
++		return ret;
++
++	if (outlen != MC_CMD_CDX_DEVICE_CONTROL_GET_OUT_LEN)
++		return -EIO;
++
++	*flags = MCDI_DWORD(outbuf, CDX_DEVICE_CONTROL_GET_OUT_FLAGS);
++
++	return 0;
++}
++
++static int cdx_mcdi_ctrl_flag_set(struct cdx_mcdi *cdx, u8 bus_num,
++				  u8 dev_num, bool enable, int bit_pos)
++{
++	MCDI_DECLARE_BUF(inbuf, MC_CMD_CDX_DEVICE_CONTROL_SET_IN_LEN);
++	u32 flags;
++	int ret;
++
++	/*
++	 * Get flags and then set/reset bit at bit_pos according to
++	 * the input params.
++	 */
++	ret = cdx_mcdi_ctrl_flag_get(cdx, bus_num, dev_num, &flags);
++	if (ret)
++		return ret;
++
++	flags = flags & (u32)(~(BIT(bit_pos)));
++	if (enable)
++		flags |= (1 << bit_pos);
++
++	MCDI_SET_DWORD(inbuf, CDX_DEVICE_CONTROL_SET_IN_BUS, bus_num);
++	MCDI_SET_DWORD(inbuf, CDX_DEVICE_CONTROL_SET_IN_DEVICE, dev_num);
++	MCDI_SET_DWORD(inbuf, CDX_DEVICE_CONTROL_SET_IN_FLAGS, flags);
++	ret = cdx_mcdi_rpc(cdx, MC_CMD_CDX_DEVICE_CONTROL_SET, inbuf,
++			   sizeof(inbuf), NULL, 0, NULL);
++
++	return ret;
++}
++
++int cdx_mcdi_bus_master_enable(struct cdx_mcdi *cdx, u8 bus_num,
++			       u8 dev_num, bool enable)
++{
++	return cdx_mcdi_ctrl_flag_set(cdx, bus_num, dev_num, enable,
++			MC_CMD_CDX_DEVICE_CONTROL_SET_IN_BUS_MASTER_ENABLE_LBN);
++}
++
++int cdx_mcdi_msi_enable(struct cdx_mcdi *cdx, u8 bus_num,
++			u8 dev_num, bool enable)
++{
++	return cdx_mcdi_ctrl_flag_set(cdx, bus_num, dev_num, enable,
++			MC_CMD_CDX_DEVICE_CONTROL_SET_IN_MSI_ENABLE_LBN);
++}
+diff --git a/drivers/cdx/controller/mcdi_functions.h b/drivers/cdx/controller/mcdi_functions.h
+index 7440ace55..b9942affd 100644
+--- a/drivers/cdx/controller/mcdi_functions.h
++++ b/drivers/cdx/controller/mcdi_functions.h
+@@ -47,6 +47,44 @@ int cdx_mcdi_get_dev_config(struct cdx_mcdi *cdx,
+ 			    u8 bus_num, u8 dev_num,
+ 			    struct cdx_dev_params *dev_params);
+ 
++/**
++ * cdx_mcdi_bus_enable - Enable CDX bus represented by bus_num
++ * @cdx: pointer to MCDI interface.
++ * @bus_num: Bus number.
++ *
++ * Return: 0 on success, <0 on failure
++ */
++int cdx_mcdi_bus_enable(struct cdx_mcdi *cdx, u8 bus_num);
++
++/**
++ * cdx_mcdi_bus_disable - Disable CDX bus represented by bus_num
++ * @cdx: pointer to MCDI interface.
++ * @bus_num: Bus number.
++ *
++ * Return: 0 on success, <0 on failure
++ */
++int cdx_mcdi_bus_disable(struct cdx_mcdi *cdx, u8 bus_num);
++
++/**
++ * cdx_mcdi_write_msi - Write MSI configuration for CDX device
++ * @cdx: pointer to MCDI interface.
++ * @bus_num: Bus number.
++ * @dev_num: Device number.
++ * @msi_vector: Device-relative MSI vector number.
++ *	Must be < MSI_COUNT reported for the device.
++ * @msi_address: MSI address to be used by the hardware. Typically, on ARM
++ *	systems this address is translated by the IOMMU (if enabled) and
++ *	it is the responsibility of the entity managing the IOMMU (APU kernel)
++ *	to supply the correct IOVA here.
++ * @msi_data: MSI data to be used by the hardware. On versal-net, only the
++ *	lower 16-bits are used, the remaining bits are ignored and should be
++ *	set to zero.
++ *
++ * Return: 0 on success, <0 on failure
++ */
++int cdx_mcdi_write_msi(struct cdx_mcdi *cdx, u8 bus_num, u8 dev_num,
++		       u32 msi_vector, u64 msi_address, u32 msi_data);
++
+ /**
+  * cdx_mcdi_reset_device - Reset cdx device represented by bus_num:dev_num
+  * @cdx: pointer to MCDI interface.
+@@ -58,4 +96,30 @@ int cdx_mcdi_get_dev_config(struct cdx_mcdi *cdx,
+ int cdx_mcdi_reset_device(struct cdx_mcdi *cdx,
+ 			  u8 bus_num, u8 dev_num);
+ 
++/**
++ * cdx_mcdi_bus_master_enable - Set/Reset bus mastering for cdx device
++ *				represented by bus_num:dev_num
++ * @cdx: pointer to MCDI interface.
++ * @bus_num: Bus number.
++ * @dev_num: Device number.
++ * @enable: Enable bus mastering if set, disable otherwise.
++ *
++ * Return: 0 on success, <0 on failure
++ */
++int cdx_mcdi_bus_master_enable(struct cdx_mcdi *cdx, u8 bus_num,
++			       u8 dev_num, bool enable);
++
++/**
++ * cdx_mcdi_msi_enable - Enable/Disable MSIs for cdx device represented
++ *			 by bus_num:dev_num
++ * @cdx: pointer to MCDI interface.
++ * @bus_num: Bus number.
++ * @dev_num: Device number.
++ * @enable: Enable msi's if set, disable otherwise.
++ *
++ * Return: 0 on success, <0 on failure
++ */
++int cdx_mcdi_msi_enable(struct cdx_mcdi *cdx, u8 bus_num,
++			u8 dev_num, bool enable);
++
+ #endif /* CDX_MCDI_FUNCTIONS_H */
+diff --git a/include/linux/cdx/cdx_bus.h b/include/linux/cdx/cdx_bus.h
+index bead71b7b..2d39d2ec0 100644
+--- a/include/linux/cdx/cdx_bus.h
++++ b/include/linux/cdx/cdx_bus.h
+@@ -21,19 +21,48 @@
+ struct cdx_controller;
+ 
+ enum {
++	CDX_DEV_MSI_CONF,
++	CDX_DEV_BUS_MASTER_CONF,
+ 	CDX_DEV_RESET_CONF,
++	CDX_DEV_MSI_ENABLE,
++};
++
++struct cdx_msi_config {
++	u16 msi_index;
++	u32 data;
++	u64 addr;
+ };
+ 
+ struct cdx_device_config {
+ 	u8 type;
++	struct cdx_msi_config msi;
++	bool bus_master_enable;
++	bool msi_enable;
+ };
+ 
++typedef int (*cdx_bus_enable_cb)(struct cdx_controller *cdx, u8 bus_num);
++
++typedef int (*cdx_bus_disable_cb)(struct cdx_controller *cdx, u8 bus_num);
++
+ typedef int (*cdx_scan_cb)(struct cdx_controller *cdx);
+ 
+ typedef int (*cdx_dev_configure_cb)(struct cdx_controller *cdx,
+ 				    u8 bus_num, u8 dev_num,
+ 				    struct cdx_device_config *dev_config);
+ 
++/**
++ * CDX_DEVICE - macro used to describe a specific CDX device
++ * @vend: the 16 bit CDX Vendor ID
++ * @dev: the 16 bit CDX Device ID
++ *
++ * This macro is used to create a struct cdx_device_id that matches a
++ * specific device. The subvendor and subdevice fields will be set to
++ * CDX_ANY_ID.
++ */
++#define CDX_DEVICE(vend, dev) \
++	.vendor = (vend), .device = (dev), \
++	.subvendor = CDX_ANY_ID, .subdevice = CDX_ANY_ID
++
+ /**
+  * CDX_DEVICE_DRIVER_OVERRIDE - macro used to describe a CDX device with
+  *                              override_only flags.
+@@ -42,18 +71,24 @@ typedef int (*cdx_dev_configure_cb)(struct cdx_controller *cdx,
+  * @driver_override: the 32 bit CDX Device override_only
+  *
+  * This macro is used to create a struct cdx_device_id that matches only a
+- * driver_override device.
++ * driver_override device. The subvendor and subdevice fields will be set to
++ * CDX_ANY_ID.
+  */
+ #define CDX_DEVICE_DRIVER_OVERRIDE(vend, dev, driver_override) \
+-	.vendor = (vend), .device = (dev), .override_only = (driver_override)
++	.vendor = (vend), .device = (dev), .subvendor = CDX_ANY_ID,\
++	.subdevice = CDX_ANY_ID, .override_only = (driver_override)
+ 
+ /**
+  * struct cdx_ops - Callbacks supported by CDX controller.
++ * @bus_enable: enable bus on the controller
++ * @bus_disable: disable bus on the controller
+  * @scan: scan the devices on the controller
+  * @dev_configure: configuration like reset, master_enable,
+  *		   msi_config etc for a CDX device
+  */
+ struct cdx_ops {
++	cdx_bus_enable_cb bus_enable;
++	cdx_bus_disable_cb bus_disable;
+ 	cdx_scan_cb scan;
+ 	cdx_dev_configure_cb dev_configure;
+ };
+@@ -62,13 +97,17 @@ struct cdx_ops {
+  * struct cdx_controller: CDX controller object
+  * @dev: Linux device associated with the CDX controller.
+  * @priv: private data
++ * @msi_domain: MSI domain
+  * @id: Controller ID
++ * @controller_registered: controller registered with bus
+  * @ops: CDX controller ops
+  */
+ struct cdx_controller {
+ 	struct device *dev;
+ 	void *priv;
++	struct irq_domain *msi_domain;
+ 	u32 id;
++	bool controller_registered;
+ 	struct cdx_ops *ops;
+ };
+ 
+@@ -78,36 +117,68 @@ struct cdx_controller {
+  * @cdx: CDX controller associated with the device
+  * @vendor: Vendor ID for CDX device
+  * @device: Device ID for CDX device
++ * @subsystem_vendor: Subsystem Vendor ID for CDX device
++ * @subsystem_device: Subsystem Device ID for CDX device
++ * @class: Class for the CDX device
++ * @revision: Revision of the CDX device
+  * @bus_num: Bus number for this CDX device
+  * @dev_num: Device number for this device
+  * @res: array of MMIO region entries
+  * @res_attr: resource binary attribute
++ * @debugfs_dir: debugfs directory for this device
+  * @res_count: number of valid MMIO regions
+  * @dma_mask: Default DMA mask
+  * @flags: CDX device flags
+  * @req_id: Requestor ID associated with CDX device
++ * @is_bus: Is this bus device
++ * @enabled: is this bus enabled
++ * @msi_dev_id: MSI Device ID associated with CDX device
++ * @num_msi: Number of MSI's supported by the device
+  * @driver_override: driver name to force a match; do not set directly,
+  *                   because core frees it; use driver_set_override() to
+  *                   set or clear it.
++ * @irqchip_lock: lock to synchronize irq/msi configuration
++ * @msi_write_pending: MSI write pending for this device
+  */
+ struct cdx_device {
+ 	struct device dev;
+ 	struct cdx_controller *cdx;
+ 	u16 vendor;
+ 	u16 device;
++	u16 subsystem_vendor;
++	u16 subsystem_device;
++	u32 class;
++	u8 revision;
+ 	u8 bus_num;
+ 	u8 dev_num;
+ 	struct resource res[MAX_CDX_DEV_RESOURCES];
++	struct bin_attribute *res_attr[MAX_CDX_DEV_RESOURCES];
++	struct dentry *debugfs_dir;
+ 	u8 res_count;
+ 	u64 dma_mask;
+ 	u16 flags;
+ 	u32 req_id;
++	bool is_bus;
++	bool enabled;
++	u32 msi_dev_id;
++	u32 num_msi;
+ 	const char *driver_override;
++	struct mutex irqchip_lock; /* Serialize write msi configuration */
++	bool msi_write_pending;
+ };
+ 
+ #define to_cdx_device(_dev) \
+ 	container_of(_dev, struct cdx_device, dev)
+ 
++#define cdx_resource_start(dev, num)	((dev)->res[(num)].start)
++#define cdx_resource_end(dev, num)	((dev)->res[(num)].end)
++#define cdx_resource_flags(dev, num)	((dev)->res[(num)].flags)
++#define cdx_resource_len(dev, num) \
++	((cdx_resource_start((dev), (num)) == 0 &&	\
++	  cdx_resource_end((dev), (num)) ==		\
++	  cdx_resource_start((dev), (num))) ? 0 :	\
++	 (cdx_resource_end((dev), (num)) -		\
++	  cdx_resource_start((dev), (num)) + 1))
+ /**
+  * struct cdx_driver - CDX device driver
+  * @driver: Generic device driver
+@@ -162,6 +233,20 @@ void cdx_driver_unregister(struct cdx_driver *cdx_driver);
+ 
+ extern struct bus_type cdx_bus_type;
+ 
++/**
++ * cdx_msi_domain_alloc_irqs - Allocate MSI's for the CDX device
++ * @dev: device pointer
++ * @irq_count: Number of MSI's to be allocated
++ *
++ * Return: 0 for success, -errno on failure
++ */
++int cdx_msi_domain_alloc_irqs(struct device *dev, unsigned int irq_count);
++
++/**
++ * cdx_msi_domain_free_irqs - Free MSI's for CDX device
++ */
++#define cdx_msi_domain_free_irqs msi_domain_free_irqs_all
++
+ /**
+  * cdx_dev_reset - Reset CDX device
+  * @dev: device pointer
+@@ -170,4 +255,34 @@ extern struct bus_type cdx_bus_type;
+  */
+ int cdx_dev_reset(struct device *dev);
+ 
++/**
++ * cdx_set_master - enables bus-mastering for CDX device
++ * @cdx_dev: the CDX device to enable
++ *
++ * Return: 0 for success, -errno on failure
++ */
++int cdx_set_master(struct cdx_device *cdx_dev);
++
++/**
++ * cdx_clear_master - disables bus-mastering for CDX device
++ * @cdx_dev: the CDX device to disable
++ *
++ * Return: 0 for success, -errno on failure
++ */
++int cdx_clear_master(struct cdx_device *cdx_dev);
++
++/**
++ * cdx_enable_msi - Enable MSI for the CDX device.
++ * @cdx_dev: device pointer
++ *
++ * Return: 0 for success, -errno on failure
++ */
++int cdx_enable_msi(struct cdx_device *cdx_dev);
++
++/**
++ * cdx_disable_msi - Disable MSI for the CDX device.
++ * @cdx_dev: device pointer
++ */
++void cdx_disable_msi(struct cdx_device *cdx_dev);
++
+ #endif /* _CDX_BUS_H_ */
+diff --git a/include/linux/mod_devicetable.h b/include/linux/mod_devicetable.h
+index 0f51bc24a..346ca1f73 100644
+--- a/include/linux/mod_devicetable.h
++++ b/include/linux/mod_devicetable.h
+@@ -937,6 +937,12 @@ enum {
+  * struct cdx_device_id - CDX device identifier
+  * @vendor: Vendor ID
+  * @device: Device ID
++ * @subvendor: Subsystem vendor ID (or CDX_ANY_ID)
++ * @subdevice: Subsystem device ID (or CDX_ANY_ID)
++ * @class: Device class
++ *         Most drivers do not need to specify class/class_mask
++ *         as vendor/device is normally sufficient.
++ * @class_mask: Limit which sub-fields of the class field are compared.
+  * @override_only: Match only when dev->driver_override is this driver.
+  *
+  * Type of entries in the "device Id" table for CDX devices supported by
+@@ -945,6 +951,10 @@ enum {
+ struct cdx_device_id {
+ 	__u16 vendor;
+ 	__u16 device;
++	__u16 subvendor;
++	__u16 subdevice;
++	__u32 class;
++	__u32 class_mask;
+ 	__u32 override_only;
+ };
+ 
+diff --git a/scripts/mod/devicetable-offsets.c b/scripts/mod/devicetable-offsets.c
+index abe65f896..7a659aa31 100644
+--- a/scripts/mod/devicetable-offsets.c
++++ b/scripts/mod/devicetable-offsets.c
+@@ -265,6 +265,10 @@ int main(void)
+ 	DEVID(cdx_device_id);
+ 	DEVID_FIELD(cdx_device_id, vendor);
+ 	DEVID_FIELD(cdx_device_id, device);
++	DEVID_FIELD(cdx_device_id, subvendor);
++	DEVID_FIELD(cdx_device_id, subdevice);
++	DEVID_FIELD(cdx_device_id, class);
++	DEVID_FIELD(cdx_device_id, class_mask);
+ 	DEVID_FIELD(cdx_device_id, override_only);
+ 
+ 	return 0;
+diff --git a/scripts/mod/file2alias.c b/scripts/mod/file2alias.c
+index ea498eff1..1b7b0b07a 100644
+--- a/scripts/mod/file2alias.c
++++ b/scripts/mod/file2alias.c
+@@ -1455,6 +1455,10 @@ static int do_cdx_entry(const char *filename, void *symval,
+ {
+ 	DEF_FIELD(symval, cdx_device_id, vendor);
+ 	DEF_FIELD(symval, cdx_device_id, device);
++	DEF_FIELD(symval, cdx_device_id, subvendor);
++	DEF_FIELD(symval, cdx_device_id, subdevice);
++	DEF_FIELD(symval, cdx_device_id, class);
++	DEF_FIELD(symval, cdx_device_id, class_mask);
+ 	DEF_FIELD(symval, cdx_device_id, override_only);
+ 
+ 	switch (override_only) {
+@@ -1472,6 +1476,10 @@ static int do_cdx_entry(const char *filename, void *symval,
+ 
+ 	ADD(alias, "v", vendor != CDX_ANY_ID, vendor);
+ 	ADD(alias, "d", device != CDX_ANY_ID, device);
++	ADD(alias, "sv", subvendor != CDX_ANY_ID, subvendor);
++	ADD(alias, "sd", subdevice != CDX_ANY_ID, subdevice);
++	ADD(alias, "c", class_mask == 0xFFFFFF, class);
++
+ 	return 1;
+ }
+ 
