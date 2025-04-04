@@ -31,6 +31,7 @@ group:
     - "net/ipv4/"
   "102_crypto"                      :
     - "crypto/"
+    - "include/crypto/"     
     - "include/linux/oid_registry.h"
   "200_drivers-bluetooth"           :
     - "drivers/bluetooth/"
@@ -53,7 +54,6 @@ group:
     - "Documentation/devicetree/bindings/timer/cdns,ttc.yaml"
   "204_drivers-crypto"              :
     - "drivers/crypto/"     
-    - "include/crypto/"     
     - "Documentation/devicetree/bindings/crypto/" 
   "205_drivers-dma"                 :
     - "drivers/dma/"        
