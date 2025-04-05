@@ -53,6 +53,7 @@ run_patch 218_drivers-media-common.patch
 run_patch 219_drivers-media-i2c.patch
 run_patch 220_drivers-media-mc.patch
 run_patch 221_drivers-media-platform.patch
+run_patch 221_drivers-media-platform-fix.patch
 run_patch 222_drivers-media-test-drivers.patch
 run_patch 223_drivers-media-usb.patch
 run_patch 224_drivers-media-v4l2.patch
