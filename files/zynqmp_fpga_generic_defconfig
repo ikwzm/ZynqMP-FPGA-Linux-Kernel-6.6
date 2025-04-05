@@ -253,6 +253,17 @@ CONFIG_EXPERT=y
 ### ----------------------------------------------------------------------------
 CONFIG_PROFILING=y
 
+### ----------------------------------------------------------------------------
+### Kexec and crash features
+### ----------------------------------------------------------------------------
+
+#### 
+#### kernel crash dumps
+#### 
+CONFIG_CRASH_DUMP=y
+
+### end of Kexec and crash features
+
 ## end of General setup
 
 ## =============================================================================
@@ -269,6 +280,42 @@ CONFIG_ARCH_ZYNQMP=y
 ## =============================================================================
 ## Kernel Features
 ## =============================================================================
+
+### ----------------------------------------------------------------------------
+### Virtual address space size
+### ----------------------------------------------------------------------------
+
+#### 
+#### 36-bit
+#### 
+#### 
+
+#### 
+#### 39-bit
+#### 
+#### CONFIG_ARM64_VA_BITS_39 is not set
+
+#### 
+#### 42-bit
+#### 
+#### 
+
+#### 
+#### 47-bit
+#### 
+#### 
+
+#### 
+#### 48-bit
+#### 
+CONFIG_ARM64_VA_BITS_48=y
+
+#### 
+#### 52-bit
+#### 
+#### 
+
+### end of Virtual address space size
 
 ### ----------------------------------------------------------------------------
 ### Maximum number of CPUs (2-4096)
@@ -394,6 +441,11 @@ CONFIG_MODULES=y
 ### Module unloading
 ### ----------------------------------------------------------------------------
 CONFIG_MODULE_UNLOAD=y
+
+#### 
+#### Forced module unloading
+#### 
+CONFIG_MODULE_FORCE_UNLOAD=y
 
 ## end of Enable loadable module support
 
@@ -2150,11 +2202,6 @@ CONFIG_MAC80211=y
 CONFIG_MAC80211_LEDS=y
 
 #### 
-#### Trace all mac80211 debug messages
-#### 
-CONFIG_MAC80211_MESSAGE_TRACING=y
-
-#### 
 #### Select mac80211 debugging features
 #### 
 CONFIG_MAC80211_DEBUG_MENU=y
@@ -2233,6 +2280,11 @@ CONFIG_PCI_QUIRKS=y
 CONFIG_PCIE_XILINX=y
 
 ##### 
+##### Xilinx DMA PL PCIe host bridge support
+##### 
+CONFIG_PCIE_XILINX_DMA_PL=y
+
+##### 
 ##### Xilinx NWL PCIe controller
 ##### 
 CONFIG_PCIE_XILINX_NWL=y
@@ -2283,6 +2335,22 @@ CONFIG_CONNECTOR=y
 ### ----------------------------------------------------------------------------
 ### Firmware Drivers
 ### ----------------------------------------------------------------------------
+
+#### 
+#### ARM System Control and Management Interface Protocol
+#### 
+
+##### 
+##### ARM System Control and Management Interface (SCMI) Message Protocol
+##### 
+CONFIG_ARM_SCMI_PROTOCOL=y
+
+##### 
+##### SCMI system power control driver
+##### 
+CONFIG_ARM_SCMI_POWER_CONTROL=y
+
+#### end of ARM System Control and Management Interface Protocol
 
 #### 
 #### Zynq MPSoC Firmware Drivers
@@ -2464,9 +2532,19 @@ CONFIG_VIRTIO_BLK=m
 ### ----------------------------------------------------------------------------
 
 #### 
+#### Generic on-chip SRAM driver
+#### 
+CONFIG_SRAM=y
+
+#### 
 #### Xilinx SDFEC 16
 #### 
 CONFIG_XILINX_SDFEC=m
+
+#### 
+#### Xilinx AI engine
+#### 
+CONFIG_XILINX_AIE=y
 
 #### 
 #### EEPROM support
@@ -2657,6 +2735,11 @@ CONFIG_AXIENET_HAS_MCDMA=y
 CONFIG_AMD_PHY=y
 
 ##### 
+##### Analog Devices Industrial Ethernet PHYs
+##### 
+CONFIG_ADIN_PHY=y
+
+##### 
 ##### Broadcom 54XX PHYs
 ##### 
 CONFIG_BROADCOM_PHY=y
@@ -2707,6 +2790,11 @@ CONFIG_MARVELL_PHY=y
 CONFIG_MICREL_PHY=y
 
 ##### 
+##### Microsemi PHYs
+##### 
+CONFIG_MICROSEMI_PHY=y
+
+##### 
 ##### National Semiconductor PHYs
 ##### 
 CONFIG_NATIONAL_PHY=y
@@ -2735,6 +2823,11 @@ CONFIG_SMSC_PHY=y
 ##### STMicroelectronics STe10Xp PHYs
 ##### 
 CONFIG_STE10XP=y
+
+##### 
+##### Texas Instruments DP83848 PHY
+##### 
+CONFIG_DP83848_PHY=y
 
 ##### 
 ##### Texas Instruments DP83867 Gigabit PHY
@@ -3438,6 +3531,13 @@ CONFIG_KEYBOARD_GPIO_POLLED=y
 
 ##### end of Keyboards
 
+##### 
+##### Mice
+##### 
+# CONFIG_INPUT_MOUSE is not set
+
+##### end of Mice
+
 ### end of Input device support
 
 ### ----------------------------------------------------------------------------
@@ -3467,6 +3567,26 @@ CONFIG_SERIAL_8250_CONSOLE=y
 ###### Devicetree based probing for 8250 ports
 ###### 
 CONFIG_SERIAL_OF_PLATFORM=y
+
+###### 
+###### ARM AMBA PL010 serial port support
+###### 
+CONFIG_SERIAL_AMBA_PL010=y
+
+####### 
+####### Support for console on AMBA serial port
+####### 
+CONFIG_SERIAL_AMBA_PL010_CONSOLE=y
+
+###### 
+###### ARM AMBA PL011 serial port support
+###### 
+CONFIG_SERIAL_AMBA_PL011=y
+
+####### 
+####### Support for console on AMBA serial port
+####### 
+CONFIG_SERIAL_AMBA_PL011_CONSOLE=y
 
 ###### 
 ###### MAX310X support
@@ -3557,6 +3677,11 @@ CONFIG_I2C_MUX=y
 ###### 
 
 ####### 
+####### NXP PCA9541 I2C Master Selector
+####### 
+CONFIG_I2C_MUX_PCA9541=y
+
+####### 
 ####### NXP PCA954x/PCA984x and Maxim MAX735x/MAX736x I2C Mux/switches
 ####### 
 CONFIG_I2C_MUX_PCA954x=y
@@ -3597,6 +3722,23 @@ CONFIG_I2C_SLAVE_EEPROM=y
 ### end of I2C support
 
 ### ----------------------------------------------------------------------------
+### I3C support
+### ----------------------------------------------------------------------------
+CONFIG_I3C=y
+
+#### 
+#### Cadence I3C master driver
+#### 
+CONFIG_CDNS_I3C_MASTER=y
+
+#### 
+#### Synospsys DesignWare I3C master driver
+#### 
+CONFIG_DW_I3C_MASTER=y
+
+### end of I3C support
+
+### ----------------------------------------------------------------------------
 ### SPI support
 ### ----------------------------------------------------------------------------
 CONFIG_SPI=y
@@ -3610,6 +3752,11 @@ CONFIG_SPI_BITBANG=y
 #### Cadence SPI controller
 #### 
 CONFIG_SPI_CADENCE=y
+
+#### 
+#### Cadence Quad SPI controller
+#### 
+CONFIG_SPI_CADENCE_QUADSPI=y
 
 #### 
 #### Xilinx SPI controller common module
@@ -3739,6 +3886,11 @@ CONFIG_PMBUS=y
 CONFIG_SENSORS_PMBUS=y
 
 ##### 
+##### Infineon IR38064 and compatibles
+##### 
+CONFIG_SENSORS_IR38064=y
+
+##### 
 ##### Infineon IRPS5401
 ##### 
 CONFIG_SENSORS_IRPS5401=y
@@ -3766,6 +3918,11 @@ CONFIG_WATCHDOG=y
 #### Xilinx Watchdog timer
 #### 
 CONFIG_XILINX_WATCHDOG=y
+
+#### 
+#### Xilinx window watchdog timer
+#### 
+CONFIG_XILINX_WINDOW_WATCHDOG=y
 
 #### 
 #### Cadence Watchdog Timer
@@ -5494,6 +5651,11 @@ CONFIG_USB_HSIC_USB4604=m
 CONFIG_USB_LINK_LAYER_TEST=m
 
 #### 
+#### Onboard USB device support
+#### 
+CONFIG_USB_ONBOARD_DEV=y
+
+#### 
 #### USB Physical Layer drivers
 #### 
 
@@ -5810,6 +5972,28 @@ CONFIG_MMC_SDHCI_OF_ARASAN=y
 ### end of MMC/SD/SDIO card support
 
 ### ----------------------------------------------------------------------------
+### Universal Flash Storage Controller
+### ----------------------------------------------------------------------------
+CONFIG_SCSI_UFSHCD=y
+
+#### 
+#### Universal Flash Storage BSG device node
+#### 
+CONFIG_SCSI_UFS_BSG=y
+
+#### 
+#### Platform bus based UFS Controller support
+#### 
+CONFIG_SCSI_UFSHCD_PLATFORM=y
+
+#### 
+#### AMD Versal Gen 2 UFS controller platform driver
+#### 
+CONFIG_SCSI_UFS_AMD_VERSAL2=y
+
+### end of Universal Flash Storage Controller
+
+### ----------------------------------------------------------------------------
 ### LED Support
 ### ----------------------------------------------------------------------------
 CONFIG_NEW_LEDS=y
@@ -5882,6 +6066,11 @@ CONFIG_EDAC=y
 #### Synopsys DDR Memory Controller
 #### 
 CONFIG_EDAC_SYNOPSYS=y
+
+#### 
+#### Xilinx Versal XilSEM Controller
+#### 
+CONFIG_EDAC_XILINX_XILSEM=y
 
 ### end of EDAC (Error Detection And Correction) reporting
 
@@ -5978,6 +6167,18 @@ CONFIG_UIO_XILINX_APM=y
 CONFIG_UIO_XILINX_AI_ENGINE=y
 
 ### end of Userspace I/O drivers
+
+### ----------------------------------------------------------------------------
+### VFIO Non-Privileged userspace driver framework
+### ----------------------------------------------------------------------------
+CONFIG_VFIO=y
+
+#### 
+#### VFIO support for CDX bus devices
+#### 
+CONFIG_VFIO_CDX=y
+
+### end of VFIO Non-Privileged userspace driver framework
 
 ### ----------------------------------------------------------------------------
 ### Virtio drivers
@@ -6091,6 +6292,11 @@ CONFIG_XILINX_TSN_QBR=y
 ### CONFIG_COMMON_CLK=y
 
 #### 
+#### Clock driver controlled via SCMI interface
+#### 
+CONFIG_COMMON_CLK_SCMI=y
+
+#### 
 #### Clock driver for SiLabs 5341 and 5340 A/B/C/D devices
 #### 
 CONFIG_COMMON_CLK_SI5341=y
@@ -6138,9 +6344,30 @@ CONFIG_COMMON_CLK_ZYNQMP=y
 ### end of Common Clock Framework
 
 ### ----------------------------------------------------------------------------
+### Clock Source drivers
+### ----------------------------------------------------------------------------
+
+#### 
+#### Enable ARM architected timer event stream generation by default
+#### 
+# CONFIG_ARM_ARCH_TIMER_EVTSTREAM is not set
+
+#### 
+#### Workaround for Freescale/NXP Erratum A-008585
+#### 
+# CONFIG_FSL_ERRATUM_A008585 is not set
+
+### end of Clock Source drivers
+
+### ----------------------------------------------------------------------------
 ### IOMMU Hardware Support
 ### ----------------------------------------------------------------------------
 ### CONFIG_IOMMU_SUPPORT=y
+
+#### 
+#### ARM Ltd. System MMU Version 3 (SMMUv3) Support
+#### 
+CONFIG_ARM_SMMU_V3=y
 
 #### 
 #### Virtio IOMMU driver
@@ -6174,6 +6401,16 @@ CONFIG_ZYNQMP_R5_REMOTEPROC=m
 #### 
 CONFIG_RPMSG_CHAR=m
 
+#### 
+#### RPMSG control interface
+#### 
+CONFIG_RPMSG_CTRL=y
+
+#### 
+#### Virtio RPMSG bus driver
+#### 
+CONFIG_RPMSG_VIRTIO=y
+
 ### end of Rpmsg drivers
 
 ### ----------------------------------------------------------------------------
@@ -6205,6 +6442,11 @@ CONFIG_XILINX_XADC=y
 ##### 
 CONFIG_XILINX_AMS=y
 
+##### 
+##### Xilinx Sysmon driver for Versal
+##### 
+CONFIG_VERSAL_SYSMON=y
+
 #### end of Analog to digital converters
 
 #### 
@@ -6232,6 +6474,17 @@ CONFIG_BME680_SPI=y
 CONFIG_BMG160=y
 
 #### end of Digital gyroscope sensors
+
+#### 
+#### Inertial measurement units
+#### 
+
+##### 
+##### ST_LSM6DSx driver for STM 6-axis IMU MEMS sensors
+##### 
+CONFIG_IIO_ST_LSM6DSX=y
+
+#### end of Inertial measurement units
 
 #### 
 #### Magnetometer sensors
@@ -6266,6 +6519,11 @@ CONFIG_PWM_CADENCE=m
 #### Xilinx Interrupt Controller IP
 #### 
 CONFIG_XILINX_INTC=y
+
+##### 
+##### IRQCHIP Xilinx Intc driver module support (experimental)
+##### 
+CONFIG_IRQCHIP_XILINX_INTC_MODULE_SUPPORT_EXPERIMENTAL=y
 
 ### end of IRQ chip support
 
@@ -6320,6 +6578,11 @@ CONFIG_NVMEM=y
 #### 
 CONFIG_NVMEM_ZYNQMP=y
 
+#### 
+#### Xilinx Secure Configuration nvmem firmware support
+#### 
+CONFIG_XLNX_SEC_CFG=y
+
 ### end of NVMEM Support
 
 ### ----------------------------------------------------------------------------
@@ -6369,6 +6632,16 @@ CONFIG_FPGA_MGR_VERSAL_FPGA=y
 
 ### end of FPGA Configuration Framework
 
+### ----------------------------------------------------------------------------
+### CDX Bus driver
+### ----------------------------------------------------------------------------
+CONFIG_CDX_BUS=y
+
+#### 
+#### CDX bus controller
+#### 
+CONFIG_CDX_CONTROLLER=m
+
 ## end of Device Drivers
 
 ## =============================================================================
@@ -6404,6 +6677,11 @@ CONFIG_BTRFS_FS=m
 #### Btrfs POSIX Access Control Lists
 #### 
 CONFIG_BTRFS_FS_POSIX_ACL=y
+
+### ----------------------------------------------------------------------------
+### Enable filesystem export operations for block IO
+### ----------------------------------------------------------------------------
+CONFIG_EXPORTFS_BLOCK_OPS=y
 
 ### ----------------------------------------------------------------------------
 ### Quota support
@@ -6509,6 +6787,11 @@ CONFIG_ECRYPT_FS=y
 CONFIG_JFFS2_FS=y
 
 ##### 
+##### JFFS2 summary support
+##### 
+CONFIG_JFFS2_SUMMARY=y
+
+##### 
 ##### JFFS2 XATTR support
 ##### 
 CONFIG_JFFS2_FS_XATTR=y
@@ -6584,6 +6867,11 @@ CONFIG_NFS_V4_2=y
 #### Root file system on NFS
 #### 
 CONFIG_ROOT_NFS=y
+
+#### 
+#### NFS: Disable NFS UDP protocol support
+#### 
+# CONFIG_NFS_DISABLE_UDP_SUPPORT is not set
 
 #### 
 #### NFS server support
@@ -7012,6 +7300,11 @@ CONFIG_CRYPTO_AES_ARM64_CE_CCM=y
 ### CONFIG_CRYPTO_HW=y
 
 #### 
+#### Support for Xilinx ECDSA hardware accelerator
+#### 
+CONFIG_CRYPTO_DEV_XILINX_ECDSA=y
+
+#### 
 #### Support for Xilinx ZynqMP RSA hw accelerator
 #### 
 CONFIG_CRYPTO_DEV_XILINX_RSA=y
@@ -7071,6 +7364,41 @@ CONFIG_CRC32_SLICEBY8=y
 #### end of CRC32 implementation
 
 ### ----------------------------------------------------------------------------
+### XZ decompression support
+### ----------------------------------------------------------------------------
+### CONFIG_XZ_DEC=y
+
+#### 
+#### x86 BCJ filter decoder
+#### 
+# CONFIG_XZ_DEC_X86 is not set
+
+#### 
+#### PowerPC BCJ filter decoder
+#### 
+# CONFIG_XZ_DEC_POWERPC is not set
+
+#### 
+#### IA-64 BCJ filter decoder
+#### 
+# CONFIG_XZ_DEC_IA64 is not set
+
+#### 
+#### ARM BCJ filter decoder
+#### 
+# CONFIG_XZ_DEC_ARM is not set
+
+#### 
+#### ARM-Thumb BCJ filter decoder
+#### 
+# CONFIG_XZ_DEC_ARMTHUMB is not set
+
+#### 
+#### SPARC BCJ filter decoder
+#### 
+# CONFIG_XZ_DEC_SPARC is not set
+
+### ----------------------------------------------------------------------------
 ### DMA Contiguous Memory Allocator
 ### ----------------------------------------------------------------------------
 CONFIG_DMA_CMA=y
@@ -7102,6 +7430,11 @@ CONFIG_PRINTK_TIME=y
 ### ----------------------------------------------------------------------------
 
 CONFIG_DEBUG_INFO=y
+
+#### 
+#### Make section mismatch errors non-fatal
+#### 
+# CONFIG_SECTION_MISMATCH_WARN_ONLY is not set
 
 ### end of Compile-time checks and compiler options
 
