@@ -1,5 +1,5 @@
 --- linux-6.6.70/Documentation/devicetree/bindings/usb/snps,dwc3.yaml	2025-03-31 13:53:01.134075900 +0900
-+++ linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/usb/snps,dwc3.yaml	2025-03-31 13:54:53.090068600 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/usb/snps,dwc3.yaml	2025-04-05 13:10:16.954273500 +0900
 @@ -310,6 +310,13 @@
      maximum: 62
      deprecated: true
@@ -15,7 +15,7 @@
      description:
        Periodic ESS RX packet threshold count (host mode only). Set this and
 --- linux-6.6.70/drivers/usb/dwc3/Kconfig	2025-03-31 13:53:24.343376500 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/usb/dwc3/Kconfig	2025-03-31 13:55:16.128760700 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/usb/dwc3/Kconfig	2025-04-05 13:10:39.241526600 +0900
 @@ -25,6 +25,7 @@
  choice
  	bool "DWC3 Mode Selection"
@@ -55,7 +55,7 @@
  
  config USB_DWC3_AM62
 --- linux-6.6.70/drivers/usb/dwc3/Makefile	2025-03-31 13:53:24.343376500 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/usb/dwc3/Makefile	2025-03-31 13:55:16.128862100 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/usb/dwc3/Makefile	2025-04-05 13:10:39.241526600 +0900
 @@ -10,12 +10,18 @@
  	dwc3-y				+= trace.o
  endif
@@ -79,7 +79,7 @@
  
  ifneq ($(CONFIG_USB_DWC3_DUAL_ROLE),)
 --- linux-6.6.70/drivers/usb/dwc3/core.c	2025-03-31 13:53:24.344373800 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/usb/dwc3/core.c	2025-03-31 13:55:16.128862100 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/usb/dwc3/core.c	2025-04-05 13:10:39.242524000 +0900
 @@ -26,6 +26,7 @@
  #include <linux/of_graph.h>
  #include <linux/acpi.h>
@@ -556,7 +556,7 @@
  	if (ret)
  		return ret;
 --- linux-6.6.70/drivers/usb/dwc3/core.h	2025-03-31 13:53:24.344373800 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/usb/dwc3/core.h	2025-03-31 13:55:16.129859800 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/usb/dwc3/core.h	2025-04-05 13:10:39.243521300 +0900
 @@ -28,8 +28,10 @@
  #include <linux/usb/otg.h>
  #include <linux/usb/role.h>
@@ -840,7 +840,7 @@
  
  #endif /* __DRIVERS_USB_DWC3_CORE_H */
 --- linux-6.6.70/drivers/usb/dwc3/debugfs.c	2025-03-31 13:53:24.346368600 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/usb/dwc3/debugfs.c	2025-03-31 13:55:16.130857100 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/usb/dwc3/debugfs.c	2025-04-05 13:10:39.243521300 +0900
 @@ -678,6 +678,53 @@
  	.release		= single_release,
  };
@@ -905,7 +905,7 @@
  }
  
 --- linux-6.6.70/drivers/usb/dwc3/dwc3-xilinx.c	2025-03-31 13:53:24.352426300 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/usb/dwc3/dwc3-xilinx.c	2025-03-31 13:55:16.138988000 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/usb/dwc3/dwc3-xilinx.c	2025-04-05 13:10:39.251560400 +0900
 @@ -11,6 +11,7 @@
  #include <linux/slab.h>
  #include <linux/clk.h>
@@ -1504,7 +1504,7 @@
  	if (ret)
  		return ret;
 --- linux-6.6.70/drivers/usb/dwc3/ep0.c	2025-03-31 13:53:24.353423500 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/usb/dwc3/ep0.c	2025-03-31 13:55:16.138988000 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/usb/dwc3/ep0.c	2025-04-05 13:10:39.251560400 +0900
 @@ -199,7 +199,7 @@
  	int				ret;
  
@@ -1631,7 +1631,7 @@
  		 * We already have a DATA transfer in the controller's cache,
  		 * if we receive a XferNotReady(DATA) we will ignore it, unless
 --- linux-6.6.70/drivers/usb/dwc3/gadget.c	2025-03-31 13:53:24.354420700 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/usb/dwc3/gadget.c	2025-03-31 13:55:16.139985700 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/usb/dwc3/gadget.c	2025-04-05 13:10:39.252556700 +0900
 @@ -310,7 +310,7 @@
  {
  	const struct usb_endpoint_descriptor *desc = dep->endpoint.desc;
@@ -2271,7 +2271,7 @@
  	return dwc3_gadget_soft_connect(dwc);
  }
 --- linux-6.6.70/drivers/usb/dwc3/gadget.h	2025-03-31 13:53:24.355417300 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/usb/dwc3/gadget.h	2025-03-31 13:55:16.139985700 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/usb/dwc3/gadget.h	2025-04-05 13:10:39.252556700 +0900
 @@ -56,6 +56,15 @@
  
  /* Frame/Microframe Number Mask */
@@ -2308,7 +2308,7 @@
  void dwc3_stop_active_transfer(struct dwc3_ep *dep, bool force, bool interrupt);
  int dwc3_gadget_start_config(struct dwc3 *dwc, unsigned int resource_index);
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/usb/dwc3/gadget_hibernation.c	2025-03-31 13:55:16.139985700 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/usb/dwc3/gadget_hibernation.c	2025-04-05 13:10:39.253555000 +0900
 @@ -0,0 +1,560 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/**
@@ -2871,7 +2871,7 @@
 +	return;
 +}
 --- linux-6.6.70/drivers/usb/dwc3/host.c	2025-03-31 13:53:24.355417300 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/usb/dwc3/host.c	2025-03-31 13:55:16.140982600 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/usb/dwc3/host.c	2025-04-05 13:10:39.253555000 +0900
 @@ -10,12 +10,28 @@
  #include <linux/irq.h>
  #include <linux/of.h>
@@ -2945,7 +2945,7 @@
  				       sizeof(struct xhci_plat_priv));
  	if (ret)
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/usb/dwc3/otg.c	2025-03-31 13:55:16.141980700 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/usb/dwc3/otg.c	2025-04-05 13:10:39.254552200 +0900
 @@ -0,0 +1,2188 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/**
@@ -5136,7 +5136,7 @@
 +	kfree(otg);
 +}
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/usb/dwc3/otg.h	2025-03-31 13:55:16.141980700 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/usb/dwc3/otg.h	2025-04-05 13:10:39.254552200 +0900
 @@ -0,0 +1,244 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/**
@@ -5383,7 +5383,7 @@
 +extern int usb_port_suspend(struct usb_device *udev, pm_message_t msg);
 +extern void usb_kick_hub_wq(struct usb_device *dev);
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/usb/dwc3/platform_data.h	2025-03-31 13:55:16.141980700 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/usb/dwc3/platform_data.h	2025-04-05 13:10:39.255548600 +0900
 @@ -0,0 +1,54 @@
 +/**
 + * platform_data.h - USB DWC3 Platform Data Support

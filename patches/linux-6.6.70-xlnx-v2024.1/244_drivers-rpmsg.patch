@@ -1,5 +1,5 @@
 --- linux-6.6.70/drivers/rpmsg/Kconfig	2025-03-31 13:53:22.304612700 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/rpmsg/Kconfig	2025-03-31 13:55:14.200741200 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/rpmsg/Kconfig	2025-04-05 13:10:37.432857500 +0900
 @@ -81,4 +81,16 @@
  	select RPMSG_NS
  	select VIRTIO
@@ -18,7 +18,7 @@
 +
  endmenu
 --- linux-6.6.70/drivers/rpmsg/virtio_rpmsg_bus.c	2025-03-31 13:53:22.310781800 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/rpmsg/virtio_rpmsg_bus.c	2025-03-31 13:55:14.206725300 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/rpmsg/virtio_rpmsg_bus.c	2025-04-05 13:10:37.437844200 +0900
 @@ -26,6 +26,7 @@
  #include <linux/virtio.h>
  #include <linux/virtio_ids.h>

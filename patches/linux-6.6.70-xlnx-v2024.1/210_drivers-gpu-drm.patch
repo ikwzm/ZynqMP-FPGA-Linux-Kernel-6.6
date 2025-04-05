@@ -1,5 +1,5 @@
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/display/panel/panel-simple-lvds-dual-ports.yaml	2025-03-31 13:54:51.439659400 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/display/panel/panel-simple-lvds-dual-ports.yaml	2025-04-05 13:10:15.402677300 +0900
 @@ -0,0 +1,118 @@
 +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
 +%YAML 1.2
@@ -120,7 +120,7 @@
 +      };
 +    };
 --- linux-6.6.70/Documentation/devicetree/bindings/display/panel/panel-simple.yaml	2025-03-31 13:52:59.454684700 +0900
-+++ linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/display/panel/panel-simple.yaml	2025-03-31 13:54:51.440656100 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/display/panel/panel-simple.yaml	2025-04-05 13:10:15.403674600 +0900
 @@ -65,14 +65,8 @@
        - auo,g104sn02
          # AU Optronics Corporation 12.1" (1280x800) TFT LCD panel
@@ -155,7 +155,7 @@
        - nvd,9128
          # OKAYA Electric America, Inc. RS800480T-7X0GP 7" WVGA LCD panel
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/display/xlnx/bridge.txt	2025-03-31 13:54:51.490093800 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/display/xlnx/bridge.txt	2025-04-05 13:10:15.449560800 +0900
 @@ -0,0 +1,29 @@
 +Xilinx DRM bridge
 +-----------------
@@ -187,7 +187,7 @@
 +	       xlnx,bridge = <&provider_node>;
 +       };
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/display/xlnx/xlnx,dp-tx.yaml	2025-03-31 13:54:51.491091000 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/display/xlnx/xlnx,dp-tx.yaml	2025-04-05 13:10:15.450558400 +0900
 @@ -0,0 +1,225 @@
 +# SPDX-License-Identifier: GPL-2.0
 +%YAML 1.2
@@ -415,7 +415,7 @@
 +   };
 +...
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/display/xlnx/xlnx,dsi.txt	2025-03-31 13:54:51.491091000 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/display/xlnx/xlnx,dsi.txt	2025-04-05 13:10:15.450558400 +0900
 @@ -0,0 +1,74 @@
 +Device-Tree bindings for Xilinx MIPI DSI Tx IP core
 +
@@ -492,7 +492,7 @@
 +			};
 +		};
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/display/xlnx/xlnx,mixer.txt	2025-03-31 13:54:51.492088300 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/display/xlnx/xlnx,mixer.txt	2025-04-05 13:10:15.450558400 +0900
 @@ -0,0 +1,211 @@
 +Device-Tree bindings for Xilinx Video Mixer IP core
 +
@@ -706,7 +706,7 @@
 +		memory-region = <&plmem_multimedia>;
 +	}
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/display/xlnx/xlnx,pl-disp.txt	2025-03-31 13:54:51.492088300 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/display/xlnx/xlnx,pl-disp.txt	2025-04-05 13:10:15.451556000 +0900
 @@ -0,0 +1,41 @@
 +Xilinx PL Display driver
 +------------------------
@@ -750,7 +750,7 @@
 +		};
 +	};
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/display/xlnx/xlnx,sdi-tx.txt	2025-03-31 13:54:51.493085600 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/display/xlnx/xlnx,sdi-tx.txt	2025-04-05 13:10:15.451556000 +0900
 @@ -0,0 +1,63 @@
 +Device-Tree bindings for Xilinx SDI Tx subsystem
 +
@@ -816,7 +816,7 @@
 +		};
 +	};
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/display/xlnx/xlnx,v-hdmi-txss1.yaml	2025-03-31 13:54:51.493085600 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/display/xlnx/xlnx,v-hdmi-txss1.yaml	2025-04-05 13:10:15.451556000 +0900
 @@ -0,0 +1,204 @@
 +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
 +%YAML 1.2
@@ -1023,7 +1023,7 @@
 +    };
 +...
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/display/xlnx/xlnx,vpss-csc.txt	2025-03-31 13:54:51.494082900 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/display/xlnx/xlnx,vpss-csc.txt	2025-04-05 13:10:15.452553200 +0900
 @@ -0,0 +1,35 @@
 +Xllinx VPSS Color Space Converter
 +-----------------------------------------
@@ -1061,7 +1061,7 @@
 +		xlnx,max-height = <2160>;
 +	}
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/display/xlnx/xlnx,vpss-scaler.txt	2025-03-31 13:54:51.494082900 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/display/xlnx/xlnx,vpss-scaler.txt	2025-04-05 13:10:15.453550500 +0900
 @@ -0,0 +1,50 @@
 +Xilinx VPSS Scaler
 +------------------
@@ -1114,7 +1114,7 @@
 +		xlnx,max-height = <2160>;
 +	}
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/display/xlnx/xlnx,vtc.txt	2025-03-31 13:54:51.494082900 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/display/xlnx/xlnx,vtc.txt	2025-04-05 13:10:15.453550500 +0900
 @@ -0,0 +1,32 @@
 +Device-Tree bindings for Xilinx Video Timing Controller(VTC)
 +
@@ -1149,7 +1149,7 @@
 +			clocks = <&misc_clk_0>, <&misc_clk_1>;
 +	};
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/display/xlnx/xlnx,zynqmp-dpsub.txt	2025-03-31 13:54:51.495079800 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/display/xlnx/xlnx,zynqmp-dpsub.txt	2025-04-05 13:10:15.453550500 +0900
 @@ -0,0 +1,82 @@
 +Xilinx ZynqMP DisplayPort subsystem
 +-----------------------------------
@@ -1234,7 +1234,7 @@
 +	};
 +};
 --- linux-6.6.70/Documentation/devicetree/bindings/display/xlnx/xlnx,zynqmp-dpsub.yaml	2025-03-31 13:52:59.499092100 +0900
-+++ linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/display/xlnx/xlnx,zynqmp-dpsub.yaml	2025-03-31 13:54:51.495079800 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/display/xlnx/xlnx,zynqmp-dpsub.yaml	2025-04-05 13:10:15.454547800 +0900
 @@ -49,13 +49,18 @@
      const: xlnx,zynqmp-dpsub-1.7
  
@@ -1278,7 +1278,7 @@
          interrupt-parent = <&gic>;
  
 --- linux-6.6.70/drivers/gpu/drm/display/drm_dp_helper.c	2025-03-31 13:53:13.481417400 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/gpu/drm/display/drm_dp_helper.c	2025-03-31 13:55:05.369562800 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/gpu/drm/display/drm_dp_helper.c	2025-04-05 13:10:28.905393600 +0900
 @@ -2129,8 +2129,6 @@
  {
  	int ret;
@@ -1289,7 +1289,7 @@
  		drm_dp_aux_init(aux);
  
 --- linux-6.6.70/drivers/gpu/drm/display/drm_hdmi_helper.c	2025-03-31 13:53:13.483412000 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/gpu/drm/display/drm_hdmi_helper.c	2025-03-31 13:55:05.371557200 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/gpu/drm/display/drm_hdmi_helper.c	2025-04-05 13:10:28.908385600 +0900
 @@ -78,6 +78,81 @@
  }
  EXPORT_SYMBOL(drm_hdmi_infoframe_set_hdr_metadata);
@@ -1373,7 +1373,7 @@
  #define FULL_COLORIMETRY_MASK		0x1FF
  #define NORMAL_COLORIMETRY_MASK		0x3
 --- linux-6.6.70/drivers/gpu/drm/drm_atomic_state_helper.c	2025-03-31 13:53:13.486403300 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/gpu/drm/drm_atomic_state_helper.c	2025-03-31 13:55:05.374578400 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/gpu/drm/drm_atomic_state_helper.c	2025-04-05 13:10:28.911464300 +0900
 @@ -625,6 +625,9 @@
  	if (state->hdr_output_metadata)
  		drm_property_blob_get(state->hdr_output_metadata);
@@ -1393,7 +1393,7 @@
  EXPORT_SYMBOL(__drm_atomic_helper_connector_destroy_state);
  
 --- linux-6.6.70/drivers/gpu/drm/drm_atomic_uapi.c	2025-03-31 13:53:13.486403300 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/gpu/drm/drm_atomic_uapi.c	2025-03-31 13:55:05.374578400 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/gpu/drm/drm_atomic_uapi.c	2025-04-05 13:10:28.911464300 +0900
 @@ -764,6 +764,13 @@
  				sizeof(struct hdr_output_metadata), -1,
  				&replaced);
@@ -1419,7 +1419,7 @@
  		*val = state->content_protection;
  	} else if (property == config->hdcp_content_type_property) {
 --- linux-6.6.70/drivers/gpu/drm/drm_connector.c	2025-03-31 13:53:13.491486400 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/gpu/drm/drm_connector.c	2025-03-31 13:55:05.379674100 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/gpu/drm/drm_connector.c	2025-04-05 13:10:28.916450900 +0900
 @@ -1374,6 +1374,14 @@
   *	hdmi_drm_infoframe_pack() to pack the infoframe as per spec, in case of
   *	HDMI encoder.
@@ -1449,7 +1449,7 @@
  }
  
 --- linux-6.6.70/drivers/gpu/drm/drm_edid.c	2025-03-31 13:53:13.497670200 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/gpu/drm/drm_edid.c	2025-03-31 13:55:05.385662100 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/gpu/drm/drm_edid.c	2025-04-05 13:10:28.921522500 +0900
 @@ -2973,6 +2973,57 @@
  	       (mode->vsync_start - mode->vdisplay == 3);
  }
@@ -1509,7 +1509,7 @@
   * drm_mode_find_dmt - Create a copy of a mode if present in DMT
   * @dev: Device to duplicate against
 --- linux-6.6.70/drivers/gpu/drm/drm_fb_dma_helper.c	2025-03-31 13:53:13.498695100 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/gpu/drm/drm_fb_dma_helper.c	2025-03-31 13:55:05.386628200 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/gpu/drm/drm_fb_dma_helper.c	2025-04-05 13:10:28.923517100 +0900
 @@ -76,7 +76,6 @@
  	u8 h_div = 1, v_div = 1;
  	u32 block_w = drm_format_info_block_width(fb->format, plane);
@@ -1528,7 +1528,7 @@
  	return dma_addr;
  }
 --- linux-6.6.70/drivers/gpu/drm/drm_fb_helper.c	2025-03-31 13:53:13.499689500 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/gpu/drm/drm_fb_helper.c	2025-03-31 13:55:05.387625000 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/gpu/drm/drm_fb_helper.c	2025-04-05 13:10:28.924514600 +0900
 @@ -69,7 +69,7 @@
   * This module_param *should* be removed as soon as possible and be
   * considered as a broken and legacy behaviour from a modern fbdev device.
@@ -1539,7 +1539,7 @@
  module_param_unsafe(drm_leak_fbdev_smem, bool, 0600);
  MODULE_PARM_DESC(drm_leak_fbdev_smem,
 --- linux-6.6.70/drivers/gpu/drm/drm_fourcc.c	2025-03-31 13:53:13.502657200 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/gpu/drm/drm_fourcc.c	2025-03-31 13:55:05.389722300 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/gpu/drm/drm_fourcc.c	2025-04-05 13:10:28.926508800 +0900
 @@ -29,6 +29,7 @@
  
  #include <drm/drm_device.h>
@@ -1608,7 +1608,7 @@
 +}
 +EXPORT_SYMBOL(drm_format_plane_width_bytes);
 --- linux-6.6.70/drivers/gpu/drm/drm_framebuffer.c	2025-03-31 13:53:13.502657200 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/gpu/drm/drm_framebuffer.c	2025-03-31 13:55:05.390719500 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/gpu/drm/drm_framebuffer.c	2025-04-05 13:10:28.927506200 +0900
 @@ -198,7 +198,8 @@
  	for (i = 0; i < info->num_planes; i++) {
  		unsigned int width = fb_plane_width(r->width, info, i);
@@ -1630,7 +1630,7 @@
  		return ERR_PTR(-EINVAL);
  	}
 --- linux-6.6.70/drivers/gpu/drm/panel/panel-simple.c	2025-03-31 13:53:14.720241500 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/gpu/drm/panel/panel-simple.c	2025-03-31 13:55:06.554249900 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/gpu/drm/panel/panel-simple.c	2025-04-05 13:10:30.077989600 +0900
 @@ -4634,6 +4634,33 @@
  	.lanes = 4,
  };
@@ -1676,7 +1676,7 @@
  		.data = &boe_tv080wum_nl0
  	}, {
 --- linux-6.6.70/drivers/gpu/drm/xlnx/Kconfig	2025-03-31 13:53:15.089241200 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/gpu/drm/xlnx/Kconfig	2025-03-31 13:55:06.900582400 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/gpu/drm/xlnx/Kconfig	2025-04-05 13:10:30.405610500 +0900
 @@ -5,13 +5,151 @@
  	depends on DMADEVICES
  	depends on PHY_XILINX_ZYNQMP
@@ -1830,7 +1830,7 @@
 +	  Xilinx FPGA's in IP. This driver provides the kernel mode
 +	  setting functionalities for the IP.
 --- linux-6.6.70/drivers/gpu/drm/xlnx/Makefile	2025-03-31 13:53:15.089241200 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/gpu/drm/xlnx/Makefile	2025-03-31 13:55:06.900582400 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/gpu/drm/xlnx/Makefile	2025-04-05 13:10:30.405610500 +0900
 @@ -1,2 +1,16 @@
 -zynqmp-dpsub-y := zynqmp_disp.o zynqmp_dpsub.o zynqmp_dp.o zynqmp_kms.o
 +zynqmp-dpsub-y := zynqmp_disp.o zynqmp_dpsub.o zynqmp_dp.o
@@ -1849,9 +1849,9 @@
 +xlnx-sdi-objs += xlnx_sdi.o xlnx_sdi_timing.o
 +obj-$(CONFIG_DRM_XLNX_SDI) += xlnx-sdi.o
 +obj-$(CONFIG_DRM_XLNX_HDCP) += hdcp/
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/gpu/drm/xlnx/hdcp/Makefile
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/drivers/gpu/drm/xlnx/hdcp/Makefile
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/gpu/drm/xlnx/hdcp/Makefile	2025-03-31 13:55:06.901579800 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/gpu/drm/xlnx/hdcp/Makefile	2025-04-05 13:10:30.406607500 +0900
 @@ -0,0 +1,7 @@
 +obj-$(CONFIG_DRM_XLNX_HDCP) += xhdcp2x_tx.o \
 +				xhdcp1x_tx.o \
@@ -1860,9 +1860,9 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/gpu/drm
 +				xlnx_hdcp2x_tx.o \
 +				xlnx_hdcp_sha1.o \
 +				xlnx_hdcp2x_crypt.o xlnx_hdcp_tx.o
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/gpu/drm/xlnx/hdcp/xhdcp1x_tx.c
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/drivers/gpu/drm/xlnx/hdcp/xhdcp1x_tx.c
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/gpu/drm/xlnx/hdcp/xhdcp1x_tx.c	2025-03-31 13:55:06.901579800 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/gpu/drm/xlnx/hdcp/xhdcp1x_tx.c	2025-04-05 13:10:30.406607500 +0900
 @@ -0,0 +1,182 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -2046,9 +2046,9 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/gpu/drm
 +	}
 +	return status;
 +}
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/gpu/drm/xlnx/hdcp/xhdcp1x_tx.h
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/drivers/gpu/drm/xlnx/hdcp/xhdcp1x_tx.h
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/gpu/drm/xlnx/hdcp/xhdcp1x_tx.h	2025-03-31 13:55:06.901579800 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/gpu/drm/xlnx/hdcp/xhdcp1x_tx.h	2025-04-05 13:10:30.406607500 +0900
 @@ -0,0 +1,39 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
 +/*
@@ -2089,9 +2089,9 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/gpu/drm
 +	REPTR_HDCP1X_TX_STATE_UNAUTHENTICATED
 +};
 +#endif
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/gpu/drm/xlnx/hdcp/xhdcp2x_tx.c
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/drivers/gpu/drm/xlnx/hdcp/xhdcp2x_tx.c
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/gpu/drm/xlnx/hdcp/xhdcp2x_tx.c	2025-03-31 13:55:06.902577100 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/gpu/drm/xlnx/hdcp/xhdcp2x_tx.c	2025-04-05 13:10:30.407605200 +0900
 @@ -0,0 +1,851 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -2944,9 +2944,9 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/gpu/drm
 +
 +	return status;
 +}
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/gpu/drm/xlnx/hdcp/xhdcp2x_tx.h
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/drivers/gpu/drm/xlnx/hdcp/xhdcp2x_tx.h
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/gpu/drm/xlnx/hdcp/xhdcp2x_tx.h	2025-03-31 13:55:06.902577100 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/gpu/drm/xlnx/hdcp/xhdcp2x_tx.h	2025-04-05 13:10:30.407605200 +0900
 @@ -0,0 +1,296 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
 +/*
@@ -3244,9 +3244,9 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/gpu/drm
 +};
 +
 +#endif
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/gpu/drm/xlnx/hdcp/xlnx_hdcp1x_keymngt.c
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/drivers/gpu/drm/xlnx/hdcp/xlnx_hdcp1x_keymngt.c
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/gpu/drm/xlnx/hdcp/xlnx_hdcp1x_keymngt.c	2025-03-31 13:55:06.903599100 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/gpu/drm/xlnx/hdcp/xlnx_hdcp1x_keymngt.c	2025-04-05 13:10:30.407605200 +0900
 @@ -0,0 +1,336 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -3584,9 +3584,9 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/gpu/drm
 +
 +	return ret;
 +}
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/gpu/drm/xlnx/hdcp/xlnx_hdcp1x_tx.c
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/drivers/gpu/drm/xlnx/hdcp/xlnx_hdcp1x_tx.c
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/gpu/drm/xlnx/hdcp/xlnx_hdcp1x_tx.c	2025-03-31 13:55:06.903599100 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/gpu/drm/xlnx/hdcp/xlnx_hdcp1x_tx.c	2025-04-05 13:10:30.408602400 +0900
 @@ -0,0 +1,1282 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -4870,9 +4870,9 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/gpu/drm
 +
 +	xhdcp1x_tx->xhdcp1x_internal_timer.timer_expired = 1;
 +}
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/gpu/drm/xlnx/hdcp/xlnx_hdcp1x_tx.h
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/drivers/gpu/drm/xlnx/hdcp/xlnx_hdcp1x_tx.h
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/gpu/drm/xlnx/hdcp/xlnx_hdcp1x_tx.h	2025-03-31 13:55:06.904597000 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/gpu/drm/xlnx/hdcp/xlnx_hdcp1x_tx.h	2025-04-05 13:10:30.408602400 +0900
 @@ -0,0 +1,362 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
 +/*
@@ -5236,9 +5236,9 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/gpu/drm
 +void xlnx_hdcp1x_tx_timer_handler(void *callbackref, u8 tmr_cnt_number);
 +void xlnx_hdcp1x_tx_start_timer(struct xlnx_hdcp1x_config *xhdcp1x_tx,
 +				u32 timeout, u8 reason_id);
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/gpu/drm/xlnx/hdcp/xlnx_hdcp2x_crypt.c
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/drivers/gpu/drm/xlnx/hdcp/xlnx_hdcp2x_crypt.c
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/gpu/drm/xlnx/hdcp/xlnx_hdcp2x_crypt.c	2025-03-31 13:55:06.904597000 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/gpu/drm/xlnx/hdcp/xlnx_hdcp2x_crypt.c	2025-04-05 13:10:30.408602400 +0900
 @@ -0,0 +1,494 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -5734,9 +5734,9 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/gpu/drm
 +					      km_ptr, HDCP2X_TX_KM_SIZE,
 +					      masking_seed, encrypted_km);
 +}
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/gpu/drm/xlnx/hdcp/xlnx_hdcp2x_tx.c
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/drivers/gpu/drm/xlnx/hdcp/xlnx_hdcp2x_tx.c
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/gpu/drm/xlnx/hdcp/xlnx_hdcp2x_tx.c	2025-03-31 13:55:06.905570000 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/gpu/drm/xlnx/hdcp/xlnx_hdcp2x_tx.c	2025-04-05 13:10:30.409689300 +0900
 @@ -0,0 +1,1267 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -7005,9 +7005,9 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/gpu/drm
 +	xhdcp2x_tx->xhdcp2x_info.is_rcvr_hdcp2x_capable =
 +			xlnx_hdcp2x_downstream_capbility(xhdcp2x_tx);
 +}
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/gpu/drm/xlnx/hdcp/xlnx_hdcp2x_tx.h
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/drivers/gpu/drm/xlnx/hdcp/xlnx_hdcp2x_tx.h
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/gpu/drm/xlnx/hdcp/xlnx_hdcp2x_tx.h	2025-03-31 13:55:06.905570000 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/gpu/drm/xlnx/hdcp/xlnx_hdcp2x_tx.h	2025-04-05 13:10:30.409689300 +0900
 @@ -0,0 +1,293 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
 +/*
@@ -7302,9 +7302,9 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/gpu/drm
 +bool xlnx_hdcp2x_downstream_capbility(struct xlnx_hdcp2x_config
 +				*xhdcp2x_tx);
 +#endif
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/gpu/drm/xlnx/hdcp/xlnx_hdcp_sha1.c
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/drivers/gpu/drm/xlnx/hdcp/xlnx_hdcp_sha1.c
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/gpu/drm/xlnx/hdcp/xlnx_hdcp_sha1.c	2025-03-31 13:55:06.905570000 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/gpu/drm/xlnx/hdcp/xlnx_hdcp_sha1.c	2025-04-05 13:10:30.409689300 +0900
 @@ -0,0 +1,287 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -7593,9 +7593,9 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/gpu/drm
 +
 +	xlnx_sha1_process_message_block(context);
 +}
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/gpu/drm/xlnx/hdcp/xlnx_hdcp_sha1.h
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/drivers/gpu/drm/xlnx/hdcp/xlnx_hdcp_sha1.h
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/gpu/drm/xlnx/hdcp/xlnx_hdcp_sha1.h	2025-03-31 13:55:06.906566400 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/gpu/drm/xlnx/hdcp/xlnx_hdcp_sha1.h	2025-04-05 13:10:30.410686400 +0900
 @@ -0,0 +1,73 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
 +/*
@@ -7670,9 +7670,9 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/gpu/drm
 +void xlnx_sha1_process_message_block(struct xlnx_sha1_context *context);
 +
 +#endif
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/gpu/drm/xlnx/hdcp/xlnx_hdcp_tx.c
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/drivers/gpu/drm/xlnx/hdcp/xlnx_hdcp_tx.c
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/gpu/drm/xlnx/hdcp/xlnx_hdcp_tx.c	2025-03-31 13:55:06.906566400 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/gpu/drm/xlnx/hdcp/xlnx_hdcp_tx.c	2025-04-05 13:10:30.410686400 +0900
 @@ -0,0 +1,450 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -8124,9 +8124,9 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/gpu/drm
 +		xlnx_hdcp1x_tx_process_ri_event(xhdcp1x);
 +	}
 +}
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/gpu/drm/xlnx/hdcp/xlnx_hdcp_tx.h
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/drivers/gpu/drm/xlnx/hdcp/xlnx_hdcp_tx.h
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/gpu/drm/xlnx/hdcp/xlnx_hdcp_tx.h	2025-03-31 13:55:06.906566400 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/gpu/drm/xlnx/hdcp/xlnx_hdcp_tx.h	2025-04-05 13:10:30.410686400 +0900
 @@ -0,0 +1,97 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
 +/*
@@ -8226,7 +8226,7 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/gpu/drm
 +
 +#endif
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/gpu/drm/xlnx/xlnx_bridge.c	2025-03-31 13:55:06.907563700 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/gpu/drm/xlnx/xlnx_bridge.c	2025-04-05 13:10:30.411683800 +0900
 @@ -0,0 +1,575 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -8804,7 +8804,7 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/gpu/drm
 +	mutex_destroy(&helper.lock);
 +}
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/gpu/drm/xlnx/xlnx_bridge.h	2025-03-31 13:55:06.907563700 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/gpu/drm/xlnx/xlnx_bridge.h	2025-04-05 13:10:30.412681100 +0900
 @@ -0,0 +1,180 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
 +/*
@@ -8987,7 +8987,7 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/gpu/drm
 +
 +#endif /* _XLNX_BRIDGE_H_ */
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/gpu/drm/xlnx/xlnx_crtc.c	2025-03-31 13:55:06.907563700 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/gpu/drm/xlnx/xlnx_crtc.c	2025-04-05 13:10:30.412681100 +0900
 @@ -0,0 +1,208 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -9198,7 +9198,7 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/gpu/drm
 +}
 +EXPORT_SYMBOL_GPL(xlnx_crtc_unregister);
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/gpu/drm/xlnx/xlnx_crtc.h	2025-03-31 13:55:06.908678800 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/gpu/drm/xlnx/xlnx_crtc.h	2025-04-05 13:10:30.412681100 +0900
 @@ -0,0 +1,76 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
 +/*
@@ -9277,7 +9277,7 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/gpu/drm
 +
 +#endif /* _XLNX_CRTC_H_ */
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/gpu/drm/xlnx/xlnx_csc.c	2025-03-31 13:55:06.908678800 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/gpu/drm/xlnx/xlnx_csc.c	2025-04-05 13:10:30.413679000 +0900
 @@ -0,0 +1,571 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -9851,7 +9851,7 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/gpu/drm
 +MODULE_DESCRIPTION("Xilinx FPGA CSC Bridge Driver");
 +MODULE_LICENSE("GPL");
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/gpu/drm/xlnx/xlnx_dptx.c	2025-03-31 13:55:06.909676500 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/gpu/drm/xlnx/xlnx_dptx.c	2025-04-05 13:10:30.413679000 +0900
 @@ -0,0 +1,4085 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -13939,7 +13939,7 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/gpu/drm
 +MODULE_DESCRIPTION("Xilinx FPGA DisplayPort Tx Driver");
 +MODULE_LICENSE("GPL");
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/gpu/drm/xlnx/xlnx_drv.c	2025-03-31 13:55:06.909676500 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/gpu/drm/xlnx/xlnx_drv.c	2025-04-05 13:10:30.414676400 +0900
 @@ -0,0 +1,538 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -14480,7 +14480,7 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/gpu/drm
 +MODULE_DESCRIPTION("Xilinx DRM KMS Driver");
 +MODULE_LICENSE("GPL");
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/gpu/drm/xlnx/xlnx_drv.h	2025-03-31 13:55:06.909676500 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/gpu/drm/xlnx/xlnx_drv.h	2025-04-05 13:10:30.414676400 +0900
 @@ -0,0 +1,33 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
 +/*
@@ -14516,7 +14516,7 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/gpu/drm
 +
 +#endif /* _XLNX_DRV_H_ */
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/gpu/drm/xlnx/xlnx_dsi.c	2025-03-31 13:55:06.910673700 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/gpu/drm/xlnx/xlnx_dsi.c	2025-04-05 13:10:30.415673600 +0900
 @@ -0,0 +1,1035 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -15554,7 +15554,7 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/gpu/drm
 +MODULE_DESCRIPTION("Xilinx FPGA MIPI DSI Tx Driver");
 +MODULE_LICENSE("GPL");
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/gpu/drm/xlnx/xlnx_fb.c	2025-03-31 13:55:06.910673700 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/gpu/drm/xlnx/xlnx_fb.c	2025-04-05 13:10:30.415673600 +0900
 @@ -0,0 +1,353 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -15910,7 +15910,7 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/gpu/drm
 +
 +#endif /* CONFIG_DRM_FBDEV_EMULATION */
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/gpu/drm/xlnx/xlnx_fb.h	2025-03-31 13:55:06.911671000 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/gpu/drm/xlnx/xlnx_fb.h	2025-04-05 13:10:30.415673600 +0900
 @@ -0,0 +1,52 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
 +/*
@@ -15965,7 +15965,7 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/gpu/drm
 +
 +#endif /* _XLNX_FB_H_ */
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/gpu/drm/xlnx/xlnx_gem.c	2025-03-31 13:55:06.911671000 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/gpu/drm/xlnx/xlnx_gem.c	2025-04-05 13:10:30.416671000 +0900
 @@ -0,0 +1,47 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -16015,7 +16015,7 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/gpu/drm
 +	return drm_gem_dma_dumb_create_internal(file_priv, drm, args);
 +}
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/gpu/drm/xlnx/xlnx_gem.h	2025-03-31 13:55:06.911671000 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/gpu/drm/xlnx/xlnx_gem.h	2025-04-05 13:10:30.416671000 +0900
 @@ -0,0 +1,26 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
 +/*
@@ -16044,7 +16044,7 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/gpu/drm
 +
 +#endif /* _XLNX_GEM_H_ */
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/gpu/drm/xlnx/xlnx_hdmi.c	2025-03-31 13:55:06.912668800 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/gpu/drm/xlnx/xlnx_hdmi.c	2025-04-05 13:10:30.417668700 +0900
 @@ -0,0 +1,4056 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -20103,7 +20103,7 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/gpu/drm
 +MODULE_DESCRIPTION("Xilinx DRM KMS HDMI Driver");
 +MODULE_LICENSE("GPL");
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/gpu/drm/xlnx/xlnx_mixer.c	2025-03-31 13:55:06.913665800 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/gpu/drm/xlnx/xlnx_mixer.c	2025-04-05 13:10:30.417668700 +0900
 @@ -0,0 +1,3180 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -23286,7 +23286,7 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/gpu/drm
 +MODULE_DESCRIPTION("Xilinx Mixer Driver");
 +MODULE_LICENSE("GPL");
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/gpu/drm/xlnx/xlnx_pl_disp.c	2025-03-31 13:55:06.913665800 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/gpu/drm/xlnx/xlnx_pl_disp.c	2025-04-05 13:10:30.418665600 +0900
 @@ -0,0 +1,696 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -23985,7 +23985,7 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/gpu/drm
 +MODULE_DESCRIPTION("Xilinx DRM Display Driver for PL IPs");
 +MODULE_LICENSE("GPL");
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/gpu/drm/xlnx/xlnx_scaler.c	2025-03-31 13:55:06.914663100 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/gpu/drm/xlnx/xlnx_scaler.c	2025-04-05 13:10:30.418665600 +0900
 @@ -0,0 +1,1977 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -25965,7 +25965,7 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/gpu/drm
 +MODULE_DESCRIPTION("Xilinx FPGA SCALER Bridge Driver");
 +MODULE_LICENSE("GPL");
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/gpu/drm/xlnx/xlnx_sdi.c	2025-03-31 13:55:06.914663100 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/gpu/drm/xlnx/xlnx_sdi.c	2025-04-05 13:10:30.419736500 +0900
 @@ -0,0 +1,1487 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -27455,7 +27455,7 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/gpu/drm
 +MODULE_DESCRIPTION("Xilinx FPGA SDI Tx Driver");
 +MODULE_LICENSE("GPL");
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/gpu/drm/xlnx/xlnx_sdi_modes.h	2025-03-31 13:55:06.914663100 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/gpu/drm/xlnx/xlnx_sdi_modes.h	2025-04-05 13:10:30.419736500 +0900
 @@ -0,0 +1,447 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
 +/*
@@ -27905,7 +27905,7 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/gpu/drm
 +
 +#endif /* _XLNX_SDI_MODES_H_ */
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/gpu/drm/xlnx/xlnx_sdi_timing.c	2025-03-31 13:55:06.915660300 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/gpu/drm/xlnx/xlnx_sdi_timing.c	2025-04-05 13:10:30.419736500 +0900
 @@ -0,0 +1,426 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -28334,7 +28334,7 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/gpu/drm
 +	xlnx_stc_writel(base, XSTC_CTL, reg | XSTC_CTL_RU);
 +}
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/gpu/drm/xlnx/xlnx_sdi_timing.h	2025-03-31 13:55:06.916657700 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/gpu/drm/xlnx/xlnx_sdi_timing.h	2025-04-05 13:10:30.420734200 +0900
 @@ -0,0 +1,20 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
 +/*
@@ -28357,7 +28357,7 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/gpu/drm
 +
 +#endif /* _XLNX_SDI_TIMING_H_ */
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/gpu/drm/xlnx/xlnx_vtc.c	2025-03-31 13:55:06.916657700 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/gpu/drm/xlnx/xlnx_vtc.c	2025-04-05 13:10:30.420734200 +0900
 @@ -0,0 +1,445 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -28805,7 +28805,7 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/gpu/drm
 +MODULE_DESCRIPTION("Xilinx VTC Bridge Driver");
 +MODULE_LICENSE("GPL");
 --- linux-6.6.70/drivers/gpu/drm/xlnx/zynqmp_disp.c	2025-03-31 13:53:15.089241200 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/gpu/drm/xlnx/zynqmp_disp.c	2025-03-31 13:55:06.917655000 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/gpu/drm/xlnx/zynqmp_disp.c	2025-04-05 13:10:30.428980300 +0900
 @@ -9,20 +9,41 @@
   * - Laurent Pinchart <laurent.pinchart@ideasonboard.com>
   */
@@ -32772,7 +32772,7 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/gpu/drm
 +	return 0;
  }
 --- linux-6.6.70/drivers/gpu/drm/xlnx/zynqmp_disp.h	2025-03-31 13:53:15.090238900 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/gpu/drm/xlnx/zynqmp_disp.h	2025-03-31 13:55:06.917655000 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/gpu/drm/xlnx/zynqmp_disp.h	2025-04-05 13:10:30.429977400 +0900
 @@ -12,65 +12,18 @@
  #ifndef _ZYNQMP_DISP_H_
  #define _ZYNQMP_DISP_H_
@@ -32849,7 +32849,7 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/gpu/drm
  
  #endif /* _ZYNQMP_DISP_H_ */
 --- linux-6.6.70/drivers/gpu/drm/xlnx/zynqmp_disp_regs.h	2025-03-31 13:53:15.090238900 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/gpu/drm/xlnx/zynqmp_disp_regs.h	2025-03-31 13:55:06.917655000 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/gpu/drm/xlnx/zynqmp_disp_regs.h	2025-04-05 13:10:30.429977400 +0900
 @@ -20,6 +20,8 @@
  #define ZYNQMP_DISP_V_BLEND_BG_CLR_2			0x8
  #define ZYNQMP_DISP_V_BLEND_BG_MAX			0xfff
@@ -32965,7 +32965,7 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/gpu/drm
  #define ZYNQMP_DISP_AV_BUF_LIVE_CONFIG_CB_FIRST		BIT(8)
  #define ZYNQMP_DISP_AV_BUF_PALETTE_MEMORY		0x400
 --- linux-6.6.70/drivers/gpu/drm/xlnx/zynqmp_dp.c	2025-03-31 13:53:15.091236100 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/gpu/drm/xlnx/zynqmp_dp.c	2025-03-31 13:55:06.918728800 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/gpu/drm/xlnx/zynqmp_dp.c	2025-04-05 13:10:30.430975000 +0900
 @@ -9,30 +9,28 @@
   * - Laurent Pinchart <laurent.pinchart@ideasonboard.com>
   */
@@ -35086,7 +35086,7 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/gpu/drm
 +	return 0;
  }
 --- linux-6.6.70/drivers/gpu/drm/xlnx/zynqmp_dp.h	2025-03-31 13:53:15.091236100 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/gpu/drm/xlnx/zynqmp_dp.h	2025-03-31 13:55:06.918728800 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/gpu/drm/xlnx/zynqmp_dp.h	2025-04-05 13:10:30.430975000 +0900
 @@ -12,14 +12,20 @@
  #ifndef _ZYNQMP_DP_H_
  #define _ZYNQMP_DP_H_
@@ -35113,7 +35113,7 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/gpu/drm
  
  #endif /* _ZYNQMP_DP_H_ */
 --- linux-6.6.70/drivers/gpu/drm/xlnx/zynqmp_dpsub.c	2025-03-31 13:53:15.091236100 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/gpu/drm/xlnx/zynqmp_dpsub.c	2025-03-31 13:55:06.918728800 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/gpu/drm/xlnx/zynqmp_dpsub.c	2025-04-05 13:10:30.430975000 +0900
 @@ -9,309 +9,174 @@
   * - Laurent Pinchart <laurent.pinchart@ideasonboard.com>
   */
@@ -35539,7 +35539,7 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/gpu/drm
  MODULE_AUTHOR("Xilinx, Inc.");
  MODULE_DESCRIPTION("ZynqMP DP Subsystem Driver");
 --- linux-6.6.70/drivers/gpu/drm/xlnx/zynqmp_dpsub.h	2025-03-31 13:53:15.092233400 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/gpu/drm/xlnx/zynqmp_dpsub.h	2025-03-31 13:55:06.919726500 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/gpu/drm/xlnx/zynqmp_dpsub.h	2025-04-05 13:10:30.431971900 +0900
 @@ -12,75 +12,11 @@
  #ifndef _ZYNQMP_DPSUB_H_
  #define _ZYNQMP_DPSUB_H_
@@ -35620,7 +35620,7 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/gpu/drm
 -
  #endif /* _ZYNQMP_DPSUB_H_ */
 --- linux-6.6.70/include/drm/display/drm_dp.h	2025-03-31 13:53:26.157953800 +0900
-+++ linux-xlnx-6.6.70-2024.1/include/drm/display/drm_dp.h	2025-03-31 13:55:18.075862300 +0900
++++ linux-xlnx-6.6.70-v2024.1/include/drm/display/drm_dp.h	2025-04-05 13:10:41.129994100 +0900
 @@ -1107,6 +1107,7 @@
  
  /* Extended Receiver Capability: See DP_DPCD_REV for definitions */
@@ -35630,7 +35630,7 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/gpu/drm
  #define DP_DPRX_FEATURE_ENUMERATION_LIST    0x2210  /* DP 1.3 */
  # define DP_GTC_CAP					(1 << 0)  /* DP 1.3 */
 --- linux-6.6.70/include/drm/display/drm_hdmi_helper.h	2025-03-31 13:53:26.162003000 +0900
-+++ linux-xlnx-6.6.70-2024.1/include/drm/display/drm_hdmi_helper.h	2025-03-31 13:55:18.079993800 +0900
++++ linux-xlnx-6.6.70-v2024.1/include/drm/display/drm_hdmi_helper.h	2025-04-05 13:10:41.133984100 +0900
 @@ -21,6 +21,10 @@
  drm_hdmi_infoframe_set_hdr_metadata(struct hdmi_drm_infoframe *frame,
  				    const struct drm_connector_state *conn_state);
@@ -35643,7 +35643,7 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/gpu/drm
  					 const struct drm_connector_state *conn_state);
  
 --- linux-6.6.70/include/drm/drm_connector.h	2025-03-31 13:53:26.167988300 +0900
-+++ linux-xlnx-6.6.70-2024.1/include/drm/drm_connector.h	2025-03-31 13:55:18.086975000 +0900
++++ linux-xlnx-6.6.70-v2024.1/include/drm/drm_connector.h	2025-04-05 13:10:41.140057100 +0900
 @@ -1022,6 +1022,13 @@
  	 * DRM blob property for HDR output metadata
  	 */
@@ -35659,7 +35659,7 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/gpu/drm
  
  /**
 --- linux-6.6.70/include/drm/drm_edid.h	2025-03-31 13:53:26.171121300 +0900
-+++ linux-xlnx-6.6.70-2024.1/include/drm/drm_edid.h	2025-03-31 13:55:18.090070900 +0900
++++ linux-xlnx-6.6.70-v2024.1/include/drm/drm_edid.h	2025-04-05 13:10:41.143049700 +0900
 @@ -588,6 +588,9 @@
  bool drm_edid_is_valid(struct edid *edid);
  void drm_edid_get_monitor_name(const struct edid *edid, char *name,
@@ -35671,7 +35671,7 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/gpu/drm
  					   int hsize, int vsize, int fresh,
  					   bool rb);
 --- linux-6.6.70/include/drm/drm_fourcc.h	2025-03-31 13:53:26.176105400 +0900
-+++ linux-xlnx-6.6.70-2024.1/include/drm/drm_fourcc.h	2025-03-31 13:55:18.094060200 +0900
++++ linux-xlnx-6.6.70-v2024.1/include/drm/drm_fourcc.h	2025-04-05 13:10:41.148036300 +0900
 @@ -128,6 +128,25 @@
  	 */
  	u8 block_h[DRM_FORMAT_MAX_PLANES];
@@ -35707,7 +35707,7 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/gpu/drm
  
  #endif /* __DRM_FOURCC_H__ */
 --- linux-6.6.70/include/drm/drm_mode_config.h	2025-03-31 13:53:26.182136200 +0900
-+++ linux-xlnx-6.6.70-2024.1/include/drm/drm_mode_config.h	2025-03-31 13:55:18.101141900 +0900
++++ linux-xlnx-6.6.70-v2024.1/include/drm/drm_mode_config.h	2025-04-05 13:10:41.154099000 +0900
 @@ -876,6 +876,15 @@
  	struct drm_property *hdr_output_metadata_property;
  
@@ -35724,9 +35724,9 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/gpu/drm
  	 * @content_protection_property: DRM ENUM property for content
  	 * protection. See drm_connector_attach_content_protection_property().
  	 */
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/include/dt-bindings/drm/mipi-dsi.h
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/include/dt-bindings/drm/mipi-dsi.h
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/include/dt-bindings/drm/mipi-dsi.h	2025-03-31 13:55:18.277452200 +0900
++++ linux-xlnx-6.6.70-v2024.1/include/dt-bindings/drm/mipi-dsi.h	2025-04-05 13:10:41.328830100 +0900
 @@ -0,0 +1,11 @@
 +#ifndef __DT_BINDINGS_DRM__
 +#define __DT_BINDINGS_DRM__
@@ -35740,7 +35740,7 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/include/dt-bind
 +
 +#endif /* _DT_BINDINGS_DRM__ */
 --- linux-6.6.70/include/uapi/drm/drm_fourcc.h	2025-03-31 13:53:28.173968500 +0900
-+++ linux-xlnx-6.6.70-2024.1/include/uapi/drm/drm_fourcc.h	2025-03-31 13:55:19.932305900 +0900
++++ linux-xlnx-6.6.70-v2024.1/include/uapi/drm/drm_fourcc.h	2025-04-05 13:10:42.920872200 +0900
 @@ -241,10 +241,12 @@
  #define DRM_FORMAT_VYUY		fourcc_code('V', 'Y', 'U', 'Y') /* [31:0] Y1:Cb0:Y0:Cr0 8:8:8:8 little endian */
  
@@ -35796,7 +35796,7 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/include/dt-bind
   * 3 plane YCbCr
   * index 0: Y plane, [7:0] Y
 --- linux-6.6.70/include/uapi/drm/drm_mode.h	2025-03-31 13:53:28.173968500 +0900
-+++ linux-xlnx-6.6.70-2024.1/include/uapi/drm/drm_mode.h	2025-03-31 13:55:19.932305900 +0900
++++ linux-xlnx-6.6.70-v2024.1/include/uapi/drm/drm_mode.h	2025-04-05 13:10:42.921869600 +0900
 @@ -665,6 +665,8 @@
  
  #define DRM_MODE_FB_INTERLACED	(1<<0) /* for interlaced framebuffers */

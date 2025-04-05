@@ -1,5 +1,5 @@
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/nvmem/xlnx,versal-sec-cfg.yaml	2025-03-31 13:54:52.289446600 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/nvmem/xlnx,versal-sec-cfg.yaml	2025-04-05 13:10:16.200304700 +0900
 @@ -0,0 +1,84 @@
 +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
 +%YAML 1.2
@@ -86,7 +86,7 @@
 +    };
 +
 --- linux-6.6.70/Documentation/devicetree/bindings/nvmem/xlnx,zynqmp-nvmem.txt	2025-03-31 13:53:00.458507200 +0900
-+++ linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/nvmem/xlnx,zynqmp-nvmem.txt	1970-01-01 09:00:00.000000000 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/nvmem/xlnx,zynqmp-nvmem.txt	1970-01-01 09:00:00.000000000 +0900
 @@ -1,46 +0,0 @@
 ---------------------------------------------------------------------------
 -=  Zynq UltraScale+ MPSoC nvmem firmware driver binding =
@@ -135,7 +135,7 @@
 -		...
 -	};
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/nvmem/xlnx,zynqmp-nvmem.yaml	2025-03-31 13:54:52.289446600 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/nvmem/xlnx,zynqmp-nvmem.yaml	2025-04-05 13:10:16.201301500 +0900
 @@ -0,0 +1,40 @@
 +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
 +%YAML 1.2
@@ -178,7 +178,7 @@
 +        };
 +    };
 --- linux-6.6.70/drivers/nvmem/Kconfig	2025-03-31 13:53:21.250770700 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/nvmem/Kconfig	2025-03-31 13:55:13.168945000 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/nvmem/Kconfig	2025-04-05 13:10:36.399213900 +0900
 @@ -405,6 +405,17 @@
  
  	  If sure, say yes. If unsure, say no.
@@ -198,7 +198,7 @@
  	tristate "NXP QorIQ eFuse support"
  	depends on PPC_85xx || COMPILE_TEST
 --- linux-6.6.70/drivers/nvmem/Makefile	2025-03-31 13:53:21.250770700 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/nvmem/Makefile	2025-03-31 13:55:13.168945000 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/nvmem/Makefile	2025-04-05 13:10:36.400211600 +0900
 @@ -79,5 +79,7 @@
  nvmem-vf610-ocotp-y			:= vf610-ocotp.o
  obj-$(CONFIG_NVMEM_ZYNQMP)		+= nvmem_zynqmp_nvmem.o
@@ -208,7 +208,7 @@
  obj-$(CONFIG_NVMEM_QORIQ_EFUSE)		+= nvmem-qoriq-efuse.o
  nvmem-qoriq-efuse-y			:= qoriq-efuse.o
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/nvmem/xlnx_secure_config.c	2025-03-31 13:55:13.185013000 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/nvmem/xlnx_secure_config.c	2025-04-05 13:10:36.415215300 +0900
 @@ -0,0 +1,1126 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -1337,7 +1337,7 @@
 +MODULE_DESCRIPTION("Versal Secure Configuration driver");
 +MODULE_LICENSE("GPL v2");
 --- linux-6.6.70/drivers/nvmem/zynqmp_nvmem.c	2025-03-31 13:53:21.265871400 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/nvmem/zynqmp_nvmem.c	2025-03-31 13:55:13.185013000 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/nvmem/zynqmp_nvmem.c	2025-04-05 13:10:36.415215300 +0900
 @@ -1,8 +1,10 @@
  // SPDX-License-Identifier: GPL-2.0+
  /*

@@ -1,5 +1,5 @@
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/arch/arm64/configs/xilinx_defconfig	2025-03-31 13:54:56.973967800 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm64/configs/xilinx_defconfig	2025-04-05 13:10:20.770696700 +0900
 @@ -0,0 +1,642 @@
 +CONFIG_SYSVIPC=y
 +CONFIG_POSIX_MQUEUE=y
@@ -644,7 +644,7 @@
 +# CONFIG_STRICT_DEVMEM is not set
 +CONFIG_MEMTEST=y
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/arch/arm64/configs/xilinx_versal_defconfig	2025-03-31 13:54:56.974965200 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm64/configs/xilinx_versal_defconfig	2025-04-05 13:10:20.770696700 +0900
 @@ -0,0 +1,400 @@
 +CONFIG_SYSVIPC=y
 +CONFIG_POSIX_MQUEUE=y
@@ -1047,7 +1047,7 @@
 +# CONFIG_STRICT_DEVMEM is not set
 +CONFIG_MEMTEST=y
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/arch/arm64/configs/xilinx_versal_net_defconfig	2025-03-31 13:54:56.974965200 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm64/configs/xilinx_versal_net_defconfig	2025-04-05 13:10:20.770696700 +0900
 @@ -0,0 +1,198 @@
 +CONFIG_SYSVIPC=y
 +CONFIG_NO_HZ=y
@@ -1248,7 +1248,7 @@
 +# CONFIG_STRICT_DEVMEM is not set
 +CONFIG_MEMTEST=y
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/arch/arm64/configs/xilinx_zynqmp_defconfig	2025-03-31 13:54:56.974965200 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm64/configs/xilinx_zynqmp_defconfig	2025-04-05 13:10:20.771694000 +0900
 @@ -0,0 +1,580 @@
 +CONFIG_SYSVIPC=y
 +CONFIG_POSIX_MQUEUE=y

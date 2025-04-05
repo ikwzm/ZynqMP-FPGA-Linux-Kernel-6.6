@@ -1,5 +1,5 @@
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/net/xilinx-phy.txt	2025-03-31 13:54:52.259222100 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/net/xilinx-phy.txt	2025-04-05 13:10:16.184164400 +0900
 @@ -0,0 +1,15 @@
 +Xilinx PCS/PMA PHY bindings
 +
@@ -17,7 +17,7 @@
 +		xlnx,phy-type = <0x5>;
 +	};
 --- linux-6.6.70/drivers/net/phy/Kconfig	2025-03-31 13:53:20.025849800 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/net/phy/Kconfig	2025-03-31 13:55:11.866049200 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/net/phy/Kconfig	2025-04-05 13:10:35.208726100 +0900
 @@ -402,6 +402,14 @@
  	help
  	  Currently supports the vsc8244
@@ -34,7 +34,7 @@
  	tristate "Xilinx GMII2RGMII converter driver"
  	help
 --- linux-6.6.70/drivers/net/phy/Makefile	2025-03-31 13:53:20.025849800 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/net/phy/Makefile	2025-03-31 13:55:11.866049200 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/net/phy/Makefile	2025-04-05 13:10:35.208726100 +0900
 @@ -94,4 +94,5 @@
  obj-$(CONFIG_STE10XP)		+= ste10Xp.o
  obj-$(CONFIG_TERANETICS_PHY)	+= teranetics.o
@@ -42,7 +42,7 @@
 +obj-$(CONFIG_XILINX_PHY)	+= xilinx_phy.o
  obj-$(CONFIG_XILINX_GMII2RGMII) += xilinx_gmii2rgmii.o
 --- linux-6.6.70/drivers/net/phy/xilinx_gmii2rgmii.c	2025-03-31 13:53:20.066157500 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/net/phy/xilinx_gmii2rgmii.c	2025-03-31 13:55:11.933941300 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/net/phy/xilinx_gmii2rgmii.c	2025-04-05 13:10:35.247964100 +0900
 @@ -15,6 +15,7 @@
  #include <linux/mii.h>
  #include <linux/mdio.h>
@@ -70,7 +70,7 @@
  	if (!phy_node) {
  		dev_err(dev, "Couldn't parse phy-handle\n");
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/net/phy/xilinx_phy.c	2025-03-31 13:55:11.933941300 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/net/phy/xilinx_phy.c	2025-04-05 13:10:35.247964100 +0900
 @@ -0,0 +1,162 @@
 +// SPDX-License-Identifier: GPL-2.0+
 +/* Xilinx PCS/PMA Core phy driver
@@ -235,7 +235,7 @@
 +MODULE_DESCRIPTION("Xilinx PCS/PMA PHY driver");
 +MODULE_LICENSE("GPL");
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/include/linux/xilinx_phy.h	2025-03-31 13:55:19.511749900 +0900
++++ linux-xlnx-6.6.70-v2024.1/include/linux/xilinx_phy.h	2025-04-05 13:10:42.509764300 +0900
 @@ -0,0 +1,20 @@
 +/* SPDX-License-Identifier: GPL-2.0+ */
 +#ifndef _XILINX_PHY_H

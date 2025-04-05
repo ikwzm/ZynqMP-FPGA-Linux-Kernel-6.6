@@ -1,5 +1,5 @@
 --- linux-6.6.70/Documentation/userspace-api/media/v4l/biblio.rst	2025-03-31 13:53:02.140936600 +0900
-+++ linux-xlnx-6.6.70-2024.1/Documentation/userspace-api/media/v4l/biblio.rst	2025-03-31 13:54:54.197713500 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/userspace-api/media/v4l/biblio.rst	2025-04-05 13:10:17.963222200 +0900
 @@ -436,3 +436,13 @@
  :title:     AV1 Bitstream & Decoding Process Specification
  
@@ -15,7 +15,7 @@
 +
 +:author:    International Telecommunication Union (http://www.itu.int)
 --- linux-6.6.70/Documentation/userspace-api/media/v4l/colorspaces-defs.rst	2025-03-31 13:53:02.141936900 +0900
-+++ linux-xlnx-6.6.70-2024.1/Documentation/userspace-api/media/v4l/colorspaces-defs.rst	2025-03-31 13:54:54.199831300 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/userspace-api/media/v4l/colorspaces-defs.rst	2025-04-05 13:10:17.965216900 +0900
 @@ -99,6 +99,8 @@
        - Use the DCI-P3 transfer function.
      * - ``V4L2_XFER_FUNC_SMPTE2084``
@@ -26,7 +26,7 @@
  
  
 --- linux-6.6.70/Documentation/userspace-api/media/v4l/colorspaces-details.rst	2025-03-31 13:53:02.142936600 +0900
-+++ linux-xlnx-6.6.70-2024.1/Documentation/userspace-api/media/v4l/colorspaces-details.rst	2025-03-31 13:54:54.200828400 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/userspace-api/media/v4l/colorspaces-details.rst	2025-04-05 13:10:17.965216900 +0900
 @@ -773,3 +773,34 @@
  
  There are better methods, see e.g. :ref:`colimg` for more in-depth information
@@ -63,7 +63,7 @@
 +     x' =\begin{cases}x^{2} / 3  & 0 \leq x \leq \frac{1}{12}
 +     \\(exp((x - c) / a) + b) / 12 & \frac{1}{12} \le x \leq 1\end{cases}
 --- linux-6.6.70/Documentation/userspace-api/media/v4l/subdev-formats.rst	2025-03-31 13:53:02.194413000 +0900
-+++ linux-xlnx-6.6.70-2024.1/Documentation/userspace-api/media/v4l/subdev-formats.rst	2025-03-31 13:54:54.251278700 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/userspace-api/media/v4l/subdev-formats.rst	2025-04-05 13:10:18.020620100 +0900
 @@ -1788,6 +1788,43 @@
        - b\ :sub:`2`
        - b\ :sub:`1`
@@ -963,7 +963,7 @@
  
        - MEDIA_BUS_FMT_UYYVYY16_0_5X48
 --- linux-6.6.70/Documentation/userspace-api/media/v4l/vidioc-queryctrl.rst	2025-03-31 13:53:02.219629000 +0900
-+++ linux-xlnx-6.6.70-2024.1/Documentation/userspace-api/media/v4l/vidioc-queryctrl.rst	2025-03-31 13:54:54.274411900 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/userspace-api/media/v4l/vidioc-queryctrl.rst	2025-04-05 13:10:18.044713300 +0900
 @@ -471,6 +471,12 @@
        - n/a
        - A struct :c:type:`v4l2_ctrl_h264_decode_params`, containing H264
@@ -978,7 +978,7 @@
        - n/a
        - n/a
 --- linux-6.6.70/Documentation/userspace-api/media/videodev2.h.rst.exceptions	2025-03-31 13:53:02.225612900 +0900
-+++ linux-xlnx-6.6.70-2024.1/Documentation/userspace-api/media/videodev2.h.rst.exceptions	2025-03-31 13:54:54.280491400 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/userspace-api/media/videodev2.h.rst.exceptions	2025-04-05 13:10:18.052765600 +0900
 @@ -82,6 +82,7 @@
  replace symbol V4L2_XFER_FUNC_SMPTE2084 :c:type:`v4l2_xfer_func`
  replace symbol V4L2_XFER_FUNC_SMPTE240M :c:type:`v4l2_xfer_func`
@@ -988,7 +988,7 @@
  
  # Documented enum v4l2_ycbcr_encoding
 --- linux-6.6.70/drivers/media/v4l2-core/v4l2-common.c	2025-03-31 13:53:17.828043300 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/media/v4l2-core/v4l2-common.c	2025-03-31 13:55:09.736705500 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/media/v4l2-core/v4l2-common.c	2025-04-05 13:10:33.109085800 +0900
 @@ -283,6 +283,7 @@
  		{ .format = V4L2_PIX_FMT_YUV420,  .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 3, .bpp = { 1, 1, 1, 0 }, .bpp_div = { 1, 1, 1, 1 }, .hdiv = 2, .vdiv = 2 },
  		{ .format = V4L2_PIX_FMT_YVU420,  .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 3, .bpp = { 1, 1, 1, 0 }, .bpp_div = { 1, 1, 1, 1 }, .hdiv = 2, .vdiv = 2 },
@@ -998,7 +998,7 @@
  
  		/* Tiled YUV formats */
 --- linux-6.6.70/drivers/media/v4l2-core/v4l2-ioctl.c	2025-03-31 13:53:17.835129700 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/media/v4l2-core/v4l2-ioctl.c	2025-03-31 13:55:09.751007400 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/media/v4l2-core/v4l2-ioctl.c	2025-04-05 13:10:33.123219700 +0900
 @@ -1300,6 +1300,9 @@
  	case V4L2_PIX_FMT_ARGB2101010:	descr = "32-bit ARGB 2-10-10-10"; break;
  	case V4L2_PIX_FMT_BGR48_12:	descr = "12-bit Depth BGR"; break;
@@ -1062,7 +1062,7 @@
  	case V4L2_PIX_FMT_SGBRG8:	descr = "8-bit Bayer GBGB/RGRG"; break;
  	case V4L2_PIX_FMT_SGRBG8:	descr = "8-bit Bayer GRGR/BGBG"; break;
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/include/media/hdr-ctrls.h	2025-03-31 13:55:19.533870900 +0900
++++ linux-xlnx-6.6.70-v2024.1/include/media/hdr-ctrls.h	2025-04-05 13:10:42.530021500 +0900
 @@ -0,0 +1,91 @@
 +/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
 +/*
@@ -1156,7 +1156,7 @@
 +
 +#endif
 --- linux-6.6.70/include/media/media-entity.h	2025-03-31 13:53:27.621168200 +0900
-+++ linux-xlnx-6.6.70-2024.1/include/media/media-entity.h	2025-03-31 13:55:19.551036800 +0900
++++ linux-xlnx-6.6.70-v2024.1/include/media/media-entity.h	2025-04-05 13:10:42.547043900 +0900
 @@ -269,6 +269,9 @@
   *			media_entity_has_pad_interdep().
   *			Optional: If the operation isn't implemented all pads
@@ -1187,7 +1187,7 @@
   * media_graph_walk_start - Start walking the media graph at a
   *	given entity
 --- linux-6.6.70/include/uapi/linux/media-bus-format.h	2025-03-31 13:53:28.304076900 +0900
-+++ linux-xlnx-6.6.70-2024.1/include/uapi/linux/media-bus-format.h	2025-03-31 13:55:20.056961600 +0900
++++ linux-xlnx-6.6.70-v2024.1/include/uapi/linux/media-bus-format.h	2025-04-05 13:10:43.047467000 +0900
 @@ -165,6 +165,21 @@
  /* HSV - next is	0x6002 */
  #define MEDIA_BUS_FMT_AHSV8888_1X32		0x6001
@@ -1211,7 +1211,7 @@
   * This format should be used when the same driver handles
   * both sides of the link and the bus format is a fixed
 --- linux-6.6.70/include/uapi/linux/v4l2-mediabus.h	2025-03-31 13:53:28.479518100 +0900
-+++ linux-xlnx-6.6.70-2024.1/include/uapi/linux/v4l2-mediabus.h	2025-03-31 13:55:20.236030600 +0900
++++ linux-xlnx-6.6.70-v2024.1/include/uapi/linux/v4l2-mediabus.h	2025-04-05 13:10:43.206280800 +0900
 @@ -75,6 +75,8 @@
  	V4L2_MBUS_FROM_MEDIA_BUS_FMT(RGB888_2X12_BE),
  	V4L2_MBUS_FROM_MEDIA_BUS_FMT(RGB888_2X12_LE),
@@ -1230,7 +1230,7 @@
  	V4L2_MBUS_FROM_MEDIA_BUS_FMT(SBGGR8_1X8),
  	V4L2_MBUS_FROM_MEDIA_BUS_FMT(SGBRG8_1X8),
 --- linux-6.6.70/include/uapi/linux/videodev2.h	2025-03-31 13:53:28.484502700 +0900
-+++ linux-xlnx-6.6.70-2024.1/include/uapi/linux/videodev2.h	2025-03-31 13:55:20.242056500 +0900
++++ linux-xlnx-6.6.70-v2024.1/include/uapi/linux/videodev2.h	2025-04-05 13:10:43.212341500 +0900
 @@ -291,6 +291,7 @@
  	V4L2_XFER_FUNC_NONE        = 5,
  	V4L2_XFER_FUNC_DCI_P3      = 6,
@@ -1329,7 +1329,7 @@
  
  /*  Used in the VIDIOC_QUERYCTRL ioctl for querying controls */
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/include/uapi/linux/xilinx-dprxss.h	2025-03-31 13:55:20.259114500 +0900
++++ linux-xlnx-6.6.70-v2024.1/include/uapi/linux/xilinx-dprxss.h	2025-04-05 13:10:43.229439800 +0900
 @@ -0,0 +1,32 @@
 +/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
 +
@@ -1364,7 +1364,7 @@
 +
 +#endif
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/include/uapi/linux/xilinx-hdmirxss.h	2025-03-31 13:55:20.260112400 +0900
++++ linux-xlnx-6.6.70-v2024.1/include/uapi/linux/xilinx-hdmirxss.h	2025-04-05 13:10:43.230437600 +0900
 @@ -0,0 +1,22 @@
 +/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
 +
@@ -1389,7 +1389,7 @@
 +
 +#endif
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/include/uapi/linux/xilinx-hls.h	2025-03-31 13:55:20.260112400 +0900
++++ linux-xlnx-6.6.70-v2024.1/include/uapi/linux/xilinx-hls.h	2025-04-05 13:10:43.230437600 +0900
 @@ -0,0 +1,23 @@
 +/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
 +
@@ -1415,7 +1415,7 @@
 +
 +#endif /* __UAPI_XILINX_HLS_H__ */
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/include/uapi/linux/xilinx-sdirxss.h	2025-03-31 13:55:20.261109500 +0900
++++ linux-xlnx-6.6.70-v2024.1/include/uapi/linux/xilinx-sdirxss.h	2025-04-05 13:10:43.230437600 +0900
 @@ -0,0 +1,66 @@
 +/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
 +
@@ -1484,7 +1484,7 @@
 +
 +#endif /* __UAPI_XILINX_SDIRXSS_H__ */
 --- linux-6.6.70/include/uapi/linux/xilinx-v4l2-controls.h	2025-03-31 13:53:28.500778800 +0900
-+++ linux-xlnx-6.6.70-2024.1/include/uapi/linux/xilinx-v4l2-controls.h	2025-03-31 13:55:20.261109500 +0900
++++ linux-xlnx-6.6.70-v2024.1/include/uapi/linux/xilinx-v4l2-controls.h	2025-04-05 13:10:43.231435000 +0900
 @@ -70,5 +70,174 @@
  #define V4L2_CID_XILINX_TPG_STUCK_PIXEL_THRESH	(V4L2_CID_XILINX_TPG + 16)
  /* Noise level */
@@ -1661,7 +1661,7 @@
  
  #endif /* __UAPI_XILINX_V4L2_CONTROLS_H__ */
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/include/uapi/linux/xilinx-v4l2-events.h	2025-03-31 13:55:20.261109500 +0900
++++ linux-xlnx-6.6.70-v2024.1/include/uapi/linux/xilinx-v4l2-events.h	2025-04-05 13:10:43.231435000 +0900
 @@ -0,0 +1,25 @@
 +/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
 +
@@ -1689,7 +1689,7 @@
 +
 +#endif /* __UAPI_XILINX_V4L2_EVENTS_H__ */
 --- linux-6.6.70/usr/include/Makefile	2025-03-31 13:53:34.594012600 +0900
-+++ linux-xlnx-6.6.70-2024.1/usr/include/Makefile	2025-03-31 13:55:26.245126300 +0900
++++ linux-xlnx-6.6.70-v2024.1/usr/include/Makefile	2025-04-05 13:10:48.966370900 +0900
 @@ -43,6 +43,9 @@
  no-header-test += linux/v4l2-subdev.h
  no-header-test += linux/videodev2.h

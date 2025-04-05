@@ -1,5 +1,5 @@
 --- linux-6.6.70/drivers/xen/Kconfig	2025-03-31 13:53:25.043886500 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/xen/Kconfig	2025-03-31 13:55:16.892522000 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/xen/Kconfig	2025-04-05 13:10:39.927928500 +0900
 @@ -229,7 +229,7 @@
  	  If in doubt, say m.
  
@@ -10,7 +10,7 @@
  	select XEN_XENBUS_FRONTEND
  	help
 --- linux-6.6.70/drivers/xen/Makefile	2025-03-31 13:53:25.043886500 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/xen/Makefile	2025-03-31 13:55:16.892522000 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/xen/Makefile	2025-04-05 13:10:39.927928500 +0900
 @@ -32,6 +32,7 @@
  obj-$(CONFIG_XEN_AUTO_XLATE)		+= xlate_mmu.o
  obj-$(CONFIG_XEN_PVCALLS_BACKEND)	+= pvcalls-back.o
@@ -20,7 +20,7 @@
  xen-gntdev-y				:= gntdev.o
  xen-gntdev-$(CONFIG_XEN_GNTDEV_DMABUF)	+= gntdev-dmabuf.o
 --- linux-6.6.70/drivers/xen/pci.c	2025-03-31 13:53:25.053955100 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/xen/pci.c	2025-03-31 13:55:16.902556300 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/xen/pci.c	2025-04-05 13:10:39.937989700 +0900
 @@ -177,6 +177,18 @@
  	return r;
  }
@@ -41,7 +41,7 @@
  			    unsigned long action, void *data)
  {
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/xen/pvcalls.c	2025-03-31 13:55:16.905548200 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/xen/pvcalls.c	2025-04-05 13:10:39.941057700 +0900
 @@ -0,0 +1,133 @@
 +#include <linux/types.h>
 +#include <linux/bitops.h>
@@ -177,7 +177,7 @@
 +}
 +early_param("pvcalls", xen_parse_pvcalls);
 --- linux-6.6.70/drivers/xen/xen-pciback/pci_stub.c	2025-03-31 13:53:25.064022300 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/xen/xen-pciback/pci_stub.c	2025-03-31 13:55:16.912639000 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/xen/xen-pciback/pci_stub.c	2025-04-05 13:10:39.948038700 +0900
 @@ -89,6 +89,16 @@
  	return psdev;
  }
@@ -225,7 +225,7 @@
  	}
  	/* Now disable the device (this also ensures some private device
 --- linux-6.6.70/include/xen/interface/physdev.h	2025-03-31 13:53:28.579418200 +0900
-+++ linux-xlnx-6.6.70-2024.1/include/xen/interface/physdev.h	2025-03-31 13:55:20.339588500 +0900
++++ linux-xlnx-6.6.70-v2024.1/include/xen/interface/physdev.h	2025-04-05 13:10:43.306818900 +0900
 @@ -256,6 +256,13 @@
   */
  #define PHYSDEVOP_prepare_msix          30
@@ -241,7 +241,7 @@
      /* IN */
      uint16_t seg;
 --- linux-6.6.70/include/xen/pci.h	2025-03-31 13:53:28.582410900 +0900
-+++ linux-xlnx-6.6.70-2024.1/include/xen/pci.h	2025-03-31 13:55:20.342580400 +0900
++++ linux-xlnx-6.6.70-v2024.1/include/xen/pci.h	2025-04-05 13:10:43.310883200 +0900
 @@ -4,10 +4,16 @@
  #define __XEN_PCI_H__
  
@@ -260,7 +260,7 @@
  {
  	return -1;
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/include/xen/pvcalls.h	2025-03-31 13:55:20.343577700 +0900
++++ linux-xlnx-6.6.70-v2024.1/include/xen/pvcalls.h	2025-04-05 13:10:43.310883200 +0900
 @@ -0,0 +1,13 @@
 +#ifndef __LINUX_NET_PVCALLS_H
 +#define __LINUX_NET_PVCALLS_H
@@ -276,7 +276,7 @@
 +
 +#endif
 --- linux-6.6.70/include/xen/xen.h	2025-03-31 13:53:28.584405700 +0900
-+++ linux-xlnx-6.6.70-2024.1/include/xen/xen.h	2025-03-31 13:55:20.345572400 +0900
++++ linux-xlnx-6.6.70-v2024.1/include/xen/xen.h	2025-04-05 13:10:43.313875100 +0900
 @@ -91,4 +91,9 @@
  }
  #endif

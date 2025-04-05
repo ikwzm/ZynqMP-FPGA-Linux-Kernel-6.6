@@ -1,5 +1,5 @@
 --- linux-6.6.70/Documentation/devicetree/bindings/mailbox/xlnx,zynqmp-ipi-mailbox.yaml	2025-03-31 13:52:59.920941900 +0900
-+++ linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/mailbox/xlnx,zynqmp-ipi-mailbox.yaml	2025-03-31 13:54:51.938010200 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/mailbox/xlnx,zynqmp-ipi-mailbox.yaml	2025-04-05 13:10:15.868134600 +0900
 @@ -37,7 +37,9 @@
  
  properties:
@@ -189,7 +189,7 @@
 +    };
  ...
 --- linux-6.6.70/drivers/mailbox/zynqmp-ipi-mailbox.c	2025-03-31 13:53:16.540433300 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/mailbox/zynqmp-ipi-mailbox.c	2025-03-31 13:55:08.479348700 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/mailbox/zynqmp-ipi-mailbox.c	2025-04-05 13:10:31.860234400 +0900
 @@ -6,9 +6,11 @@
   */
  

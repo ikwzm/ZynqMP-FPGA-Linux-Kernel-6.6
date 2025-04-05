@@ -1,5 +1,5 @@
 --- linux-6.6.70/drivers/video/hdmi.c	2025-03-31 13:53:24.921064100 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/video/hdmi.c	2025-03-31 13:55:16.767871600 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/video/hdmi.c	2025-04-05 13:10:39.807167200 +0900
 @@ -60,7 +60,7 @@
  	memset(frame, 0, sizeof(*frame));
  

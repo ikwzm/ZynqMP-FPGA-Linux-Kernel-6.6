@@ -2,7 +2,7 @@
 name: linux-6.6.70-xlnx-v2024.1
 file: ./make-patches/diff-linux-6.6.70-xlnx-v2024.1.txt
 a:    {name: linux-6.6.70, path: linux-6.6.70} 
-b:    {name: linux-xlnx-6.6.70-2024.1, path: linux-xlnx-6.6.70-2024.1} 
+b:    {name: linux-xlnx-6.6.70-v2024.1, path: linux-xlnx-6.6.70-v2024.1} 
 contents:
  - U: Documentation/ABI/stable/sysfs-driver-firmware-zynqmp
  - U: Documentation/ABI/testing/sysfs-bus-cdx

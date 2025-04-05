@@ -1,5 +1,5 @@
 --- linux-6.6.70/Documentation/devicetree/bindings/sound/audio-graph-port.yaml	2025-03-31 13:53:00.902197000 +0900
-+++ linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/sound/audio-graph-port.yaml	2025-03-31 13:54:52.810240800 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/sound/audio-graph-port.yaml	2025-04-05 13:10:16.703029600 +0900
 @@ -13,19 +13,17 @@
  
  definitions:
@@ -40,7 +40,7 @@
        dai-tdm-slot-num:
          description: Number of slots in use.
 --- linux-6.6.70/Documentation/devicetree/bindings/sound/audio-graph.yaml	2025-03-31 13:53:00.902197000 +0900
-+++ linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/sound/audio-graph.yaml	2025-03-31 13:54:52.810240800 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/sound/audio-graph.yaml	2025-04-05 13:10:16.703029600 +0900
 @@ -9,6 +9,9 @@
  maintainers:
    - Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
@@ -65,7 +65,7 @@
    pa-gpios:
      maxItems: 1
 --- linux-6.6.70/Documentation/devicetree/bindings/sound/dai-params.yaml	2025-03-31 13:53:00.915259900 +0900
-+++ linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/sound/dai-params.yaml	2025-03-31 13:54:52.830349600 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/sound/dai-params.yaml	2025-04-05 13:10:16.717035000 +0900
 @@ -11,15 +11,14 @@
  
  select: false
@@ -100,7 +100,7 @@
 -
  additionalProperties: true
 --- linux-6.6.70/Documentation/devicetree/bindings/sound/mediatek,mt8188-afe.yaml	2025-03-31 13:53:00.938478400 +0900
-+++ linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/sound/mediatek,mt8188-afe.yaml	2025-03-31 13:54:52.854583300 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/sound/mediatek,mt8188-afe.yaml	2025-04-05 13:10:16.742168800 +0900
 @@ -29,7 +29,7 @@
      maxItems: 1
      description: |
@@ -111,7 +111,7 @@
    mediatek,topckgen:
      $ref: /schemas/types.yaml#/definitions/phandle
 --- linux-6.6.70/Documentation/devicetree/bindings/sound/renesas,rsnd.yaml	2025-03-31 13:53:00.979860800 +0900
-+++ linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/sound/renesas,rsnd.yaml	2025-03-31 13:54:52.915109100 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/sound/renesas,rsnd.yaml	2025-04-05 13:10:16.788339000 +0900
 @@ -9,20 +9,6 @@
  maintainers:
    - Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
@@ -162,7 +162,7 @@
  required:
    - compatible
 --- linux-6.6.70/Documentation/devicetree/bindings/sound/xlnx,audio-formatter.txt	2025-03-31 13:53:01.020251400 +0900
-+++ linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/sound/xlnx,audio-formatter.txt	2025-03-31 13:54:52.962348800 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/sound/xlnx,audio-formatter.txt	2025-04-05 13:10:16.831652400 +0900
 @@ -1,6 +1,6 @@
  Device-Tree bindings for Xilinx PL audio formatter
  
@@ -206,7 +206,7 @@
 +		clocks = <&clk 71>, <&audio_ss_0_clk_wiz_0 0>, <&audio_ss_0_clk_wiz_0 0>, <&clk 71>;
  	};
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/sound/xlnx,dp-snd-card.txt	2025-03-31 13:54:52.962348800 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/sound/xlnx,dp-snd-card.txt	2025-04-05 13:10:16.832649800 +0900
 @@ -0,0 +1,17 @@
 +Device-Tree bindings for Xilinx ZynqMP DisplayPort Audio Card
 +
@@ -226,7 +226,7 @@
 +		xlnx,dp-snd-codec = <&xlnx_dp_snd_codec0>;
 +	};
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/sound/xlnx,dp-snd-codec.txt	2025-03-31 13:54:52.963345800 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/sound/xlnx,dp-snd-codec.txt	2025-04-05 13:10:16.832649800 +0900
 @@ -0,0 +1,18 @@
 +Device-Tree bindings for Xilinx ZynqMP DisplayPort Codec
 +
@@ -247,7 +247,7 @@
 +		clock-names = "aud_clk";
 +	};
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/sound/xlnx,dp-snd-pcm.txt	2025-03-31 13:54:52.963345800 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/sound/xlnx,dp-snd-pcm.txt	2025-04-05 13:10:16.832649800 +0900
 @@ -0,0 +1,18 @@
 +Device-Tree bindings for Xilinx ZynqMP DisplayPort PCM
 +
@@ -268,7 +268,7 @@
 +		dma-names = "tx";
 +	};
 --- linux-6.6.70/Documentation/devicetree/bindings/sound/xlnx,i2s.txt	2025-03-31 13:53:01.020251400 +0900
-+++ linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/sound/xlnx,i2s.txt	2025-03-31 13:54:52.963345800 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/sound/xlnx,i2s.txt	2025-04-05 13:10:16.833647100 +0900
 @@ -11,18 +11,31 @@
   - xlnx,dwidth: sample data width. Can be any of 16, 24.
   - xlnx,num-channels: Number of I2S streams. Can be any of 1, 2, 3, 4.
@@ -302,7 +302,7 @@
 +	Documentation of "audio_ss_0_audio_formatter_0" node is located
 +	at Documentation/devicetree/bindings/sound/xlnx,audio-formatter.txt
 --- linux-6.6.70/Documentation/devicetree/bindings/sound/xlnx,spdif.txt	2025-03-31 13:53:01.020251400 +0900
-+++ linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/sound/xlnx,spdif.txt	2025-03-31 13:54:52.964343000 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/sound/xlnx,spdif.txt	2025-04-05 13:10:16.833647100 +0900
 @@ -1,28 +1,27 @@
 -Device-Tree bindings for Xilinx SPDIF IP
 +Device-Tree bindings for Xilinx SPDIF PL IP
@@ -343,7 +343,7 @@
 +		xlnx,snd-pcm = <&audio_formatter_0>;
  	};
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/sound/xlnx,v-uhdsdi-audio.txt	2025-03-31 13:54:52.964343000 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/sound/xlnx,v-uhdsdi-audio.txt	2025-04-05 13:10:16.833647100 +0900
 @@ -0,0 +1,60 @@
 +Device-Tree bindings for Xilinx SDI audio
 +
@@ -406,7 +406,7 @@
 +	Node 'audio_ss_0_audio_formatter_0' node is documented
 +	at Documentation/devicetree/bindings/sound/xlnx,audio-formatter.txt
 --- linux-6.6.70/sound/soc/xilinx/Kconfig	2025-03-31 13:53:31.558344900 +0900
-+++ linux-xlnx-6.6.70-2024.1/sound/soc/xilinx/Kconfig	2025-03-31 13:55:23.383756400 +0900
++++ linux-xlnx-6.6.70-v2024.1/sound/soc/xilinx/Kconfig	2025-04-05 13:10:46.243508500 +0900
 @@ -1,4 +1,19 @@
  # SPDX-License-Identifier: GPL-2.0-only
 +config SND_SOC_XILINX_DP
@@ -453,7 +453,7 @@
 +	  support. This enables sound card using xilinx soft IPs
 +	  in audio pipeline.
 --- linux-6.6.70/sound/soc/xilinx/Makefile	2025-03-31 13:53:31.558344900 +0900
-+++ linux-xlnx-6.6.70-2024.1/sound/soc/xilinx/Makefile	2025-03-31 13:55:23.384784200 +0900
++++ linux-xlnx-6.6.70-v2024.1/sound/soc/xilinx/Makefile	2025-04-05 13:10:46.244505900 +0900
 @@ -1,7 +1,11 @@
  # SPDX-License-Identifier: GPL-2.0-only
 +obj-$(CONFIG_SND_SOC_XILINX_DP) += xilinx-dp-pcm.o
@@ -469,7 +469,7 @@
 +obj-$(CONFIG_SND_SOC_XILINX_SPDIF) += xlnx_spdif.o
 +obj-$(CONFIG_SND_SOC_XILINX_PL_SND_CARD) += xlnx_pl_snd_card.o
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/sound/soc/xilinx/xilinx-dp-card.c	2025-03-31 13:55:23.384784200 +0900
++++ linux-xlnx-6.6.70-v2024.1/sound/soc/xilinx/xilinx-dp-card.c	2025-04-05 13:10:46.244505900 +0900
 @@ -0,0 +1,123 @@
 +/*
 + * Xilinx DisplayPort SoC Sound Card support
@@ -595,7 +595,7 @@
 +MODULE_DESCRIPTION("Xilinx DisplayPort Sound Card module");
 +MODULE_LICENSE("GPL");
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/sound/soc/xilinx/xilinx-dp-codec.c	2025-03-31 13:55:23.384784200 +0900
++++ linux-xlnx-6.6.70-v2024.1/sound/soc/xilinx/xilinx-dp-codec.c	2025-04-05 13:10:46.245503200 +0900
 @@ -0,0 +1,313 @@
 +/*
 + * Xilinx DisplayPort Sound Codec support
@@ -911,7 +911,7 @@
 +MODULE_DESCRIPTION("Xilinx DisplayPort Sound Codec module");
 +MODULE_LICENSE("GPL");
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/sound/soc/xilinx/xilinx-dp-pcm.c	2025-03-31 13:55:23.385781700 +0900
++++ linux-xlnx-6.6.70-v2024.1/sound/soc/xilinx/xilinx-dp-pcm.c	2025-04-05 13:10:46.245503200 +0900
 @@ -0,0 +1,94 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -1008,7 +1008,7 @@
 +MODULE_DESCRIPTION("Xilinx DisplayPort Sound PCM module");
 +MODULE_LICENSE("GPL");
 --- linux-6.6.70/sound/soc/xilinx/xlnx_formatter_pcm.c	2025-03-31 13:53:31.559371600 +0900
-+++ linux-xlnx-6.6.70-2024.1/sound/soc/xilinx/xlnx_formatter_pcm.c	2025-03-31 13:55:23.385781700 +0900
++++ linux-xlnx-6.6.70-v2024.1/sound/soc/xilinx/xlnx_formatter_pcm.c	2025-04-05 13:10:46.245503200 +0900
 @@ -1,22 +1,26 @@
  // SPDX-License-Identifier: GPL-2.0
 -//
@@ -1629,7 +1629,7 @@
  		ret = xlnx_formatter_pcm_reset(adata->mmio + XLNX_S2MM_OFFSET);
  
 --- linux-6.6.70/sound/soc/xilinx/xlnx_i2s.c	2025-03-31 13:53:31.559371600 +0900
-+++ linux-xlnx-6.6.70-2024.1/sound/soc/xilinx/xlnx_i2s.c	2025-03-31 13:55:23.385781700 +0900
++++ linux-xlnx-6.6.70-v2024.1/sound/soc/xilinx/xlnx_i2s.c	2025-04-05 13:10:46.246500500 +0900
 @@ -7,6 +7,7 @@
  // Author: Praveen Vuppala <praveenv@xilinx.com>
  // Author: Maruthi Srinivas Bayyavarapu <maruthis@xilinx.com>
@@ -1770,7 +1770,7 @@
  
  module_platform_driver(xlnx_i2s_aud_driver);
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/sound/soc/xilinx/xlnx_pl_snd_card.c	2025-03-31 13:55:23.386779100 +0900
++++ linux-xlnx-6.6.70-v2024.1/sound/soc/xilinx/xlnx_pl_snd_card.c	2025-04-05 13:10:46.246500500 +0900
 @@ -0,0 +1,545 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -2318,7 +2318,7 @@
 +MODULE_AUTHOR("Maruthi Srinivas Bayyavarapu");
 +MODULE_LICENSE("GPL");
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/sound/soc/xilinx/xlnx_sdi_audio.c	2025-03-31 13:55:23.386779100 +0900
++++ linux-xlnx-6.6.70-v2024.1/sound/soc/xilinx/xlnx_sdi_audio.c	2025-04-05 13:10:46.246500500 +0900
 @@ -0,0 +1,611 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -2932,7 +2932,7 @@
 +MODULE_AUTHOR("Maruthi Srinivas Bayyavarapu");
 +MODULE_LICENSE("GPL");
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/sound/soc/xilinx/xlnx_snd_common.h	2025-03-31 13:55:23.386779100 +0900
++++ linux-xlnx-6.6.70-v2024.1/sound/soc/xilinx/xlnx_snd_common.h	2025-04-05 13:10:46.247497900 +0900
 @@ -0,0 +1,23 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
 +/*
@@ -2958,7 +2958,7 @@
 +};
 +#endif /* _XLNX_SND_COMMON_H */
 --- linux-6.6.70/sound/soc/xilinx/xlnx_spdif.c	2025-03-31 13:53:31.559371600 +0900
-+++ linux-xlnx-6.6.70-2024.1/sound/soc/xilinx/xlnx_spdif.c	2025-03-31 13:55:23.387917100 +0900
++++ linux-xlnx-6.6.70-v2024.1/sound/soc/xilinx/xlnx_spdif.c	2025-04-05 13:10:46.247497900 +0900
 @@ -24,32 +24,43 @@
  #define XLNX_SPDIF_FORMATS (SNDRV_PCM_FMTBIT_S16_LE | SNDRV_PCM_FMTBIT_S24_LE)
  

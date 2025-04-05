@@ -1,5 +1,5 @@
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/media/xilinx/xlnx,axis-broadcaster.yaml	2025-03-31 13:54:52.015523100 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/media/xilinx/xlnx,axis-broadcaster.yaml	2025-04-05 13:10:15.940809600 +0900
 @@ -0,0 +1,179 @@
 +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
 +%YAML 1.2
@@ -181,7 +181,7 @@
 +    };
 +...
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/media/xilinx/xlnx,axis-subsetconv.yaml	2025-03-31 13:54:52.015523100 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/media/xilinx/xlnx,axis-subsetconv.yaml	2025-04-05 13:10:15.940809600 +0900
 @@ -0,0 +1,133 @@
 +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
 +%YAML 1.2
@@ -317,7 +317,7 @@
 +    };
 +...
 --- linux-6.6.70/Documentation/devicetree/bindings/media/xilinx/xlnx,csi2rxss.yaml	2025-03-31 13:52:59.988026000 +0900
-+++ linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/media/xilinx/xlnx,csi2rxss.yaml	2025-03-31 13:54:52.016519900 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/media/xilinx/xlnx,csi2rxss.yaml	2025-04-05 13:10:15.940809600 +0900
 @@ -50,6 +50,7 @@
        Packets other than this data type (except for RAW8 and
        User defined data types) will be filtered out.
@@ -335,7 +335,7 @@
          maximum: 0x24
        - minimum: 0x28
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/media/xilinx/xlnx,isppipeline.yaml	2025-03-31 13:54:52.016519900 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/media/xilinx/xlnx,isppipeline.yaml	2025-04-05 13:10:15.941806800 +0900
 @@ -0,0 +1,202 @@
 +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
 +%YAML 1.2
@@ -540,7 +540,7 @@
 +    };
 +...
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/media/xilinx/xlnx,mem2mem.txt	2025-03-31 13:54:52.016519900 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/media/xilinx/xlnx,mem2mem.txt	2025-04-05 13:10:15.941806800 +0900
 @@ -0,0 +1,25 @@
 +Xilinx Video IP MEM2MEM Pipeline (XVIM2M)
 +----------------------------------------
@@ -568,7 +568,7 @@
 +		dma-names = "tx", "rx";
 +	};
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/media/xilinx/xlnx,sdirxss.txt	2025-03-31 13:54:52.017517900 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/media/xilinx/xlnx,sdirxss.txt	2025-04-05 13:10:15.941806800 +0900
 @@ -0,0 +1,77 @@
 +
 +Xilinx SDI Receiver Subsystem
@@ -648,7 +648,7 @@
 +			};
 +		};
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/media/xilinx/xlnx,v-axi4s-switch.txt	2025-03-31 13:54:52.017517900 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/media/xilinx/xlnx,v-axi4s-switch.txt	2025-04-05 13:10:15.942804100 +0900
 @@ -0,0 +1,141 @@
 +Xilinx AXI4-Stream Switch
 +-------------------------------
@@ -792,7 +792,7 @@
 +
 +	};
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/media/xilinx/xlnx,v-cfa.txt	2025-03-31 13:54:52.017517900 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/media/xilinx/xlnx,v-cfa.txt	2025-04-05 13:10:15.942804100 +0900
 @@ -0,0 +1,58 @@
 +Xilinx Color Filter Array (CFA)
 +-------------------------------
@@ -853,7 +853,7 @@
 +		};
 +	};
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/media/xilinx/xlnx,v-cresample.txt	2025-03-31 13:54:52.018592800 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/media/xilinx/xlnx,v-cresample.txt	2025-04-05 13:10:15.942804100 +0900
 @@ -0,0 +1,54 @@
 +Xilinx Chroma Resampler (CRESAMPLE)
 +-----------------------------------
@@ -910,7 +910,7 @@
 +		};
 +	};
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/media/xilinx/xlnx,v-demosaic.txt	2025-03-31 13:54:52.018592800 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/media/xilinx/xlnx,v-demosaic.txt	2025-04-05 13:10:15.943801500 +0900
 @@ -0,0 +1,62 @@
 +Xilinx Video Demosaic IP
 +-----------------------------
@@ -975,7 +975,7 @@
 +		};
 +	};
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/media/xilinx/xlnx,v-dprxss.yaml	2025-03-31 13:54:52.018592800 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/media/xilinx/xlnx,v-dprxss.yaml	2025-04-05 13:10:15.943801500 +0900
 @@ -0,0 +1,210 @@
 +# SPDX-License-Identifier: GPL-2.0
 +%YAML 1.2
@@ -1188,7 +1188,7 @@
 +   };
 +...
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/media/xilinx/xlnx,v-gamma-lut.txt	2025-03-31 13:54:52.019590500 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/media/xilinx/xlnx,v-gamma-lut.txt	2025-04-05 13:10:15.944798800 +0900
 @@ -0,0 +1,63 @@
 +Xilinx Video Gamma Correction IP
 +-----------------------------------
@@ -1254,7 +1254,7 @@
 +		};
 +	};
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/media/xilinx/xlnx,v-hdmi-rxss1.yaml	2025-03-31 13:54:52.019590500 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/media/xilinx/xlnx,v-hdmi-rxss1.yaml	2025-04-05 13:10:15.944798800 +0900
 @@ -0,0 +1,234 @@
 +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
 +%YAML 1.2
@@ -1491,7 +1491,7 @@
 +    };
 +...
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/media/xilinx/xlnx,v-hls.txt	2025-03-31 13:54:52.019590500 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/media/xilinx/xlnx,v-hls.txt	2025-04-05 13:10:15.944798800 +0900
 @@ -0,0 +1,64 @@
 +Xilinx High-Level Synthesis Core (HLS)
 +--------------------------------------
@@ -1558,7 +1558,7 @@
 +		};
 +	};
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/media/xilinx/xlnx,v-multi-scaler.txt	2025-03-31 13:54:52.020587200 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/media/xilinx/xlnx,v-multi-scaler.txt	2025-04-05 13:10:15.945796100 +0900
 @@ -0,0 +1,95 @@
 +Xilinx mem2mem Multi Video Scaler (XM2MSC)
 +-----------------------------------------
@@ -1656,7 +1656,7 @@
 +	xlnx,num-taps = <6>;
 +};
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/media/xilinx/xlnx,v-remapper.txt	2025-03-31 13:54:52.020587200 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/media/xilinx/xlnx,v-remapper.txt	2025-04-05 13:10:15.945796100 +0900
 @@ -0,0 +1,61 @@
 +Xilinx Video Remapper
 +---------------------
@@ -1720,7 +1720,7 @@
 +		};
 +	};
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/media/xilinx/xlnx,v-rgb2yuv.txt	2025-03-31 13:54:52.020587200 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/media/xilinx/xlnx,v-rgb2yuv.txt	2025-04-05 13:10:15.945796100 +0900
 @@ -0,0 +1,54 @@
 +Xilinx RGB to YUV (RGB2YUV)
 +---------------------------
@@ -1777,7 +1777,7 @@
 +		};
 +	};
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/media/xilinx/xlnx,v-scaler.txt	2025-03-31 13:54:52.021585100 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/media/xilinx/xlnx,v-scaler.txt	2025-04-05 13:10:15.946793500 +0900
 @@ -0,0 +1,75 @@
 +Xilinx Scaler (SCALER)
 +------------------------------------
@@ -1855,7 +1855,7 @@
 +		};
 +	};
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/media/xilinx/xlnx,v-scd.txt	2025-03-31 13:54:52.021585100 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/media/xilinx/xlnx,v-scd.txt	2025-04-05 13:10:15.946793500 +0900
 @@ -0,0 +1,164 @@
 +Xilinx Scene Change Detection IP (SCD)
 +--------------------------------------
@@ -2022,7 +2022,7 @@
 +		};
 +	};
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/media/xilinx/xlnx,v-switch.txt	2025-03-31 13:54:52.021585100 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/media/xilinx/xlnx,v-switch.txt	2025-04-05 13:10:15.946793500 +0900
 @@ -0,0 +1,55 @@
 +Xilinx Video Switch
 +-------------------
@@ -2080,7 +2080,7 @@
 +		};
 +	};
 --- linux-6.6.70/Documentation/devicetree/bindings/media/xilinx/xlnx,v-tpg.txt	2025-03-31 13:52:59.988026000 +0900
-+++ linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/media/xilinx/xlnx,v-tpg.txt	2025-03-31 13:54:52.022581800 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/media/xilinx/xlnx,v-tpg.txt	2025-04-05 13:10:15.947790800 +0900
 @@ -6,7 +6,8 @@
  - compatible: Must contain at least one of
  
@@ -2129,7 +2129,7 @@
  		timing-gpios = <&ps7_gpio_0 55 GPIO_ACTIVE_LOW>;
  
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/media/xilinx/xlnx,v-vpss-csc.txt	2025-03-31 13:54:52.022581800 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/media/xilinx/xlnx,v-vpss-csc.txt	2025-04-05 13:10:15.947790800 +0900
 @@ -0,0 +1,67 @@
 +Xilinx VPSS Color Space Converter (CSC)
 +-----------------------------------------
@@ -2199,7 +2199,7 @@
 +		};
 +	};
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/media/xilinx/xlnx,v-vpss-scaler.txt	2025-03-31 13:54:52.023579900 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/media/xilinx/xlnx,v-vpss-scaler.txt	2025-04-05 13:10:15.948788100 +0900
 @@ -0,0 +1,93 @@
 +  Xilinx VPSS Scaler
 +------------------------
@@ -2295,7 +2295,7 @@
 +
 +	};
 --- linux-6.6.70/Documentation/devicetree/bindings/media/xilinx/xlnx,video.txt	2025-03-31 13:52:59.989080500 +0900
-+++ linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/media/xilinx/xlnx,video.txt	2025-03-31 13:54:52.023579900 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/media/xilinx/xlnx,video.txt	2025-04-05 13:10:15.948788100 +0900
 @@ -21,6 +21,18 @@
  
  - ports: Video port, using the DT bindings defined in ../video-interfaces.txt.
@@ -2363,7 +2363,7 @@
 +		memory-region = <&plmem_multimedia>;
 +	}
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/xlnx,ctrl-fb.txt	2025-03-31 13:54:53.131208100 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/xlnx,ctrl-fb.txt	2025-04-05 13:10:16.994486600 +0900
 @@ -0,0 +1,22 @@
 +The Xilinx framebuffer DMA engine supports two soft IP blocks: one IP
 +block is used for reading video frame data from memory (FB Read) to the device
@@ -2388,7 +2388,7 @@
 +                reset-gpios = <&gpio 82 1>;
 +        };
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/xlnx,ctrl-vpss.txt	2025-03-31 13:54:53.131208100 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/xlnx,ctrl-vpss.txt	2025-04-05 13:10:16.994486600 +0900
 @@ -0,0 +1,21 @@
 +The Xilinx VPSS Scaler is a Video IP that supports up scaling, down scaling and
 +no scaling functionailty along with color space conversion. This supports custom
@@ -2412,7 +2412,7 @@
 +                xlnx,vpss-ppc = <2>;
 +        };
 --- linux-6.6.70/drivers/media/platform/xilinx/Kconfig	2025-03-31 13:53:17.477522400 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/media/platform/xilinx/Kconfig	2025-03-31 13:55:09.376007600 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/media/platform/xilinx/Kconfig	2025-04-05 13:10:32.757295000 +0900
 @@ -6,9 +6,11 @@
  	tristate "Xilinx Video IP (EXPERIMENTAL)"
  	depends on V4L_PLATFORM_DRIVERS
@@ -2638,7 +2638,7 @@
 +	  To compile this driver as a module, choose M here.
 +	  If unsure, choose N
 --- linux-6.6.70/drivers/media/platform/xilinx/Makefile	2025-03-31 13:53:17.477522400 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/media/platform/xilinx/Makefile	2025-03-31 13:55:09.376007600 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/media/platform/xilinx/Makefile	2025-04-05 13:10:32.757295000 +0900
 @@ -1,8 +1,34 @@
  # SPDX-License-Identifier: GPL-2.0
  
@@ -2675,7 +2675,7 @@
 +obj-$(CONFIG_VIDEO_XILINX_VPSS_SCALER) += xilinx-vpss-scaler.o
  obj-$(CONFIG_VIDEO_XILINX_VTC) += xilinx-vtc.o
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/media/platform/xilinx/xilinx-axis-broadcaster.c	2025-03-31 13:55:09.377004900 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/media/platform/xilinx/xilinx-axis-broadcaster.c	2025-04-05 13:10:32.757295000 +0900
 @@ -0,0 +1,288 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -2966,7 +2966,7 @@
 +MODULE_DESCRIPTION("Xilinx AXI4-Stream Broadcaster Driver");
 +MODULE_LICENSE("GPL");
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/media/platform/xilinx/xilinx-axis-subsetconv.c	2025-03-31 13:55:09.377004900 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/media/platform/xilinx/xilinx-axis-subsetconv.c	2025-04-05 13:10:32.758292300 +0900
 @@ -0,0 +1,355 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -3324,7 +3324,7 @@
 +MODULE_DESCRIPTION("Xilinx AXI4-Stream Subset Converter Driver");
 +MODULE_LICENSE("GPL");
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/media/platform/xilinx/xilinx-axis-switch.c	2025-03-31 13:55:09.377004900 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/media/platform/xilinx/xilinx-axis-switch.c	2025-04-05 13:10:32.758292300 +0900
 @@ -0,0 +1,634 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -3961,7 +3961,7 @@
 +MODULE_DESCRIPTION("Xilinx AXI4-Stream Switch Driver");
 +MODULE_LICENSE("GPL");
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/media/platform/xilinx/xilinx-cfa.c	2025-03-31 13:55:09.378001600 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/media/platform/xilinx/xilinx-cfa.c	2025-04-05 13:10:32.758292300 +0900
 @@ -0,0 +1,410 @@
 +/*
 + * Xilinx Color Filter Array
@@ -4374,7 +4374,7 @@
 +MODULE_DESCRIPTION("Xilinx Color Filter Array Driver");
 +MODULE_LICENSE("GPL");
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/media/platform/xilinx/xilinx-cresample.c	2025-03-31 13:55:09.378001600 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/media/platform/xilinx/xilinx-cresample.c	2025-04-05 13:10:32.759394800 +0900
 @@ -0,0 +1,461 @@
 +/*
 + * Xilinx Chroma Resampler
@@ -4838,7 +4838,7 @@
 +MODULE_DESCRIPTION("Xilinx Chroma Resampler Driver");
 +MODULE_LICENSE("GPL");
 --- linux-6.6.70/drivers/media/platform/xilinx/xilinx-csi2rxss.c	2025-03-31 13:53:17.478586700 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/media/platform/xilinx/xilinx-csi2rxss.c	2025-03-31 13:55:09.379070600 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/media/platform/xilinx/xilinx-csi2rxss.c	2025-04-05 13:10:32.759394800 +0900
 @@ -49,6 +49,7 @@
  
  #define XCSI_ISR_FR		BIT(31)
@@ -5046,7 +5046,7 @@
  	case MIPI_CSI2_DT_RGB444:
  	case MIPI_CSI2_DT_RGB555:
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/media/platform/xilinx/xilinx-demosaic.c	2025-03-31 13:55:09.379070600 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/media/platform/xilinx/xilinx-demosaic.c	2025-04-05 13:10:32.759394800 +0900
 @@ -0,0 +1,436 @@
 +/*
 + * Xilinx Video Demosaic IP
@@ -5485,7 +5485,7 @@
 +MODULE_DESCRIPTION("Xilinx Demosaic IP Driver");
 +MODULE_LICENSE("GPL");
 --- linux-6.6.70/drivers/media/platform/xilinx/xilinx-dma.c	2025-03-31 13:53:17.479583700 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/media/platform/xilinx/xilinx-dma.c	2025-03-31 13:55:09.380068500 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/media/platform/xilinx/xilinx-dma.c	2025-04-05 13:10:32.760392600 +0900
 @@ -10,11 +10,13 @@
   */
  
@@ -6786,7 +6786,7 @@
  
  	mutex_destroy(&dma->lock);
 --- linux-6.6.70/drivers/media/platform/xilinx/xilinx-dma.h	2025-03-31 13:53:17.479583700 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/media/platform/xilinx/xilinx-dma.h	2025-03-31 13:55:09.380068500 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/media/platform/xilinx/xilinx-dma.h	2025-04-05 13:10:32.760392600 +0900
 @@ -18,6 +18,7 @@
  #include <linux/videodev2.h>
  
@@ -6876,7 +6876,7 @@
  
  #define to_xvip_dma(vdev)	container_of(vdev, struct xvip_dma, video)
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/media/platform/xilinx/xilinx-dprxss.c	2025-03-31 13:55:09.381090300 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/media/platform/xilinx/xilinx-dprxss.c	2025-04-05 13:10:32.761389900 +0900
 @@ -0,0 +1,3215 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -10094,7 +10094,7 @@
 +MODULE_DESCRIPTION("Xilinx DP Rx Subsystem Driver");
 +MODULE_LICENSE("GPL");
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/media/platform/xilinx/xilinx-gamma-coeff.h	2025-03-31 13:55:09.381090300 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/media/platform/xilinx/xilinx-gamma-coeff.h	2025-04-05 13:10:32.762387100 +0900
 @@ -0,0 +1,5385 @@
 +/*
 + * Xilinx Gamma Correction IP
@@ -15482,7 +15482,7 @@
 +};
 +#endif /* __XILINX_GAMMA_COEFF_H__ */
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/media/platform/xilinx/xilinx-gamma-correction.h	2025-03-31 13:55:09.382089100 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/media/platform/xilinx/xilinx-gamma-correction.h	2025-04-05 13:10:32.762387100 +0900
 @@ -0,0 +1,657 @@
 +/* SPDX-License-Identifier: GPL-2.0
 + *
@@ -16142,7 +16142,7 @@
 +
 +#endif /* __XILINX_GAMMA_CORRECTION_H__ */
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/media/platform/xilinx/xilinx-gamma.c	2025-03-31 13:55:09.383060400 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/media/platform/xilinx/xilinx-gamma.c	2025-04-05 13:10:32.763384500 +0900
 @@ -0,0 +1,565 @@
 +/*
 + * Xilinx Gamma Correction IP
@@ -16710,7 +16710,7 @@
 +MODULE_DESCRIPTION("Xilinx Video Gamma Correction LUT Driver");
 +MODULE_LICENSE("GPL");
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/media/platform/xilinx/xilinx-hdcp1x-rx.c	2025-03-31 13:55:09.384057700 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/media/platform/xilinx/xilinx-hdcp1x-rx.c	2025-04-05 13:10:32.763384500 +0900
 @@ -0,0 +1,824 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -17537,7 +17537,7 @@
 +	hdcp1x->handlers.wr_handler(hdcp1x->interface_ref, offset, (u8 *)&val, size);
 +}
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/media/platform/xilinx/xilinx-hdcp1x-rx.h	2025-03-31 13:55:09.385055100 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/media/platform/xilinx/xilinx-hdcp1x-rx.h	2025-04-05 13:10:32.763384500 +0900
 @@ -0,0 +1,96 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
 +/*
@@ -17636,7 +17636,7 @@
 +#endif /* CONFIG_VIDEO_XILINX_HDCP1X_RX */
 +#endif /* __XILINX_HDCP1X_RX_H__ */
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/media/platform/xilinx/xilinx-hdcp2x-rx-crypt.c	2025-03-31 13:55:09.385055100 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/media/platform/xilinx/xilinx-hdcp2x-rx-crypt.c	2025-04-05 13:10:32.764381800 +0900
 @@ -0,0 +1,620 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -18259,7 +18259,7 @@
 +					  random_number_ptr, num_octets, num_octets);
 +}
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/media/platform/xilinx/xilinx-hdcp2x-rx.c	2025-03-31 13:55:09.386051800 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/media/platform/xilinx/xilinx-hdcp2x-rx.c	2025-04-05 13:10:32.764381800 +0900
 @@ -0,0 +1,1145 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -19407,7 +19407,7 @@
 +	return XHDCP2X_STATE_B4;
 +}
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/media/platform/xilinx/xilinx-hdcp2x-rx.h	2025-03-31 13:55:09.386051800 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/media/platform/xilinx/xilinx-hdcp2x-rx.h	2025-04-05 13:10:32.765379100 +0900
 @@ -0,0 +1,460 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
 +/*
@@ -19870,7 +19870,7 @@
 +
 +#endif /* __XILINX_HDCP2X_RX_H__ */
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/media/platform/xilinx/xilinx-hdmirx-hw.h	2025-03-31 13:55:09.387049900 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/media/platform/xilinx/xilinx-hdmirx-hw.h	2025-04-05 13:10:32.765379100 +0900
 @@ -0,0 +1,729 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
 +/*
@@ -20602,7 +20602,7 @@
 +
 +#endif /* __XILINX_HDMIRX_HW_H__ */
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/media/platform/xilinx/xilinx-hdmirxss.c	2025-03-31 13:55:09.387049900 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/media/platform/xilinx/xilinx-hdmirxss.c	2025-04-05 13:10:32.766376400 +0900
 @@ -0,0 +1,4430 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -25035,7 +25035,7 @@
 +MODULE_DESCRIPTION("Xilinx HDMI 2.1 Rx Subsystem Driver");
 +MODULE_LICENSE("GPL");
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/media/platform/xilinx/xilinx-hls-common.h	2025-03-31 13:55:09.388046100 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/media/platform/xilinx/xilinx-hls-common.h	2025-04-05 13:10:32.766376400 +0900
 @@ -0,0 +1,36 @@
 +/*
 + * Xilinx HLS common header
@@ -25074,7 +25074,7 @@
 +
 +#endif /* __XILINX_HLS_COMMON_H__ */
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/media/platform/xilinx/xilinx-hls.c	2025-03-31 13:55:09.388046100 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/media/platform/xilinx/xilinx-hls.c	2025-04-05 13:10:32.766376400 +0900
 @@ -0,0 +1,505 @@
 +/*
 + * Xilinx HLS Core
@@ -25582,7 +25582,7 @@
 +MODULE_DESCRIPTION("Xilinx HLS Core Driver");
 +MODULE_LICENSE("GPL");
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/media/platform/xilinx/xilinx-isppipeline.c	2025-03-31 13:55:09.388046100 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/media/platform/xilinx/xilinx-isppipeline.c	2025-04-05 13:10:32.768371200 +0900
 @@ -0,0 +1,671 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -26256,7 +26256,7 @@
 +MODULE_DESCRIPTION("Xilinx Video ISP Pipeline IP Driver");
 +MODULE_LICENSE("GPL");
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/media/platform/xilinx/xilinx-m2m.c	2025-03-31 13:55:09.389144700 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/media/platform/xilinx/xilinx-m2m.c	2025-04-05 13:10:32.768371200 +0900
 @@ -0,0 +1,2216 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -28475,7 +28475,7 @@
 +MODULE_DESCRIPTION("Xilinx V4L2 mem2mem driver");
 +MODULE_LICENSE("GPL");
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/media/platform/xilinx/xilinx-multi-scaler-coeff.h	2025-03-31 13:55:09.389144700 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/media/platform/xilinx/xilinx-multi-scaler-coeff.h	2025-04-05 13:10:32.769460800 +0900
 @@ -0,0 +1,574 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
 +/*
@@ -29052,7 +29052,7 @@
 +	{18, 49, 145, 310, 507, 669, 730, 667, 504, 307, 143, 48, },
 +};
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/media/platform/xilinx/xilinx-multi-scaler.c	2025-03-31 13:55:09.390167500 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/media/platform/xilinx/xilinx-multi-scaler.c	2025-04-05 13:10:32.769460800 +0900
 @@ -0,0 +1,2499 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -31554,7 +31554,7 @@
 +MODULE_LICENSE("GPL");
 +MODULE_ALIAS("xlnx_m2m_multiscaler_dev");
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/media/platform/xilinx/xilinx-remapper.c	2025-03-31 13:55:09.390167500 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/media/platform/xilinx/xilinx-remapper.c	2025-04-05 13:10:32.770458600 +0900
 @@ -0,0 +1,566 @@
 +/*
 + * Xilinx Video Remapper
@@ -32123,7 +32123,7 @@
 +MODULE_DESCRIPTION("Xilinx Video Remapper Driver");
 +MODULE_LICENSE("GPL");
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/media/platform/xilinx/xilinx-rgb2yuv.c	2025-03-31 13:55:09.391139900 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/media/platform/xilinx/xilinx-rgb2yuv.c	2025-04-05 13:10:32.770458600 +0900
 @@ -0,0 +1,581 @@
 +/*
 + * Xilinx RGB to YUV Convertor
@@ -32707,7 +32707,7 @@
 +MODULE_DESCRIPTION("Xilinx RGB to YUV Converter Driver");
 +MODULE_LICENSE("GPL");
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/media/platform/xilinx/xilinx-scaler.c	2025-03-31 13:55:09.391139900 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/media/platform/xilinx/xilinx-scaler.c	2025-04-05 13:10:32.770458600 +0900
 @@ -0,0 +1,751 @@
 +/*
 + * Xilinx Scaler
@@ -33461,7 +33461,7 @@
 +MODULE_DESCRIPTION("Xilinx Scaler Driver");
 +MODULE_LICENSE("GPL");
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/media/platform/xilinx/xilinx-scenechange-channel.c	2025-03-31 13:55:09.391139900 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/media/platform/xilinx/xilinx-scenechange-channel.c	2025-04-05 13:10:32.771455800 +0900
 @@ -0,0 +1,464 @@
 +//SPDX-License-Identifier: GPL-2.0
 +/*
@@ -33928,7 +33928,7 @@
 +	mutex_destroy(&chan->lock);
 +}
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/media/platform/xilinx/xilinx-scenechange-dma.c	2025-03-31 13:55:09.392167000 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/media/platform/xilinx/xilinx-scenechange-dma.c	2025-04-05 13:10:32.771455800 +0900
 @@ -0,0 +1,554 @@
 +//SPDX-License-Identifier: GPL-2.0
 +/*
@@ -34485,7 +34485,7 @@
 +	of_dma_controller_free(xscd->dev->of_node);
 +}
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/media/platform/xilinx/xilinx-scenechange.c	2025-03-31 13:55:09.392167000 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/media/platform/xilinx/xilinx-scenechange.c	2025-04-05 13:10:32.771455800 +0900
 @@ -0,0 +1,195 @@
 +//SPDX-License-Identifier: GPL-2.0
 +/*
@@ -34683,7 +34683,7 @@
 +MODULE_DESCRIPTION("Xilinx Scene Change Detection");
 +MODULE_LICENSE("GPL");
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/media/platform/xilinx/xilinx-scenechange.h	2025-03-31 13:55:09.392167000 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/media/platform/xilinx/xilinx-scenechange.h	2025-04-05 13:10:32.772453200 +0900
 @@ -0,0 +1,245 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
 +/*
@@ -34931,7 +34931,7 @@
 +		       struct device_node *node);
 +#endif
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/media/platform/xilinx/xilinx-sdirxss.c	2025-03-31 13:55:09.393134400 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/media/platform/xilinx/xilinx-sdirxss.c	2025-04-05 13:10:32.773450500 +0900
 @@ -0,0 +1,2758 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -37692,7 +37692,7 @@
 +MODULE_DESCRIPTION("Xilinx SDI Rx Subsystem Driver");
 +MODULE_LICENSE("GPL");
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/media/platform/xilinx/xilinx-switch.c	2025-03-31 13:55:09.393134400 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/media/platform/xilinx/xilinx-switch.c	2025-04-05 13:10:32.773450500 +0900
 @@ -0,0 +1,480 @@
 +/*
 + * Xilinx Video Switch
@@ -38175,7 +38175,7 @@
 +MODULE_DESCRIPTION("Xilinx Video Switch Driver");
 +MODULE_LICENSE("GPL");
 --- linux-6.6.70/drivers/media/platform/xilinx/xilinx-tpg.c	2025-03-31 13:53:17.479583700 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/media/platform/xilinx/xilinx-tpg.c	2025-03-31 13:55:09.394131800 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/media/platform/xilinx/xilinx-tpg.c	2025-04-05 13:10:32.773450500 +0900
 @@ -20,6 +20,7 @@
  #include <media/v4l2-ctrls.h>
  #include <media/v4l2-subdev.h>
@@ -39125,7 +39125,7 @@
  };
  MODULE_DEVICE_TABLE(of, xtpg_of_id_table);
 --- linux-6.6.70/drivers/media/platform/xilinx/xilinx-vip.c	2025-03-31 13:53:17.480581900 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/media/platform/xilinx/xilinx-vip.c	2025-03-31 13:55:09.394131800 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/media/platform/xilinx/xilinx-vip.c	2025-04-05 13:10:32.774447800 +0900
 @@ -24,24 +24,118 @@
   */
  
@@ -39392,7 +39392,7 @@
  EXPORT_SYMBOL_GPL(xvip_init_resources);
  
 --- linux-6.6.70/drivers/media/platform/xilinx/xilinx-vip.h	2025-03-31 13:53:17.481579400 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/media/platform/xilinx/xilinx-vip.h	2025-03-31 13:55:09.395159200 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/media/platform/xilinx/xilinx-vip.h	2025-04-05 13:10:32.774447800 +0900
 @@ -107,21 +107,33 @@
   * @width: AXI4 format width in bits per component
   * @pattern: CFA pattern for Mono/Sensor formats
@@ -39429,7 +39429,7 @@
  			  const struct v4l2_subdev_format *fmt);
  int xvip_enum_mbus_code(struct v4l2_subdev *subdev,
 --- linux-6.6.70/drivers/media/platform/xilinx/xilinx-vipp.c	2025-03-31 13:53:17.481579400 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/media/platform/xilinx/xilinx-vipp.c	2025-03-31 13:55:09.395159200 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/media/platform/xilinx/xilinx-vipp.c	2025-04-05 13:10:32.774447800 +0900
 @@ -15,6 +15,7 @@
  #include <linux/of_graph.h>
  #include <linux/platform_device.h>
@@ -39763,7 +39763,7 @@
  	xvip_composite_v4l2_cleanup(xdev);
  }
 --- linux-6.6.70/drivers/media/platform/xilinx/xilinx-vipp.h	2025-03-31 13:53:17.481579400 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/media/platform/xilinx/xilinx-vipp.h	2025-03-31 13:55:09.395159200 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/media/platform/xilinx/xilinx-vipp.h	2025-04-05 13:10:32.775445200 +0900
 @@ -27,6 +27,9 @@
   * @notifier: V4L2 asynchronous subdevs notifier
   * @dmas: list of DMA channels at the pipeline output and input
@@ -39787,7 +39787,7 @@
 +
  #endif /* __XILINX_VIPP_H__ */
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/media/platform/xilinx/xilinx-vpss-csc.c	2025-03-31 13:55:09.396126500 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/media/platform/xilinx/xilinx-vpss-csc.c	2025-04-05 13:10:32.775445200 +0900
 @@ -0,0 +1,1205 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -40995,7 +40995,7 @@
 +MODULE_DESCRIPTION("Xilinx VPSS CSC Driver");
 +MODULE_LICENSE("GPL");
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/media/platform/xilinx/xilinx-vpss-scaler.c	2025-03-31 13:55:09.396126500 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/media/platform/xilinx/xilinx-vpss-scaler.c	2025-04-05 13:10:32.776442500 +0900
 @@ -0,0 +1,2125 @@
 +/*
 + * Xilinx VPSS Scaler
@@ -43123,7 +43123,7 @@
 +MODULE_DESCRIPTION("Xilinx Scaler VPSS Driver");
 +MODULE_LICENSE("GPL");
 --- linux-6.6.70/drivers/media/platform/xilinx/xilinx-vtc.c	2025-03-31 13:53:17.482576400 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/media/platform/xilinx/xilinx-vtc.c	2025-03-31 13:55:09.398188300 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/media/platform/xilinx/xilinx-vtc.c	2025-04-05 13:10:32.776442500 +0900
 @@ -141,6 +141,9 @@
  
  #define XVTC_GENERATOR_GLOBAL_DELAY		0x0104
@@ -43161,7 +43161,7 @@
  	if (ret < 0)
  		return ret;
 --- linux-6.6.70/drivers/media/platform/xilinx/xilinx-vtc.h	2025-03-31 13:53:17.482576400 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/media/platform/xilinx/xilinx-vtc.h	2025-03-31 13:55:09.398244700 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/media/platform/xilinx/xilinx-vtc.h	2025-04-05 13:10:32.776442500 +0900
 @@ -27,6 +27,7 @@
  	unsigned int vsync_start;
  	unsigned int vsync_end;
@@ -43171,7 +43171,7 @@
  
  struct xvtc_device *xvtc_of_get(struct device_node *np);
 --- linux-6.6.70/include/dt-bindings/media/xilinx-vip.h	2025-03-31 13:53:26.398872300 +0900
-+++ linux-xlnx-6.6.70-2024.1/include/dt-bindings/media/xilinx-vip.h	2025-03-31 13:55:18.312700300 +0900
++++ linux-xlnx-6.6.70-v2024.1/include/dt-bindings/media/xilinx-vip.h	2025-04-05 13:10:41.363028900 +0900
 @@ -32,5 +32,11 @@
  #define XVIP_VF_CUSTOM2			13
  #define XVIP_VF_CUSTOM3			14

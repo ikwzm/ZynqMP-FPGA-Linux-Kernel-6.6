@@ -1,6 +1,6 @@
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/staging/net/xilinx-tsn-ethernet.txt
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/staging/net/xilinx-tsn-ethernet.txt
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/staging/net/xilinx-tsn-ethernet.txt	2025-03-31 13:54:53.004502600 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/staging/net/xilinx-tsn-ethernet.txt	2025-04-05 13:10:16.872835100 +0900
 @@ -0,0 +1,54 @@
 +Xilinx TSN (time sensitive networking) TEMAC axi ethernet driver (xilinx_axienet)
 +-----------------------------------------------------------------------
@@ -56,9 +56,9 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/Documentation/d
 +		xlnx,txsum = <0>;
 +		xlnx,rxsum = <0>;
 +	};
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/staging/net/xilinx_tsn.txt
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/staging/net/xilinx_tsn.txt
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/staging/net/xilinx_tsn.txt	2025-03-31 13:54:53.004502600 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/staging/net/xilinx_tsn.txt	2025-04-05 13:10:16.872835100 +0900
 @@ -0,0 +1,17 @@
 +Xilinx TSN (time sensitive networking) IP driver (xilinx_tsn_ip)
 +-----------------------------------------------------------------------
@@ -77,9 +77,9 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/Documentation/d
 +		reg = <0x0 0x80040000 0x0 0x40000>;
 +		ranges;
 +	};
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/staging/net/xilinx_tsn_ep.txt
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/staging/net/xilinx_tsn_ep.txt
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/staging/net/xilinx_tsn_ep.txt	2025-03-31 13:54:53.004502600 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/staging/net/xilinx_tsn_ep.txt	2025-04-05 13:10:16.872835100 +0900
 @@ -0,0 +1,54 @@
 +Xilinx TSN (time sensitive networking) EndPoint Driver (xilinx_tsn_ep)
 +-------------------------------------------------------------------------------
@@ -135,9 +135,9 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/Documentation/d
 +		xlnx,channel-ids = "1","2","3","4","5";
 +		xlnx,eth-hasnobuf ;
 +	};
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/staging/net/xilinx_tsn_ep_ex.txt
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/staging/net/xilinx_tsn_ep_ex.txt
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/staging/net/xilinx_tsn_ep_ex.txt	2025-03-31 13:54:53.005500000 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/staging/net/xilinx_tsn_ep_ex.txt	2025-04-05 13:10:16.873832400 +0900
 @@ -0,0 +1,26 @@
 +Xilinx TSN (time sensitive networking) Extended EndPoint Driver (xilinx_tsn_ep_ex)
 +-------------------------------------------------------------------------------
@@ -165,9 +165,9 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/Documentation/d
 +		local-mac-address = [00 0A 35 00 01 20];
 +		tsn,endpoint = <&tsn_ep>;
 +	};
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/staging/net/xilinx_tsn_switch.txt
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/staging/net/xilinx_tsn_switch.txt
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/staging/net/xilinx_tsn_switch.txt	2025-03-31 13:54:53.005500000 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/staging/net/xilinx_tsn_switch.txt	2025-04-05 13:10:16.873832400 +0900
 @@ -0,0 +1,26 @@
 +Xilinx TSN (time sensitive networking) Switch Driver (xilinx_tsn_switch)
 +-----------------------------------------------------------------------------
@@ -196,7 +196,7 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/Documentation/d
 +		xlnx,has-inband-mgmt-tag ;
 +	};
 --- linux-6.6.70/drivers/staging/Kconfig	2025-03-31 13:53:23.231560900 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/staging/Kconfig	2025-03-31 13:55:15.033081000 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/staging/Kconfig	2025-04-05 13:10:38.223141000 +0900
 @@ -78,4 +78,22 @@
  
  source "drivers/staging/vme_user/Kconfig"
@@ -221,7 +221,7 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/Documentation/d
 +
  endif # STAGING
 --- linux-6.6.70/drivers/staging/Makefile	2025-03-31 13:53:23.231560900 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/staging/Makefile	2025-03-31 13:55:15.033081000 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/staging/Makefile	2025-04-05 13:10:38.223141000 +0900
 @@ -28,3 +28,11 @@
  obj-$(CONFIG_XIL_AXIS_FIFO)	+= axis-fifo/
  obj-$(CONFIG_FIELDBUS_DEV)     += fieldbus/
@@ -234,9 +234,9 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/Documentation/d
 +obj-$(CONFIG_SERIAL_UARTLITE_RS485)	+= uartlite-rs485/
 +obj-$(CONFIG_XILINX_TSN)	+= xilinx-tsn/
 +obj-$(CONFIG_XILINX_HDCP_COMMON)	+= xilinx_hdcp/
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging/fclk/Kconfig
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/drivers/staging/fclk/Kconfig
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/staging/fclk/Kconfig	2025-03-31 13:55:15.057287400 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/staging/fclk/Kconfig	2025-04-05 13:10:38.246248400 +0900
 @@ -0,0 +1,9 @@
 +#
 +# Xilinx PL clk enabler
@@ -247,20 +247,20 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging
 +	depends on COMMON_CLK && OF
 +	help
 +	  Support for the Xilinx fclk clock enabler.
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging/fclk/Makefile
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/drivers/staging/fclk/Makefile
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/staging/fclk/Makefile	2025-03-31 13:55:15.058284800 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/staging/fclk/Makefile	2025-04-05 13:10:38.246248400 +0900
 @@ -0,0 +1 @@
 +obj-$(CONFIG_XILINX_FCLK)	+= xilinx_fclk.o
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging/fclk/TODO
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/drivers/staging/fclk/TODO
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/staging/fclk/TODO	2025-03-31 13:55:15.058284800 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/staging/fclk/TODO	2025-04-05 13:10:38.246248400 +0900
 @@ -0,0 +1,2 @@
 +TODO:
 +	- Remove this hack and clock adapt all the drivers.
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging/fclk/dt-binding.txt
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/drivers/staging/fclk/dt-binding.txt
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/staging/fclk/dt-binding.txt	2025-03-31 13:55:15.058284800 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/staging/fclk/dt-binding.txt	2025-04-05 13:10:38.247245700 +0900
 @@ -0,0 +1,16 @@
 +Binding for Xilinx pl clocks
 +
@@ -278,9 +278,9 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging
 +		compatible = "xlnx,fclk";
 +		clocks = <&clkc 71>;
 +	};
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging/fclk/xilinx_fclk.c
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/drivers/staging/fclk/xilinx_fclk.c
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/staging/fclk/xilinx_fclk.c	2025-03-31 13:55:15.059391900 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/staging/fclk/xilinx_fclk.c	2025-04-05 13:10:38.247245700 +0900
 @@ -0,0 +1,115 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -397,9 +397,9 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging
 +MODULE_AUTHOR("Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>");
 +MODULE_DESCRIPTION("fclk enable");
 +MODULE_LICENSE("GPL");
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging/uartlite-rs485/Kconfig
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/drivers/staging/uartlite-rs485/Kconfig
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/staging/uartlite-rs485/Kconfig	2025-03-31 13:55:15.685619400 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/staging/uartlite-rs485/Kconfig	2025-04-05 13:10:38.856433800 +0900
 @@ -0,0 +1,15 @@
 +# SPDX-License-Identifier: GPL-2.0
 +#
@@ -416,9 +416,9 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging
 +	  To compile this driver as a module, choose M here: the
 +	  module will be called uartlite_485.
 +
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging/uartlite-rs485/Makefile
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/drivers/staging/uartlite-rs485/Makefile
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/staging/uartlite-rs485/Makefile	2025-03-31 13:55:15.685619400 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/staging/uartlite-rs485/Makefile	2025-04-05 13:10:38.856433800 +0900
 @@ -0,0 +1,6 @@
 +# SPDX-License-Identifier: GPL-2.0
 +#
@@ -426,9 +426,9 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging
 +#
 +
 +obj-$(CONFIG_SERIAL_UARTLITE_RS485) += uartlite-rs485.o
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging/uartlite-rs485/uartlite-rs485.c
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/drivers/staging/uartlite-rs485/uartlite-rs485.c
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/staging/uartlite-rs485/uartlite-rs485.c	2025-03-31 13:55:15.686616600 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/staging/uartlite-rs485/uartlite-rs485.c	2025-04-05 13:10:38.857431800 +0900
 @@ -0,0 +1,717 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -1147,9 +1147,9 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging
 +MODULE_AUTHOR("Peter Korsgaard <jacmet@sunsite.dk>");
 +MODULE_DESCRIPTION("Xilinx uartlite serial driver");
 +MODULE_LICENSE("GPL");
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging/xilinx-tsn/Kconfig
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/drivers/staging/xilinx-tsn/Kconfig
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/staging/xilinx-tsn/Kconfig	2025-03-31 13:55:15.741049300 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/staging/xilinx-tsn/Kconfig	2025-04-05 13:10:38.913721500 +0900
 @@ -0,0 +1,68 @@
 +# SPDX-License-Identifier: GPL-2.0-only
 +#
@@ -1219,9 +1219,9 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging
 +	  Enable TSN QBR protocol support.
 +
 +endif # NET_VENDOR_XILINX
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging/xilinx-tsn/Makefile
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/drivers/staging/xilinx-tsn/Makefile
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/staging/xilinx-tsn/Makefile	2025-03-31 13:55:15.742046700 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/staging/xilinx-tsn/Makefile	2025-04-05 13:10:38.913721500 +0900
 @@ -0,0 +1,14 @@
 +# SPDX-License-Identifier: GPL-2.0
 +#
@@ -1237,9 +1237,9 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging
 +obj-$(CONFIG_XILINX_TSN_SWITCH) += xilinx_tsn_switch.o xilinx_tsn_switchdev.o
 +obj-$(CONFIG_XILINX_TSN_QBR) += xilinx_tsn_preemption.o
 +obj-$(CONFIG_AXIENET_HAS_TADMA) += xilinx_tsn_tadma.o
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging/xilinx-tsn/xilinx_axienet_main_tsn.c
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/drivers/staging/xilinx-tsn/xilinx_axienet_main_tsn.c
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/staging/xilinx-tsn/xilinx_axienet_main_tsn.c	2025-03-31 13:55:15.742046700 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/staging/xilinx-tsn/xilinx_axienet_main_tsn.c	2025-04-05 13:10:38.914719000 +0900
 @@ -0,0 +1,2039 @@
 +// SPDX-License-Identifier: GPL-2.0-only
 +/*
@@ -3280,9 +3280,9 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging
 +MODULE_DESCRIPTION("Xilinx Axi Ethernet driver");
 +MODULE_AUTHOR("Xilinx");
 +MODULE_LICENSE("GPL");
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging/xilinx-tsn/xilinx_axienet_mcdma_tsn.c
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/drivers/staging/xilinx-tsn/xilinx_axienet_mcdma_tsn.c
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/staging/xilinx-tsn/xilinx_axienet_mcdma_tsn.c	2025-03-31 13:55:15.743044000 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/staging/xilinx-tsn/xilinx_axienet_mcdma_tsn.c	2025-04-05 13:10:38.914719000 +0900
 @@ -0,0 +1,1117 @@
 +// SPDX-License-Identifier: GPL-2.0
 +
@@ -4401,9 +4401,9 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging
 +{
 +	sysfs_remove_group(kobj, &mcdma_attributes);
 +}
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging/xilinx-tsn/xilinx_axienet_mdio_tsn.c
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/drivers/staging/xilinx-tsn/xilinx_axienet_mdio_tsn.c
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/staging/xilinx-tsn/xilinx_axienet_mdio_tsn.c	2025-03-31 13:55:15.743044000 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/staging/xilinx-tsn/xilinx_axienet_mdio_tsn.c	2025-04-05 13:10:38.915716400 +0900
 @@ -0,0 +1,297 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -4702,9 +4702,9 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging
 +	mdiobus_free(lp->mii_bus);
 +	lp->mii_bus = NULL;
 +}
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging/xilinx-tsn/xilinx_axienet_tsn.h
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/drivers/staging/xilinx-tsn/xilinx_axienet_tsn.h
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/staging/xilinx-tsn/xilinx_axienet_tsn.h	2025-03-31 13:55:15.744041300 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/staging/xilinx-tsn/xilinx_axienet_tsn.h	2025-04-05 13:10:38.915716400 +0900
 @@ -0,0 +1,1354 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
 +/*
@@ -6060,9 +6060,9 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging
 +#endif
 +
 +#endif /* XILINX_AXI_ENET_TSN_H */
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging/xilinx-tsn/xilinx_tsn_cb.c
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/drivers/staging/xilinx-tsn/xilinx_tsn_cb.c
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/staging/xilinx-tsn/xilinx_tsn_cb.c	2025-03-31 13:55:15.744041300 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/staging/xilinx-tsn/xilinx_tsn_cb.c	2025-04-05 13:10:38.916713600 +0900
 @@ -0,0 +1,199 @@
 +// SPDX-License-Identifier: GPL-2.0-only
 +/*
@@ -6263,9 +6263,9 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging
 +	data->seq_recv_rst.msb = axienet_ior(&lp,
 +					     SEQ_RECV_RESETS_OFFSET + offset + 0x4);
 +}
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging/xilinx-tsn/xilinx_tsn_ep.c
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/drivers/staging/xilinx-tsn/xilinx_tsn_ep.c
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/staging/xilinx-tsn/xilinx_tsn_ep.c	2025-03-31 13:55:15.744041300 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/staging/xilinx-tsn/xilinx_tsn_ep.c	2025-04-05 13:10:38.916713600 +0900
 @@ -0,0 +1,655 @@
 +// SPDX-License-Identifier: GPL-2.0-only
 +/*
@@ -6922,9 +6922,9 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging
 +MODULE_DESCRIPTION("Xilinx Axi Ethernet driver");
 +MODULE_AUTHOR("Xilinx");
 +MODULE_LICENSE("GPL");
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging/xilinx-tsn/xilinx_tsn_ep_ex.c
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/drivers/staging/xilinx-tsn/xilinx_tsn_ep_ex.c
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/staging/xilinx-tsn/xilinx_tsn_ep_ex.c	2025-03-31 13:55:15.745038600 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/staging/xilinx-tsn/xilinx_tsn_ep_ex.c	2025-04-05 13:10:38.916713600 +0900
 @@ -0,0 +1,159 @@
 +// SPDX-License-Identifier: GPL-2.0-only
 +/*
@@ -7085,9 +7085,9 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging
 +MODULE_DESCRIPTION("Xilinx Axi Ethernet driver");
 +MODULE_AUTHOR("Xilinx");
 +MODULE_LICENSE("GPL");
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging/xilinx-tsn/xilinx_tsn_ip.c
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/drivers/staging/xilinx-tsn/xilinx_tsn_ip.c
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/staging/xilinx-tsn/xilinx_tsn_ip.c	2025-03-31 13:55:15.745038600 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/staging/xilinx-tsn/xilinx_tsn_ip.c	2025-04-05 13:10:38.917710900 +0900
 @@ -0,0 +1,434 @@
 +// SPDX-License-Identifier: GPL-2.0
 +
@@ -7523,9 +7523,9 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging
 +MODULE_DESCRIPTION("Xilinx Axi Ethernet driver");
 +MODULE_AUTHOR("Xilinx");
 +MODULE_LICENSE("GPL");
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging/xilinx-tsn/xilinx_tsn_preemption.c
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/drivers/staging/xilinx-tsn/xilinx_tsn_preemption.c
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/staging/xilinx-tsn/xilinx_tsn_preemption.c	2025-03-31 13:55:15.745038600 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/staging/xilinx-tsn/xilinx_tsn_preemption.c	2025-04-05 13:10:38.917710900 +0900
 @@ -0,0 +1,360 @@
 +// SPDX-License-Identifier: GPL-2.0-only
 +/*
@@ -7887,9 +7887,9 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging
 +		return -EFAULT;
 +	return 0;
 +}
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging/xilinx-tsn/xilinx_tsn_preemption.h
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/drivers/staging/xilinx-tsn/xilinx_tsn_preemption.h
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/staging/xilinx-tsn/xilinx_tsn_preemption.h	2025-03-31 13:55:15.746036000 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/staging/xilinx-tsn/xilinx_tsn_preemption.h	2025-04-05 13:10:38.917710900 +0900
 @@ -0,0 +1,177 @@
 +/* SPDX-License-Identifier: GPL-2.0-only */
 +/*
@@ -8068,9 +8068,9 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging
 +	struct preempt_ctrl_sts ctrl;
 +};
 +#endif /* XILINX_TSN_PREEMPTION_H */
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging/xilinx-tsn/xilinx_tsn_ptp.h
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/drivers/staging/xilinx-tsn/xilinx_tsn_ptp.h
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/staging/xilinx-tsn/xilinx_tsn_ptp.h	2025-03-31 13:55:15.746036000 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/staging/xilinx-tsn/xilinx_tsn_ptp.h	2025-04-05 13:10:38.918708200 +0900
 @@ -0,0 +1,89 @@
 +/* SPDX-License-Identifier: GPL-2.0-only */
 +/*
@@ -8161,9 +8161,9 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging
 +irqreturn_t axienet_ptp_tx_irq(int irq, void *_ndev);
 +
 +#endif
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging/xilinx-tsn/xilinx_tsn_ptp_clock.c
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/drivers/staging/xilinx-tsn/xilinx_tsn_ptp_clock.c
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/staging/xilinx-tsn/xilinx_tsn_ptp_clock.c	2025-03-31 13:55:15.747033300 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/staging/xilinx-tsn/xilinx_tsn_ptp_clock.c	2025-04-05 13:10:38.918708200 +0900
 @@ -0,0 +1,313 @@
 +// SPDX-License-Identifier: GPL-2.0-only
 +/*
@@ -8478,9 +8478,9 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging
 +	timer->ptp_clock = NULL;
 +	return NULL;
 +}
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging/xilinx-tsn/xilinx_tsn_ptp_xmit.c
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/drivers/staging/xilinx-tsn/xilinx_tsn_ptp_xmit.c
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/staging/xilinx-tsn/xilinx_tsn_ptp_xmit.c	2025-03-31 13:55:15.747033300 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/staging/xilinx-tsn/xilinx_tsn_ptp_xmit.c	2025-04-05 13:10:38.919757600 +0900
 @@ -0,0 +1,370 @@
 +// SPDX-License-Identifier: GPL-2.0-only
 +/*
@@ -8852,9 +8852,9 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging
 +
 +	return IRQ_HANDLED;
 +}
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging/xilinx-tsn/xilinx_tsn_qci.c
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/drivers/staging/xilinx-tsn/xilinx_tsn_qci.c
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/staging/xilinx-tsn/xilinx_tsn_qci.c	2025-03-31 13:55:15.747033300 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/staging/xilinx-tsn/xilinx_tsn_qci.c	2025-04-05 13:10:38.919757600 +0900
 @@ -0,0 +1,154 @@
 +// SPDX-License-Identifier: GPL-2.0-only
 +/*
@@ -9010,9 +9010,9 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging
 +	data->err_meter.lsb = axienet_ior(&lp, METER_ERR_OFFSET + offset);
 +	data->err_meter.msb = axienet_ior(&lp, METER_ERR_OFFSET + offset + 0x4);
 +}
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging/xilinx-tsn/xilinx_tsn_shaper.c
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/drivers/staging/xilinx-tsn/xilinx_tsn_shaper.c
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/staging/xilinx-tsn/xilinx_tsn_shaper.c	2025-03-31 13:55:15.748030600 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/staging/xilinx-tsn/xilinx_tsn_shaper.c	2025-04-05 13:10:38.919757600 +0900
 @@ -0,0 +1,232 @@
 +// SPDX-License-Identifier: GPL-2.0-only
 +/*
@@ -9246,9 +9246,9 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging
 +
 +	free_irq(lp->qbv_irq, ndev);
 +}
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging/xilinx-tsn/xilinx_tsn_shaper.h
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/drivers/staging/xilinx-tsn/xilinx_tsn_shaper.h
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/staging/xilinx-tsn/xilinx_tsn_shaper.h	2025-03-31 13:55:15.748030600 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/staging/xilinx-tsn/xilinx_tsn_shaper.h	2025-04-05 13:10:38.920755300 +0900
 @@ -0,0 +1,137 @@
 +/* SPDX-License-Identifier: GPL-2.0-only */
 +/*
@@ -9387,9 +9387,9 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging
 +};
 +
 +#endif /* XILINX_TSN_SHAPER_H */
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging/xilinx-tsn/xilinx_tsn_switch.c
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/drivers/staging/xilinx-tsn/xilinx_tsn_switch.c
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/staging/xilinx-tsn/xilinx_tsn_switch.c	2025-03-31 13:55:15.749096900 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/staging/xilinx-tsn/xilinx_tsn_switch.c	2025-04-05 13:10:38.920755300 +0900
 @@ -0,0 +1,1870 @@
 +// SPDX-License-Identifier: GPL-2.0-only
 +/*
@@ -11261,9 +11261,9 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging
 +MODULE_DESCRIPTION("Xilinx TSN Switch driver");
 +MODULE_AUTHOR("Xilinx");
 +MODULE_LICENSE("GPL");
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging/xilinx-tsn/xilinx_tsn_switch.h
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/drivers/staging/xilinx-tsn/xilinx_tsn_switch.h
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/staging/xilinx-tsn/xilinx_tsn_switch.h	2025-03-31 13:55:15.749096900 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/staging/xilinx-tsn/xilinx_tsn_switch.h	2025-04-05 13:10:38.921752600 +0900
 @@ -0,0 +1,479 @@
 +/* SPDX-License-Identifier: GPL-2.0-only */
 +/*
@@ -11744,9 +11744,9 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging
 +void xlnx_switchdev_remove(void);
 +#endif
 +#endif /* XILINX_TSN_SWITCH_H */
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging/xilinx-tsn/xilinx_tsn_switchdev.c
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/drivers/staging/xilinx-tsn/xilinx_tsn_switchdev.c
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/staging/xilinx-tsn/xilinx_tsn_switchdev.c	2025-03-31 13:55:15.749096900 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/staging/xilinx-tsn/xilinx_tsn_switchdev.c	2025-04-05 13:10:38.921752600 +0900
 @@ -0,0 +1,374 @@
 +// SPDX-License-Identifier: GPL-2.0-only
 +/*
@@ -12122,9 +12122,9 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging
 +	unregister_switchdev_blocking_notifier(&xlnx_switchdev_blocking_notifier);
 +}
 +#endif
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging/xilinx-tsn/xilinx_tsn_tadma.c
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/drivers/staging/xilinx-tsn/xilinx_tsn_tadma.c
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/staging/xilinx-tsn/xilinx_tsn_tadma.c	2025-03-31 13:55:15.750094700 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/staging/xilinx-tsn/xilinx_tsn_tadma.c	2025-04-05 13:10:38.922749900 +0900
 @@ -0,0 +1,719 @@
 +// SPDX-License-Identifier: GPL-2.0
 +
@@ -12845,9 +12845,9 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging
 +
 +	return 0;
 +}
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging/xilinx-tsn/xilinx_tsn_tadma.h
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/drivers/staging/xilinx-tsn/xilinx_tsn_tadma.h
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/staging/xilinx-tsn/xilinx_tsn_tadma.h	2025-03-31 13:55:15.750094700 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/staging/xilinx-tsn/xilinx_tsn_tadma.h	2025-04-05 13:10:38.922749900 +0900
 @@ -0,0 +1,132 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
 +/*
@@ -12981,9 +12981,9 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging
 +	iowrite32(value, (lp->tadma_regs + offset));
 +}
 +#endif /* _XTADMA_TSN_H */
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging/xilinx-tsn/xilinx_tsn_timer.h
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/drivers/staging/xilinx-tsn/xilinx_tsn_timer.h
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/staging/xilinx-tsn/xilinx_tsn_timer.h	2025-03-31 13:55:15.751091800 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/staging/xilinx-tsn/xilinx_tsn_timer.h	2025-04-05 13:10:38.922749900 +0900
 @@ -0,0 +1,74 @@
 +/* SPDX-License-Identifier: GPL-2.0-only */
 +/*
@@ -13059,9 +13059,9 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging
 +int axienet_ptp_timer_remove(void *priv);
 +int axienet_get_phc_index(void *priv);
 +#endif
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging/xilinx_hdcp/Kconfig
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/drivers/staging/xilinx_hdcp/Kconfig
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/staging/xilinx_hdcp/Kconfig	2025-03-31 13:55:15.751091800 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/staging/xilinx_hdcp/Kconfig	2025-04-05 13:10:38.923747200 +0900
 @@ -0,0 +1,8 @@
 +config XILINX_HDCP_COMMON
 +	bool
@@ -13071,26 +13071,26 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging
 +
 +	  This code will be compiled by selection from the interface
 +	  drivers (DisplayPort/HDMI) of Xilinx.
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging/xilinx_hdcp/MAINTAINERS
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/drivers/staging/xilinx_hdcp/MAINTAINERS
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/staging/xilinx_hdcp/MAINTAINERS	2025-03-31 13:55:15.751091800 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/staging/xilinx_hdcp/MAINTAINERS	2025-04-05 13:10:38.923747200 +0900
 @@ -0,0 +1,4 @@
 +XILINX HDCP COMMON DRIVER
 +M:	Lakshmi Prasanna Eachuri <lakshmi.prasanna.eachuri@xilinx.com>
 +S:	Maintained
 +F:	drivers/staging/xilinx_hdcp
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging/xilinx_hdcp/Makefile
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/drivers/staging/xilinx_hdcp/Makefile
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/staging/xilinx_hdcp/Makefile	2025-03-31 13:55:15.752089100 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/staging/xilinx_hdcp/Makefile	2025-04-05 13:10:38.923747200 +0900
 @@ -0,0 +1,5 @@
 +obj-$(CONFIG_XILINX_HDCP_COMMON) += xlnx_hdcp_rng.o \
 +	xlnx_timer.o \
 +	xlnx_hdcp_bigdigits.o \
 +	xlnx_hdcp2x_cipher.o \
 +	xlnx_hdcp2x_mmult.o \
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging/xilinx_hdcp/xlnx_hdcp2x_cipher.c
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/drivers/staging/xilinx_hdcp/xlnx_hdcp2x_cipher.c
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/staging/xilinx_hdcp/xlnx_hdcp2x_cipher.c	2025-03-31 13:55:15.752089100 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/staging/xilinx_hdcp/xlnx_hdcp2x_cipher.c	2025-04-05 13:10:38.924744600 +0900
 @@ -0,0 +1,97 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -13189,9 +13189,9 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging
 +				 XHDCP2X_CIPHER_REG_CTRL_SET_OFFSET,
 +				 lanecount << XHDCP2X_CIPHER_REG_CTRL_LANE_CNT_BIT_POS);
 +}
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging/xilinx_hdcp/xlnx_hdcp2x_mmult.c
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/drivers/staging/xilinx_hdcp/xlnx_hdcp2x_mmult.c
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/staging/xilinx_hdcp/xlnx_hdcp2x_mmult.c	2025-03-31 13:55:15.752089100 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/staging/xilinx_hdcp/xlnx_hdcp2x_mmult.c	2025-04-05 13:10:38.924744600 +0900
 @@ -0,0 +1,108 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -13301,9 +13301,9 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging
 +			(offset + i) * XHDCP2X_MMULT_OFFSET_MULT, *(data + i));
 +	return length;
 +}
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging/xilinx_hdcp/xlnx_hdcp_bigdigits.c
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/drivers/staging/xilinx_hdcp/xlnx_hdcp_bigdigits.c
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/staging/xilinx_hdcp/xlnx_hdcp_bigdigits.c	2025-03-31 13:55:15.753086500 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/staging/xilinx_hdcp/xlnx_hdcp_bigdigits.c	2025-04-05 13:10:38.925741900 +0900
 @@ -0,0 +1,1149 @@
 +// SPDX-License-Identifier: GPL-2.0
 +// Id: bigdigits.c
@@ -14454,9 +14454,9 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging
 +
 +	return mp_mod_exp_1(y, x, n, d, ndigits);
 +}
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging/xilinx_hdcp/xlnx_hdcp_rng.c
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/drivers/staging/xilinx_hdcp/xlnx_hdcp_rng.c
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/staging/xilinx_hdcp/xlnx_hdcp_rng.c	2025-03-31 13:55:15.753086500 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/staging/xilinx_hdcp/xlnx_hdcp_rng.c	2025-04-05 13:10:38.925741900 +0900
 @@ -0,0 +1,72 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -14530,9 +14530,9 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging
 +	xlnx_hdcp2x_rng_write(rng_cfg->rng_coreaddress, XHDCP2X_RNG_REG_CTRL_CLR_OFFSET,
 +			      XHDCP2X_RNG_REG_CTRL_RUN_MASK);
 +}
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging/xilinx_hdcp/xlnx_timer.c
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/drivers/staging/xilinx_hdcp/xlnx_timer.c
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/staging/xilinx_hdcp/xlnx_timer.c	2025-03-31 13:55:15.753086500 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/staging/xilinx_hdcp/xlnx_timer.c	2025-04-05 13:10:38.925741900 +0900
 @@ -0,0 +1,248 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -14782,9 +14782,9 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging
 +		}
 +	}
 +}
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging/xlnx_hdcp1x/Kconfig
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/drivers/staging/xlnx_hdcp1x/Kconfig
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/staging/xlnx_hdcp1x/Kconfig	2025-03-31 13:55:15.754083800 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/staging/xlnx_hdcp1x/Kconfig	2025-04-05 13:10:38.926740300 +0900
 @@ -0,0 +1,8 @@
 +config XLNX_HDCP1X_CIPHER
 +	bool
@@ -14794,22 +14794,22 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging
 +
 +	  This code will be compiled by selection from the interface
 +	  drivers (DP/HDMI) of xilinx.
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging/xlnx_hdcp1x/MAINTAINERS
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/drivers/staging/xlnx_hdcp1x/MAINTAINERS
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/staging/xlnx_hdcp1x/MAINTAINERS	2025-03-31 13:55:15.754083800 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/staging/xlnx_hdcp1x/MAINTAINERS	2025-04-05 13:10:38.926740300 +0900
 @@ -0,0 +1,4 @@
 +XILINX HDCP1X CIPHER DRIVER
 +M:	Jagadeesh Banisetti <jagadeesh.banisetti@amd.com>
 +S:	Maintained
 +F:	drivers/staging/xlnx_hdcp1x
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging/xlnx_hdcp1x/Makefile
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/drivers/staging/xlnx_hdcp1x/Makefile
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/staging/xlnx_hdcp1x/Makefile	2025-03-31 13:55:15.754083800 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/staging/xlnx_hdcp1x/Makefile	2025-04-05 13:10:38.927735900 +0900
 @@ -0,0 +1 @@
 +obj-y += xilinx-hdcp1x-cipher.o
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging/xlnx_hdcp1x/xilinx-hdcp1x-cipher.c
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/drivers/staging/xlnx_hdcp1x/xilinx-hdcp1x-cipher.c
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/staging/xlnx_hdcp1x/xilinx-hdcp1x-cipher.c	2025-03-31 13:55:15.755080700 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/staging/xlnx_hdcp1x/xilinx-hdcp1x-cipher.c	2025-04-05 13:10:38.927735900 +0900
 @@ -0,0 +1,989 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -15800,9 +15800,9 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging
 +	return status;
 +}
 +EXPORT_SYMBOL_GPL(xhdcp1x_cipher_set_ri_update);
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging/xlnx_tsmux/Kconfig
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/drivers/staging/xlnx_tsmux/Kconfig
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/staging/xlnx_tsmux/Kconfig	2025-03-31 13:55:15.755080700 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/staging/xlnx_tsmux/Kconfig	2025-04-05 13:10:38.927735900 +0900
 @@ -0,0 +1,11 @@
 +config XLNX_TSMUX
 +	tristate "Xilinx MPEG2 Transport Stream Muxer"
@@ -15815,22 +15815,22 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging
 +
 +	  To compile this driver as a module, choose M here.
 +	  If unsure, choose N.
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging/xlnx_tsmux/MAINTAINERS
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/drivers/staging/xlnx_tsmux/MAINTAINERS
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/staging/xlnx_tsmux/MAINTAINERS	2025-03-31 13:55:15.756078800 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/staging/xlnx_tsmux/MAINTAINERS	2025-04-05 13:10:38.928733900 +0900
 @@ -0,0 +1,4 @@
 +XILINX MPG2TSMUX DRIVER
 +M:	Venkateshwar Rao <venkateshwar.rao.gannavarapu@xilinx.com>
 +S:	Maintained
 +F:	drivers/staging/xlnx_tsmux
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging/xlnx_tsmux/Makefile
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/drivers/staging/xlnx_tsmux/Makefile
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/staging/xlnx_tsmux/Makefile	2025-03-31 13:55:15.756078800 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/staging/xlnx_tsmux/Makefile	2025-04-05 13:10:38.928733900 +0900
 @@ -0,0 +1 @@
 +obj-$(CONFIG_XLNX_TSMUX) += xlnx_mpg2tsmux.o
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging/xlnx_tsmux/dt-binding.txt
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/drivers/staging/xlnx_tsmux/dt-binding.txt
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/staging/xlnx_tsmux/dt-binding.txt	2025-03-31 13:55:15.756078800 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/staging/xlnx_tsmux/dt-binding.txt	2025-04-05 13:10:38.928733900 +0900
 @@ -0,0 +1,28 @@
 +The Xilinx mpegtsmux IP reads the elementary streams from memory and
 +writes the MPEG2 TS(transport stream) to memory.
@@ -15860,9 +15860,9 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging
 +		clock-names = "ap_clk";
 +		clocks = <&misc_clk_0>;
 +	};
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging/xlnx_tsmux/xlnx_mpg2tsmux.c
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/drivers/staging/xlnx_tsmux/xlnx_mpg2tsmux.c
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/staging/xlnx_tsmux/xlnx_mpg2tsmux.c	2025-03-31 13:55:15.757076100 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/staging/xlnx_tsmux/xlnx_mpg2tsmux.c	2025-04-05 13:10:38.929803900 +0900
 @@ -0,0 +1,1568 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -17432,9 +17432,9 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging
 +MODULE_AUTHOR("Xilinx Inc.");
 +MODULE_DESCRIPTION("Xilinx mpeg2 transport stream muxer IP driver");
 +MODULE_LICENSE("GPL");
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging/xlnxsync/Kconfig
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/drivers/staging/xlnxsync/Kconfig
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/staging/xlnxsync/Kconfig	2025-03-31 13:55:15.757076100 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/staging/xlnxsync/Kconfig	2025-04-05 13:10:38.929803900 +0900
 @@ -0,0 +1,11 @@
 +config XLNX_SYNC
 +	tristate "Xilinx Synchronizer"
@@ -17447,22 +17447,22 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging
 +
 +	  To compile this driver as a module, choose M here.
 +	  If unsure, choose N
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging/xlnxsync/MAINTAINERS
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/drivers/staging/xlnxsync/MAINTAINERS
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/staging/xlnxsync/MAINTAINERS	2025-03-31 13:55:15.758073100 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/staging/xlnxsync/MAINTAINERS	2025-04-05 13:10:38.930801700 +0900
 @@ -0,0 +1,4 @@
 +XILINX SYNCHRONIZER DRIVER
 +M:	Vishal Sagar <vishal.sagar@xilinx.com>
 +S:	Maintained
 +F:	drivers/staging/xlnxsync
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging/xlnxsync/Makefile
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/drivers/staging/xlnxsync/Makefile
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/staging/xlnxsync/Makefile	2025-03-31 13:55:15.758073100 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/staging/xlnxsync/Makefile	2025-04-05 13:10:38.930801700 +0900
 @@ -0,0 +1 @@
 +obj-$(CONFIG_XLNX_SYNC) += xlnxsync.o
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging/xlnxsync/dt-binding.txt
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/drivers/staging/xlnxsync/dt-binding.txt
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/staging/xlnxsync/dt-binding.txt	2025-03-31 13:55:15.758073100 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/staging/xlnxsync/dt-binding.txt	2025-04-05 13:10:38.930801700 +0900
 @@ -0,0 +1,34 @@
 +Xilinx Synchronizer
 +-------------------
@@ -17498,9 +17498,9 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging
 +	xlnx,num-chan = <4>;
 +	xlnx,encode;
 +};
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging/xlnxsync/xlnxsync.c
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/drivers/staging/xlnxsync/xlnxsync.c
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/staging/xlnxsync/xlnxsync.c	2025-03-31 13:55:15.759189900 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/staging/xlnxsync/xlnxsync.c	2025-04-05 13:10:38.931798500 +0900
 @@ -0,0 +1,1494 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -18996,9 +18996,9 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging
 +MODULE_DESCRIPTION("Xilinx Synchronizer IP Driver");
 +MODULE_LICENSE("GPL");
 +MODULE_VERSION(XLNXSYNC_DRIVER_VERSION);
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging/xroeframer/Kconfig
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/drivers/staging/xroeframer/Kconfig
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/staging/xroeframer/Kconfig	2025-03-31 13:55:15.759189900 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/staging/xroeframer/Kconfig	2025-04-05 13:10:38.931798500 +0900
 @@ -0,0 +1,18 @@
 +#
 +# Xilinx Radio over Ethernet Framer driver
@@ -19018,9 +19018,9 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging
 +
 +	  - Uplink, from the Phone to the BaseBand, Antenna to Ethernet,
 +	  we call this the Framer path, or fram on all related IP signals.
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging/xroeframer/Makefile
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/drivers/staging/xroeframer/Makefile
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/staging/xroeframer/Makefile	2025-03-31 13:55:15.759189900 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/staging/xroeframer/Makefile	2025-04-05 13:10:38.932796400 +0900
 @@ -0,0 +1,12 @@
 +# SPDX-License-Identifier: GPL-2.0
 +#
@@ -19034,9 +19034,9 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging
 +		sysfs_xroe_framer_ipv6.o \
 +		sysfs_xroe_framer_udp.o \
 +		sysfs_xroe_framer_stats.o
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging/xroeframer/README
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/drivers/staging/xroeframer/README
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/staging/xroeframer/README	2025-03-31 13:55:15.760187600 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/staging/xroeframer/README	2025-04-05 13:10:38.932796400 +0900
 @@ -0,0 +1,47 @@
 +Xilinx Radio over Ethernet Framer driver
 +=========================================
@@ -19085,9 +19085,9 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging
 +
 +There is also the option of accessing the framer's register map using
 +ioctl calls for both reading and writing (where permitted) directly.
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging/xroeframer/dt-binding.txt
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/drivers/staging/xroeframer/dt-binding.txt
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/staging/xroeframer/dt-binding.txt	2025-03-31 13:55:15.760187600 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/staging/xroeframer/dt-binding.txt	2025-04-05 13:10:38.932796400 +0900
 @@ -0,0 +1,17 @@
 +* Xilinx Radio over Ethernet Framer driver
 +
@@ -19106,9 +19106,9 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging
 +			      "internal_bus_clk";
 +		clocks = <0x43 0x44 0x44 0x45 0x45>;
 +	};
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging/xroeframer/roe_framer_ctrl.h
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/drivers/staging/xroeframer/roe_framer_ctrl.h
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/staging/xroeframer/roe_framer_ctrl.h	2025-03-31 13:55:15.760187600 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/staging/xroeframer/roe_framer_ctrl.h	2025-04-05 13:10:38.933793200 +0900
 @@ -0,0 +1,1088 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -20198,9 +20198,9 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging
 +#define STATS_USER_CTRL_RX_PKTS_RATE_OFFSET 0x0 /* 0 */
 +#define STATS_USER_CTRL_RX_PKTS_RATE_WIDTH 0x20 /* 32 */
 +#define STATS_USER_CTRL_RX_PKTS_RATE_DEFAULT 0x0 /* 0 */
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging/xroeframer/sysfs_xroe.c
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/drivers/staging/xroeframer/sysfs_xroe.c
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/staging/xroeframer/sysfs_xroe.c	2025-03-31 13:55:15.761185000 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/staging/xroeframer/sysfs_xroe.c	2025-04-05 13:10:38.933793200 +0900
 @@ -0,0 +1,562 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -20764,9 +20764,9 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging
 +	buffer = ioread32(working_address);
 +	return (buffer & mask) >> offset;
 +}
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging/xroeframer/sysfs_xroe_framer_ipv4.c
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/drivers/staging/xroeframer/sysfs_xroe_framer_ipv4.c
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/staging/xroeframer/sysfs_xroe_framer_ipv4.c	2025-03-31 13:55:15.761185000 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/staging/xroeframer/sysfs_xroe_framer_ipv4.c	2025-04-05 13:10:38.934791000 +0900
 @@ -0,0 +1,718 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -21486,9 +21486,9 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging
 +	}
 +	return ret;
 +}
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging/xroeframer/sysfs_xroe_framer_ipv6.c
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/drivers/staging/xroeframer/sysfs_xroe_framer_ipv6.c
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/staging/xroeframer/sysfs_xroe_framer_ipv6.c	2025-03-31 13:55:15.762182100 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/staging/xroeframer/sysfs_xroe_framer_ipv6.c	2025-04-05 13:10:38.934791000 +0900
 @@ -0,0 +1,571 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -22061,9 +22061,9 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging
 +	}
 +	return ret;
 +}
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging/xroeframer/sysfs_xroe_framer_stats.c
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/drivers/staging/xroeframer/sysfs_xroe_framer_stats.c
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/staging/xroeframer/sysfs_xroe_framer_stats.c	2025-03-31 13:55:15.762182100 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/staging/xroeframer/sysfs_xroe_framer_stats.c	2025-04-05 13:10:38.934791000 +0900
 @@ -0,0 +1,401 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -22466,9 +22466,9 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging
 +{
 +	kobject_put(kobj_stats);
 +}
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging/xroeframer/sysfs_xroe_framer_udp.c
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/drivers/staging/xroeframer/sysfs_xroe_framer_udp.c
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/staging/xroeframer/sysfs_xroe_framer_udp.c	2025-03-31 13:55:15.762182100 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/staging/xroeframer/sysfs_xroe_framer_udp.c	2025-04-05 13:10:38.935787800 +0900
 @@ -0,0 +1,181 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -22651,9 +22651,9 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging
 +	for (i = 0; i < MAX_NUM_ETH_PORTS; i++)
 +		kobject_put(kobj_udp[i]);
 +}
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging/xroeframer/xroe_framer.c
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/drivers/staging/xroeframer/xroe_framer.c
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/staging/xroeframer/xroe_framer.c	2025-03-31 13:55:15.763179500 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/staging/xroeframer/xroe_framer.c	2025-04-05 13:10:38.935787800 +0900
 @@ -0,0 +1,155 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -22810,9 +22810,9 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging
 +MODULE_LICENSE("GPL");
 +MODULE_AUTHOR("Xilinx Inc.");
 +MODULE_DESCRIPTION("framer - Xilinx Radio over Ethernet Framer driver");
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging/xroeframer/xroe_framer.h
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/drivers/staging/xroeframer/xroe_framer.h
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/staging/xroeframer/xroe_framer.h	2025-03-31 13:55:15.763179500 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/staging/xroeframer/xroe_framer.h	2025-04-05 13:10:38.935787800 +0900
 @@ -0,0 +1,63 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
 +/*
@@ -22877,9 +22877,9 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging
 +			       struct kobject *kobj);
 +u32 utils_sysfs_show_wrapper(u32 address, u32 offset, u32 mask,
 +			     struct kobject *kobj);
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging/xroetrafficgen/Kconfig
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/drivers/staging/xroetrafficgen/Kconfig
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/staging/xroetrafficgen/Kconfig	2025-03-31 13:55:15.763179500 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/staging/xroetrafficgen/Kconfig	2025-04-05 13:10:38.936785200 +0900
 @@ -0,0 +1,14 @@
 +# SPDX-License-Identifier: GPL-2.0
 +
@@ -22895,9 +22895,9 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging
 +	  It generates rolling rampdata for eCPRI antenna paths.
 +	  Each path is tagged with the antenna number. The sink locks to this
 +	  ramp data, then checks the next value is as expected.
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging/xroetrafficgen/Makefile
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/drivers/staging/xroetrafficgen/Makefile
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/staging/xroetrafficgen/Makefile	2025-03-31 13:55:15.764176800 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/staging/xroetrafficgen/Makefile	2025-04-05 13:10:38.936785200 +0900
 @@ -0,0 +1,8 @@
 +# SPDX-License-Identifier: GPL-2.0
 +#
@@ -22907,9 +22907,9 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging
 +
 +framer-objs := 	xroe-traffic-gen.o \
 +		xroe-traffic-gen-sysfs.o \
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging/xroetrafficgen/README
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/drivers/staging/xroetrafficgen/README
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/staging/xroetrafficgen/README	2025-03-31 13:55:15.764176800 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/staging/xroetrafficgen/README	2025-04-05 13:10:38.936785200 +0900
 @@ -0,0 +1,19 @@
 +Xilinx Radio over Ethernet Traffic Generator driver
 +===================================================
@@ -22930,9 +22930,9 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging
 +(see "dt-binding.txt" for more information). When the driver is loaded, the
 +general controls (such as sink lock, enable, loopback etc) are exposed
 +under /sys/kernel/xroetrafficgen.
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging/xroetrafficgen/dt-binding.txt
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/drivers/staging/xroetrafficgen/dt-binding.txt
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/staging/xroetrafficgen/dt-binding.txt	2025-03-31 13:55:15.764176800 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/staging/xroetrafficgen/dt-binding.txt	2025-04-05 13:10:38.937783000 +0900
 @@ -0,0 +1,15 @@
 +* Xilinx Radio over Ethernet Traffic Generator driver
 +
@@ -22949,9 +22949,9 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging
 +		clock-names = "s_axis_fram_aclk", "s_axi_aclk";
 +		clocks = <0x44 0x43>;
 +	};
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging/xroetrafficgen/roe_radio_ctrl.h
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/drivers/staging/xroetrafficgen/roe_radio_ctrl.h
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/staging/xroetrafficgen/roe_radio_ctrl.h	2025-03-31 13:55:15.765174100 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/staging/xroetrafficgen/roe_radio_ctrl.h	2025-04-05 13:10:38.937783000 +0900
 @@ -0,0 +1,183 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
 +/*
@@ -23136,9 +23136,9 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging
 +#define FRAM_PAUSE_DATA_SIZE_OFFSET 0x0
 +#define FRAM_PAUSE_DATA_SIZE_WIDTH 0x7
 +#define FRAM_PAUSE_DATA_SIZE_DEFAULT 0x0
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging/xroetrafficgen/xroe-traffic-gen-sysfs.c
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/drivers/staging/xroetrafficgen/xroe-traffic-gen-sysfs.c
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/staging/xroetrafficgen/xroe-traffic-gen-sysfs.c	2025-03-31 13:55:15.765174100 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/staging/xroetrafficgen/xroe-traffic-gen-sysfs.c	2025-04-05 13:10:38.937783000 +0900
 @@ -0,0 +1,824 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -23964,9 +23964,9 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging
 +{
 +	sysfs_remove_group(&dev->kobj, *xroe_traffic_gen_groups);
 +}
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging/xroetrafficgen/xroe-traffic-gen.c
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/drivers/staging/xroetrafficgen/xroe-traffic-gen.c
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/staging/xroetrafficgen/xroe-traffic-gen.c	2025-03-31 13:55:15.765174100 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/staging/xroetrafficgen/xroe-traffic-gen.c	2025-04-05 13:10:38.938780200 +0900
 @@ -0,0 +1,124 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -24092,9 +24092,9 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging
 +MODULE_LICENSE("GPL");
 +MODULE_AUTHOR("Xilinx Inc.");
 +MODULE_DESCRIPTION("Xilinx Radio over Ethernet Traffic Generator driver");
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging/xroetrafficgen/xroe-traffic-gen.h
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/drivers/staging/xroetrafficgen/xroe-traffic-gen.h
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/staging/xroetrafficgen/xroe-traffic-gen.h	2025-03-31 13:55:15.766171400 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/staging/xroetrafficgen/xroe-traffic-gen.h	2025-04-05 13:10:38.938780200 +0900
 @@ -0,0 +1,15 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
 +/*
@@ -24111,9 +24111,9 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/staging
 +
 +int xroe_traffic_gen_sysfs_init(struct device *dev);
 +void xroe_traffic_gen_sysfs_exit(struct device *dev);
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/include/linux/xlnx/xilinx-hdcp1x-cipher.h
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/include/linux/xlnx/xilinx-hdcp1x-cipher.h
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/include/linux/xlnx/xilinx-hdcp1x-cipher.h	2025-03-31 13:55:19.512756800 +0900
++++ linux-xlnx-6.6.70-v2024.1/include/linux/xlnx/xilinx-hdcp1x-cipher.h	2025-04-05 13:10:42.509912600 +0900
 @@ -0,0 +1,294 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
 +/*
@@ -24409,9 +24409,9 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/include/linux/x
 +#endif /* CONFIG_XLNX_HDCP1X_CIPHER */
 +
 +#endif /* __XILINX_HDCP1X_CIPHER_H__ */
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/include/linux/xlnx/xlnx_hdcp2x_cipher.h
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/include/linux/xlnx/xlnx_hdcp2x_cipher.h
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/include/linux/xlnx/xlnx_hdcp2x_cipher.h	2025-03-31 13:55:19.513745500 +0900
++++ linux-xlnx-6.6.70-v2024.1/include/linux/xlnx/xlnx_hdcp2x_cipher.h	2025-04-05 13:10:42.509912600 +0900
 @@ -0,0 +1,103 @@
 +/* SPDX-License-Identifier: GPL-2.0*/
 +/*
@@ -24516,9 +24516,9 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/include/linux/x
 +					      u8 enable);
 +
 +#endif
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/include/linux/xlnx/xlnx_hdcp2x_mmult.h
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/include/linux/xlnx/xlnx_hdcp2x_mmult.h
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/include/linux/xlnx/xlnx_hdcp2x_mmult.h	2025-03-31 13:55:19.513745500 +0900
++++ linux-xlnx-6.6.70-v2024.1/include/linux/xlnx/xlnx_hdcp2x_mmult.h	2025-04-05 13:10:42.510910500 +0900
 @@ -0,0 +1,59 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
 +/*
@@ -24579,9 +24579,9 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/include/linux/x
 +void xlnx_hdcp2x_mmult_enable(struct xlnx_hdcp2x_mmult_hw *mmult_cfg);
 +
 +#endif  /* __XLNX_HDCP2X_MMULT_H__ */
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/include/linux/xlnx/xlnx_hdcp_common.h
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/include/linux/xlnx/xlnx_hdcp_common.h
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/include/linux/xlnx/xlnx_hdcp_common.h	2025-03-31 13:55:19.513745500 +0900
++++ linux-xlnx-6.6.70-v2024.1/include/linux/xlnx/xlnx_hdcp_common.h	2025-04-05 13:10:42.510910500 +0900
 @@ -0,0 +1,34 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
 +/*
@@ -24617,9 +24617,9 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/include/linux/x
 +int mp_divide(unsigned int q[], unsigned int r[], const unsigned int u[],
 +	      size_t udigits, unsigned int v[], size_t vdigits);
 +#endif
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/include/linux/xlnx/xlnx_hdcp_rng.h
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/include/linux/xlnx/xlnx_hdcp_rng.h
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/include/linux/xlnx/xlnx_hdcp_rng.h	2025-03-31 13:55:19.514714100 +0900
++++ linux-xlnx-6.6.70-v2024.1/include/linux/xlnx/xlnx_hdcp_rng.h	2025-04-05 13:10:42.510910500 +0900
 @@ -0,0 +1,43 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
 +/*
@@ -24664,9 +24664,9 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/include/linux/x
 +void xlnx_hdcp2x_rng_disable(struct xlnx_hdcp2x_rng_hw *rng_cfg);
 +
 +#endif
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/include/linux/xlnx/xlnx_timer.h
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/include/linux/xlnx/xlnx_timer.h
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/include/linux/xlnx/xlnx_timer.h	2025-03-31 13:55:19.514714100 +0900
++++ linux-xlnx-6.6.70-v2024.1/include/linux/xlnx/xlnx_timer.h	2025-04-05 13:10:42.511907800 +0900
 @@ -0,0 +1,108 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
 +/*
@@ -24777,7 +24777,7 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/include/linux/x
 +
 +#endif
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/include/uapi/linux/xlnx_mpg2tsmux_interface.h	2025-03-31 13:55:20.262106900 +0900
++++ linux-xlnx-6.6.70-v2024.1/include/uapi/linux/xlnx_mpg2tsmux_interface.h	2025-04-05 13:10:43.232432100 +0900
 @@ -0,0 +1,253 @@
 +/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
 +
@@ -25033,7 +25033,7 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/include/linux/x
 +
 +#endif
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/include/uapi/linux/xlnxsync.h	2025-03-31 13:55:20.262106900 +0900
++++ linux-xlnx-6.6.70-v2024.1/include/uapi/linux/xlnxsync.h	2025-04-05 13:10:43.232432100 +0900
 @@ -0,0 +1,179 @@
 +/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
 +

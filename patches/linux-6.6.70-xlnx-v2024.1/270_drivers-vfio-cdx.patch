@@ -1,5 +1,5 @@
 --- linux-6.6.70/drivers/vfio/cdx/Makefile	2025-03-31 13:53:24.669376800 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/vfio/cdx/Makefile	2025-03-31 13:55:16.512575200 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/vfio/cdx/Makefile	2025-04-05 13:10:39.561987300 +0900
 @@ -5,4 +5,4 @@
  
  obj-$(CONFIG_VFIO_CDX) += vfio-cdx.o
@@ -7,7 +7,7 @@
 -vfio-cdx-objs := main.o
 +vfio-cdx-objs := main.o intr.o
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/vfio/cdx/intr.c	2025-03-31 13:55:16.513601100 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/vfio/cdx/intr.c	2025-04-05 13:10:39.561987300 +0900
 @@ -0,0 +1,211 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -221,7 +221,7 @@
 +	vfio_cdx_set_msi_trigger(vdev, 1, 0, 0, VFIO_IRQ_SET_DATA_NONE, NULL);
 +}
 --- linux-6.6.70/drivers/vfio/cdx/main.c	2025-03-31 13:53:24.670374000 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/vfio/cdx/main.c	2025-03-31 13:55:16.513601100 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/vfio/cdx/main.c	2025-04-05 13:10:39.561987300 +0900
 @@ -14,7 +14,7 @@
  		container_of(core_vdev, struct vfio_cdx_device, vdev);
  	struct cdx_device *cdx_dev = to_cdx_device(core_vdev->dev);
@@ -394,7 +394,7 @@
  MODULE_DESCRIPTION("VFIO for CDX devices - User Level meta-driver");
 +MODULE_IMPORT_NS(CDX_BUS);
 --- linux-6.6.70/drivers/vfio/cdx/private.h	2025-03-31 13:53:24.670374000 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/vfio/cdx/private.h	2025-03-31 13:55:16.513601100 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/vfio/cdx/private.h	2025-04-05 13:10:39.562984800 +0900
 @@ -13,6 +13,14 @@
  	return ((u64)(index) << VFIO_CDX_OFFSET_SHIFT);
  }
@@ -430,7 +430,7 @@
 +
  #endif /* VFIO_CDX_PRIVATE_H */
 --- linux-6.6.70/include/uapi/linux/vfio.h	2025-03-31 13:53:28.482505600 +0900
-+++ linux-xlnx-6.6.70-2024.1/include/uapi/linux/vfio.h	2025-03-31 13:55:20.239064200 +0900
++++ linux-xlnx-6.6.70-v2024.1/include/uapi/linux/vfio.h	2025-04-05 13:10:43.210347000 +0900
 @@ -1434,6 +1434,27 @@
  
  #define VFIO_DEVICE_FEATURE_MIG_DATA_SIZE 9

@@ -1,5 +1,5 @@
 --- linux-6.6.70/Documentation/devicetree/bindings/net/can/xilinx,can.yaml	2025-03-31 13:53:00.377469700 +0900
-+++ linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/net/can/xilinx,can.yaml	2025-03-31 13:54:52.191792900 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/net/can/xilinx,can.yaml	2025-04-05 13:10:16.113385100 +0900
 @@ -49,6 +49,10 @@
    resets:
      maxItems: 1
@@ -20,7 +20,7 @@
  
    - |
 --- linux-6.6.70/drivers/net/can/xilinx_can.c	2025-03-31 13:53:18.493852000 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/net/can/xilinx_can.c	2025-03-31 13:55:10.338237100 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/net/can/xilinx_can.c	2025-04-05 13:10:33.703523000 +0900
 @@ -31,6 +31,7 @@
  #include <linux/phy/phy.h>
  #include <linux/pm_runtime.h>

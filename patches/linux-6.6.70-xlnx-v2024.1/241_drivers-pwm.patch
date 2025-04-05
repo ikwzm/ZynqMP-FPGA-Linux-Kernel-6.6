@@ -1,5 +1,5 @@
 --- linux-6.6.70/drivers/pwm/Kconfig	2025-03-31 13:53:22.136925200 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/pwm/Kconfig	2025-03-31 13:55:14.035526600 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/pwm/Kconfig	2025-04-05 13:10:37.268901800 +0900
 @@ -152,6 +152,17 @@
  	  To compile this driver as a module, choose M Here: the module
  	  will be called pwm-brcmstb.c.
@@ -19,7 +19,7 @@
  	tristate "Clock based PWM support"
  	depends on HAVE_CLK || COMPILE_TEST
 --- linux-6.6.70/drivers/pwm/Makefile	2025-03-31 13:53:22.136925200 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/pwm/Makefile	2025-03-31 13:55:14.036523400 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/pwm/Makefile	2025-04-05 13:10:37.269899000 +0900
 @@ -11,6 +11,7 @@
  obj-$(CONFIG_PWM_BCM2835)	+= pwm-bcm2835.o
  obj-$(CONFIG_PWM_BERLIN)	+= pwm-berlin.o
@@ -29,7 +29,7 @@
  obj-$(CONFIG_PWM_CLPS711X)	+= pwm-clps711x.o
  obj-$(CONFIG_PWM_CRC)		+= pwm-crc.o
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/pwm/pwm-cadence.c	2025-03-31 13:55:14.040561000 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/pwm/pwm-cadence.c	2025-04-05 13:10:37.273971600 +0900
 @@ -0,0 +1,370 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*

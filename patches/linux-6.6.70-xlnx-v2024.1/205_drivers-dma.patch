@@ -1,5 +1,5 @@
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/dma/xilinx/xilinx_frmbuf.txt	2025-03-31 13:54:51.520219400 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/dma/xilinx/xilinx_frmbuf.txt	2025-04-05 13:10:15.477791900 +0900
 @@ -0,0 +1,128 @@
 +The Xilinx framebuffer DMA engine supports two soft IP blocks: one IP
 +block is used for reading video frame data from memory (FB Read) to the device
@@ -130,7 +130,7 @@
 +	clock-names = "ap_clk"
 +};
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/dma/xilinx/xlnx,axi-dma-test.yaml	2025-03-31 13:54:51.520219400 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/dma/xilinx/xlnx,axi-dma-test.yaml	2025-04-05 13:10:15.477791900 +0900
 @@ -0,0 +1,42 @@
 +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
 +%YAML 1.2
@@ -175,7 +175,7 @@
 +      dma-names = "axidma0", "axidma1";
 +    };
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/dma/xilinx/xlnx,axi-vdma-test.yaml	2025-03-31 13:54:51.521216800 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/dma/xilinx/xlnx,axi-vdma-test.yaml	2025-04-05 13:10:15.478789200 +0900
 @@ -0,0 +1,50 @@
 +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
 +%YAML 1.2
@@ -228,7 +228,7 @@
 +      xlnx,num-fstores = <0x8>;
 +    };
 --- linux-6.6.70/drivers/dma/Kconfig	2025-03-31 13:53:11.135478500 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/dma/Kconfig	2025-03-31 13:55:03.153862400 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/dma/Kconfig	2025-04-05 13:10:26.640485300 +0900
 @@ -733,6 +733,12 @@
  	  driver provides the dmaengine required by the DisplayPort subsystem
  	  display driver.
@@ -262,7 +262,7 @@
 +
  endif
 --- linux-6.6.70/drivers/dma/xilinx/Makefile	2025-03-31 13:53:11.263141600 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/dma/xilinx/Makefile	2025-03-31 13:55:03.246956100 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/dma/xilinx/Makefile	2025-04-05 13:10:26.732187100 +0900
 @@ -1,5 +1,8 @@
  # SPDX-License-Identifier: GPL-2.0-only
 +obj-$(CONFIG_XILINX_DMATEST) += axidmatest.o
@@ -273,7 +273,7 @@
  obj-$(CONFIG_XILINX_ZYNQMP_DPDMA) += xilinx_dpdma.o
 +obj-$(CONFIG_XILINX_FRMBUF) += xilinx_frmbuf.o
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/dma/xilinx/axidmatest.c	2025-03-31 13:55:03.246956100 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/dma/xilinx/axidmatest.c	2025-04-05 13:10:26.733156600 +0900
 @@ -0,0 +1,698 @@
 +// SPDX-License-Identifier: GPL-2.0-or-later
 +/*
@@ -974,7 +974,7 @@
 +MODULE_DESCRIPTION("Xilinx AXI DMA Test Client");
 +MODULE_LICENSE("GPL");
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/dma/xilinx/vdmatest.c	2025-03-31 13:55:03.247924500 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/dma/xilinx/vdmatest.c	2025-04-05 13:10:26.733156600 +0900
 @@ -0,0 +1,666 @@
 +// SPDX-License-Identifier: GPL-2.0-or-later
 +/*
@@ -1643,7 +1643,7 @@
 +MODULE_DESCRIPTION("Xilinx AXI VDMA Test Client");
 +MODULE_LICENSE("GPL");
 --- linux-6.6.70/drivers/dma/xilinx/xilinx_dpdma.c	2025-03-31 13:53:11.265136300 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/dma/xilinx/xilinx_dpdma.c	2025-03-31 13:55:03.249089600 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/dma/xilinx/xilinx_dpdma.c	2025-04-05 13:10:26.735193500 +0900
 @@ -671,6 +671,84 @@
  }
  
@@ -1770,7 +1770,7 @@
  	/* TODO: Can we achieve better granularity ? */
  	ddev->device_tx_status = dma_cookie_status;
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/dma/xilinx/xilinx_frmbuf.c	2025-03-31 13:55:03.250116000 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/dma/xilinx/xilinx_frmbuf.c	2025-04-05 13:10:26.736148600 +0900
 @@ -0,0 +1,1902 @@
 +// SPDX-License-Identifier: GPL-2.0-or-later
 +/*
@@ -3675,7 +3675,7 @@
 +MODULE_DESCRIPTION("Xilinx Framebuffer driver");
 +MODULE_LICENSE("GPL");
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/include/linux/dma/xilinx_frmbuf.h	2025-03-31 13:55:18.616893900 +0900
++++ linux-xlnx-6.6.70-v2024.1/include/linux/dma/xilinx_frmbuf.h	2025-04-05 13:10:41.667699400 +0900
 @@ -0,0 +1,258 @@
 +/*
 + * Xilinx Framebuffer DMA support header file

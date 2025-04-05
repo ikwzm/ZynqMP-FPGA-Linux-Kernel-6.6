@@ -1,5 +1,5 @@
 --- linux-6.6.70/Documentation/devicetree/bindings/arm/xilinx.yaml	2025-03-31 13:52:59.169620900 +0900
-+++ linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/arm/xilinx.yaml	1970-01-01 09:00:00.000000000 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/arm/xilinx.yaml	1970-01-01 09:00:00.000000000 +0900
 @@ -1,137 +0,0 @@
 -# SPDX-License-Identifier: GPL-2.0
 -%YAML 1.2
@@ -138,9 +138,9 @@
 -additionalProperties: true
 -
 -...
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/arm/zynq/zynq-efuse.txt
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/arm/zynq/zynq-efuse.txt
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/arm/zynq/zynq-efuse.txt	2025-03-31 13:54:51.144441400 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/arm/zynq/zynq-efuse.txt	2025-04-05 13:10:15.098680700 +0900
 @@ -0,0 +1,15 @@
 +Device tree bindings for Zynq's eFuse Controller
 +
@@ -158,7 +158,7 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/Documentation/d
 +	reg = <0xf800d000 0x20>;
 +};
 --- linux-6.6.70/arch/arm64/kernel/irq.c	2025-03-31 13:53:05.231136800 +0900
-+++ linux-xlnx-6.6.70-2024.1/arch/arm64/kernel/irq.c	2025-03-31 13:54:57.096932200 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm64/kernel/irq.c	2025-04-05 13:10:20.890240500 +0900
 @@ -100,7 +100,11 @@
  void (*handle_arch_irq)(struct pt_regs *) __ro_after_init = default_handle_irq;
  void (*handle_arch_fiq)(struct pt_regs *) __ro_after_init = default_handle_fiq;

@@ -1,5 +1,5 @@
 --- linux-6.6.70/Documentation/devicetree/bindings/remoteproc/renesas,rcar-rproc.yaml	2025-03-31 13:53:00.754312100 +0900
-+++ linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/remoteproc/renesas,rcar-rproc.yaml	2025-03-31 13:54:52.655583800 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/remoteproc/renesas,rcar-rproc.yaml	2025-04-05 13:10:16.527406700 +0900
 @@ -31,7 +31,7 @@
        remoteproc device. This is variable and describes the memories shared with
        the remote processor (e.g. remoteproc firmware and carveouts, rpmsg
@@ -10,7 +10,7 @@
  required:
    - compatible
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/remoteproc/xilinx,zynqmp-r5-remoteproc.yaml	2025-03-31 13:54:52.659613700 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/remoteproc/xilinx,zynqmp-r5-remoteproc.yaml	2025-04-05 13:10:16.531502500 +0900
 @@ -0,0 +1,216 @@
 +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
 +%YAML 1.2
@@ -229,7 +229,7 @@
 +
 +...
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/remoteproc/zynq_remoteproc.txt	2025-03-31 13:54:52.660610500 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/remoteproc/zynq_remoteproc.txt	2025-04-05 13:10:16.532499800 +0900
 @@ -0,0 +1,47 @@
 +Xilinx ARM Cortex A9-A9 remoteproc driver
 +==========================================
@@ -279,7 +279,7 @@
 +		memory-region = <&rproc_0_reserved>, <&rproc_0_dma>;
 +	};
 --- linux-6.6.70/drivers/remoteproc/Kconfig	2025-03-31 13:53:22.257959000 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/remoteproc/Kconfig	2025-03-31 13:55:14.153237300 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/remoteproc/Kconfig	2025-04-05 13:10:37.384503700 +0900
 @@ -308,6 +308,15 @@
  	  processor framework.
  	  This can be either built-in or a loadable module.
@@ -335,7 +335,7 @@
  
  endmenu
 --- linux-6.6.70/drivers/remoteproc/Makefile	2025-03-31 13:53:22.257959000 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/remoteproc/Makefile	2025-03-31 13:55:14.153237300 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/remoteproc/Makefile	2025-04-05 13:10:37.385501000 +0900
 @@ -34,8 +34,10 @@
  qcom_wcnss_pil-y			+= qcom_wcnss_iris.o
  obj-$(CONFIG_RCAR_REMOTEPROC)		+= rcar_rproc.o
@@ -348,7 +348,7 @@
  obj-$(CONFIG_XLNX_R5_REMOTEPROC)	+= xlnx_r5_remoteproc.o
 +obj-$(CONFIG_ZYNQMP_R5_REMOTEPROC)	+= zynqmp_r5_remoteproc.o
 --- linux-6.6.70/drivers/remoteproc/remoteproc_core.c	2025-03-31 13:53:22.270144400 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/remoteproc/remoteproc_core.c	2025-03-31 13:55:14.171502500 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/remoteproc/remoteproc_core.c	2025-04-05 13:10:37.403729000 +0900
 @@ -33,6 +33,7 @@
  #include <linux/idr.h>
  #include <linux/elf.h>
@@ -407,7 +407,7 @@
  }
  EXPORT_SYMBOL(rproc_put);
 --- linux-6.6.70/drivers/remoteproc/xlnx_r5_remoteproc.c	2025-03-31 13:53:22.276131300 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/remoteproc/xlnx_r5_remoteproc.c	2025-03-31 13:55:14.178603800 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/remoteproc/xlnx_r5_remoteproc.c	2025-04-05 13:10:37.409787700 +0900
 @@ -39,12 +39,14 @@
   * struct mem_bank_data - Memory Bank description
   *
@@ -605,7 +605,7 @@
  	/* count per core tcm banks */
  	tcm_bank_count = tcm_bank_count / cluster->core_count;
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/remoteproc/zynq_remoteproc.c	2025-03-31 13:55:14.178603800 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/remoteproc/zynq_remoteproc.c	2025-04-05 13:10:37.410785300 +0900
 @@ -0,0 +1,430 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -1038,7 +1038,7 @@
 +MODULE_LICENSE("GPL");
 +MODULE_DESCRIPTION("Zynq remote processor control driver");
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/remoteproc/zynqmp_r5_remoteproc.c	2025-03-31 13:55:14.178603800 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/remoteproc/zynqmp_r5_remoteproc.c	2025-04-05 13:10:37.410785300 +0900
 @@ -0,0 +1,1342 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*

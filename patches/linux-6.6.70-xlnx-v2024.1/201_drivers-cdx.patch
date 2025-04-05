@@ -1,5 +1,5 @@
 --- linux-6.6.70/Documentation/ABI/testing/sysfs-bus-cdx	2025-03-31 13:52:58.552981800 +0900
-+++ linux-xlnx-6.6.70-2024.1/Documentation/ABI/testing/sysfs-bus-cdx	2025-03-31 13:54:50.513776100 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/ABI/testing/sysfs-bus-cdx	2025-04-05 13:10:14.496040200 +0900
 @@ -28,14 +28,57 @@
  		of a device manufacturer.
  		Combination of Vendor ID and Device ID identifies a device.
@@ -89,7 +89,7 @@
 +		    - sdXXXX contains the subsystem device ID;
 +		    - cXXXXXX contains the device class.
 --- linux-6.6.70/drivers/cdx/Kconfig	2025-03-31 13:53:10.074542000 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/cdx/Kconfig	2025-03-31 13:55:01.963449200 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/cdx/Kconfig	2025-04-05 13:10:25.593771800 +0900
 @@ -8,6 +8,7 @@
  config CDX_BUS
  	bool "CDX Bus driver"
@@ -99,7 +99,7 @@
  	  Driver to enable Composable DMA Transfer(CDX) Bus. CDX bus
  	  exposes Fabric devices which uses composable DMA IP to the
 --- linux-6.6.70/drivers/cdx/Makefile	2025-03-31 13:53:10.074542000 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/cdx/Makefile	2025-03-31 13:55:01.963449200 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/cdx/Makefile	2025-04-05 13:10:25.593771800 +0900
 @@ -5,4 +5,6 @@
  # Copyright (C) 2022-2023, Advanced Micro Devices, Inc.
  #
@@ -109,7 +109,7 @@
 +
 +obj-$(CONFIG_CDX_BUS) += cdx.o cdx_msi.o controller/
 --- linux-6.6.70/drivers/cdx/cdx.c	2025-03-31 13:53:10.075539300 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/cdx/cdx.c	2025-03-31 13:55:01.964446000 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/cdx/cdx.c	2025-04-05 13:10:25.594769500 +0900
 @@ -56,22 +56,35 @@
   */
  
@@ -778,7 +778,7 @@
  }
  postcore_initcall(cdx_bus_init);
 --- linux-6.6.70/drivers/cdx/cdx.h	2025-03-31 13:53:10.075539300 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/cdx/cdx.h	2025-03-31 13:55:01.964446000 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/cdx/cdx.h	2025-04-05 13:10:25.594769500 +0900
 @@ -13,24 +13,37 @@
  /**
   * struct cdx_dev_params - CDX device parameters
@@ -843,7 +843,7 @@
 +
  #endif /* _CDX_H_ */
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/cdx/cdx_msi.c	2025-03-31 13:55:01.964446000 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/cdx/cdx_msi.c	2025-04-05 13:10:25.594769500 +0900
 @@ -0,0 +1,215 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -1061,7 +1061,7 @@
 +}
 +EXPORT_SYMBOL_NS_GPL(cdx_msi_domain_init, CDX_BUS_CONTROLLER);
 --- linux-6.6.70/drivers/cdx/controller/cdx_controller.c	2025-03-31 13:53:10.077533600 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/cdx/controller/cdx_controller.c	2025-03-31 13:55:01.966441200 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/cdx/controller/cdx_controller.c	2025-04-05 13:10:25.596763800 +0900
 @@ -9,6 +9,7 @@
  #include <linux/platform_device.h>
  #include <linux/slab.h>
@@ -1189,7 +1189,7 @@
  MODULE_LICENSE("GPL");
 +MODULE_IMPORT_NS(CDX_BUS_CONTROLLER);
 --- linux-6.6.70/drivers/cdx/controller/mc_cdx_pcol.h	2025-03-31 13:53:10.078569100 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/cdx/controller/mc_cdx_pcol.h	2025-03-31 13:55:01.967438500 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/cdx/controller/mc_cdx_pcol.h	2025-04-05 13:10:25.597761100 +0900
 @@ -455,6 +455,66 @@
  #define MC_CMD_CDX_BUS_GET_DEVICE_CONFIG_OUT_REQUESTER_ID_OFST			84
  #define MC_CMD_CDX_BUS_GET_DEVICE_CONFIG_OUT_REQUESTER_ID_LEN			4
@@ -1323,7 +1323,7 @@
  #define MC_CMD_V2_EXTN					0x7f
  
 --- linux-6.6.70/drivers/cdx/controller/mcdi_functions.c	2025-03-31 13:53:10.079567000 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/cdx/controller/mcdi_functions.c	2025-03-31 13:55:01.968503800 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/cdx/controller/mcdi_functions.c	2025-04-05 13:10:25.598758400 +0900
 @@ -49,7 +49,7 @@
  			    u8 bus_num, u8 dev_num,
  			    struct cdx_dev_params *dev_params)
@@ -1483,7 +1483,7 @@
 +			MC_CMD_CDX_DEVICE_CONTROL_SET_IN_MSI_ENABLE_LBN);
 +}
 --- linux-6.6.70/drivers/cdx/controller/mcdi_functions.h	2025-03-31 13:53:10.079567000 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/cdx/controller/mcdi_functions.h	2025-03-31 13:55:01.969501500 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/cdx/controller/mcdi_functions.h	2025-04-05 13:10:25.599853400 +0900
 @@ -48,6 +48,44 @@
  			    struct cdx_dev_params *dev_params);
  
@@ -1561,7 +1561,7 @@
 +
  #endif /* CDX_MCDI_FUNCTIONS_H */
 --- linux-6.6.70/include/linux/cdx/cdx_bus.h	2025-03-31 13:53:26.614946800 +0900
-+++ linux-xlnx-6.6.70-2024.1/include/linux/cdx/cdx_bus.h	2025-03-31 13:55:18.535407900 +0900
++++ linux-xlnx-6.6.70-v2024.1/include/linux/cdx/cdx_bus.h	2025-04-05 13:10:41.583351900 +0900
 @@ -21,13 +21,29 @@
  struct cdx_controller;
  
@@ -1783,7 +1783,7 @@
 +
  #endif /* _CDX_BUS_H_ */
 --- linux-6.6.70/include/linux/mod_devicetable.h	2025-03-31 13:53:27.074932400 +0900
-+++ linux-xlnx-6.6.70-2024.1/include/linux/mod_devicetable.h	2025-03-31 13:55:19.019186600 +0900
++++ linux-xlnx-6.6.70-v2024.1/include/linux/mod_devicetable.h	2025-04-05 13:10:42.025774400 +0900
 @@ -937,6 +937,12 @@
   * struct cdx_device_id - CDX device identifier
   * @vendor: Vendor ID
@@ -1809,7 +1809,7 @@
  };
  
 --- linux-6.6.70/scripts/mod/devicetable-offsets.c	2025-03-31 13:53:30.342109700 +0900
-+++ linux-xlnx-6.6.70-2024.1/scripts/mod/devicetable-offsets.c	2025-03-31 13:55:22.196980200 +0900
++++ linux-xlnx-6.6.70-v2024.1/scripts/mod/devicetable-offsets.c	2025-04-05 13:10:45.009308400 +0900
 @@ -265,6 +265,10 @@
  	DEVID(cdx_device_id);
  	DEVID_FIELD(cdx_device_id, vendor);
@@ -1822,7 +1822,7 @@
  
  	return 0;
 --- linux-6.6.70/scripts/mod/file2alias.c	2025-03-31 13:53:30.343107000 +0900
-+++ linux-xlnx-6.6.70-2024.1/scripts/mod/file2alias.c	2025-03-31 13:55:22.198095000 +0900
++++ linux-xlnx-6.6.70-v2024.1/scripts/mod/file2alias.c	2025-04-05 13:10:45.010306100 +0900
 @@ -1455,6 +1455,10 @@
  {
  	DEF_FIELD(symval, cdx_device_id, vendor);

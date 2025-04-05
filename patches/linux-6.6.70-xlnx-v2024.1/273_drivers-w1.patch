@@ -1,5 +1,5 @@
 --- linux-6.6.70/drivers/w1/masters/Kconfig	2025-03-31 13:53:24.956286100 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/w1/masters/Kconfig	2025-03-31 13:55:16.804247100 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/w1/masters/Kconfig	2025-04-05 13:10:39.842453800 +0900
 @@ -5,6 +5,17 @@
  
  menu "1-wire Bus Masters"
@@ -19,7 +19,7 @@
  	tristate "Matrox G400 transport layer for 1-wire"
  	depends on PCI
 --- linux-6.6.70/drivers/w1/masters/Makefile	2025-03-31 13:53:24.956286100 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/w1/masters/Makefile	2025-03-31 13:55:16.804247100 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/w1/masters/Makefile	2025-04-05 13:10:39.842453800 +0900
 @@ -3,6 +3,7 @@
  # Makefile for 1-wire bus master drivers.
  #
@@ -29,7 +29,7 @@
  obj-$(CONFIG_W1_MASTER_DS2490)		+= ds2490.o
  obj-$(CONFIG_W1_MASTER_DS2482)		+= ds2482.o
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/w1/masters/amd_axi_w1.c	2025-03-31 13:55:16.805245400 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/w1/masters/amd_axi_w1.c	2025-04-05 13:10:39.842453800 +0900
 @@ -0,0 +1,395 @@
 +// SPDX-License-Identifier: GPL-2.0-only
 +/*

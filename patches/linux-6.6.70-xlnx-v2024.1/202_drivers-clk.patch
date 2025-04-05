@@ -1,5 +1,5 @@
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/clock/renesas,proxo.yaml	2025-03-31 13:54:51.279617800 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/clock/renesas,proxo.yaml	2025-04-05 13:10:15.238089400 +0900
 @@ -0,0 +1,49 @@
 +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
 +%YAML 1.2
@@ -51,7 +51,7 @@
 +      };
 +    };
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/clock/silabs,si5324.txt	2025-03-31 13:54:51.293655300 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/clock/silabs,si5324.txt	2025-04-05 13:10:15.253267800 +0900
 @@ -0,0 +1,78 @@
 +Binding for Silicon Labs si5324, si5328 and si5319 programmable
 +I2C clock generator.
@@ -132,7 +132,7 @@
 +	};
 +};
 --- linux-6.6.70/Documentation/devicetree/bindings/clock/xlnx,clocking-wizard.yaml	2025-03-31 13:52:59.336274000 +0900
-+++ linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/clock/xlnx,clocking-wizard.yaml	2025-03-31 13:54:51.317755600 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/clock/xlnx,clocking-wizard.yaml	2025-04-05 13:10:15.278420100 +0900
 @@ -20,6 +20,7 @@
        - xlnx,clocking-wizard
        - xlnx,clocking-wizard-v5.2
@@ -142,7 +142,7 @@
  
    reg:
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/clock/xlnx,vcu.txt	2025-03-31 13:54:51.317755600 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/clock/xlnx,vcu.txt	2025-04-05 13:10:15.278420100 +0900
 @@ -0,0 +1,33 @@
 +LogicoreIP designed compatible with Xilinx ZYNQ family.
 +-------------------------------------------------------
@@ -178,7 +178,7 @@
 +		clock-names = "pll_ref", "aclk";
 +	};
 --- linux-6.6.70/Documentation/devicetree/bindings/clock/xlnx,versal-clk.yaml	2025-03-31 13:52:59.337270600 +0900
-+++ linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/clock/xlnx,versal-clk.yaml	2025-03-31 13:54:51.318830900 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/clock/xlnx,versal-clk.yaml	2025-04-05 13:10:15.279557700 +0900
 @@ -31,11 +31,11 @@
    clocks:
      description: List of clock specifiers which are external input
@@ -247,7 +247,7 @@
        };
      };
 --- linux-6.6.70/Documentation/devicetree/bindings/soc/xilinx/xlnx,vcu.txt	2025-03-31 13:53:00.883042600 +0900
-+++ linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/soc/xilinx/xlnx,vcu.txt	1970-01-01 09:00:00.000000000 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/soc/xilinx/xlnx,vcu.txt	1970-01-01 09:00:00.000000000 +0900
 @@ -1,26 +0,0 @@
 -LogicoreIP designed compatible with Xilinx ZYNQ family.
 --------------------------------------------------------
@@ -276,7 +276,7 @@
 -		clock-names = "pll_ref", "aclk";
 -	};
 --- linux-6.6.70/drivers/clk/Kconfig	2025-03-31 13:53:10.168866800 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/clk/Kconfig	2025-03-31 13:55:02.056811400 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/clk/Kconfig	2025-04-05 13:10:25.686281500 +0900
 @@ -170,6 +170,16 @@
  	help
  	  This driver supports the clocks on Bitmain BM1880 SoC.
@@ -309,7 +309,7 @@
  source "drivers/clk/analogbits/Kconfig"
  source "drivers/clk/baikal-t1/Kconfig"
 --- linux-6.6.70/drivers/clk/Makefile	2025-03-31 13:53:10.168866800 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/clk/Makefile	2025-03-31 13:55:02.057808800 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/clk/Makefile	2025-04-05 13:10:25.686281500 +0900
 @@ -54,6 +54,7 @@
  obj-$(CONFIG_ARCH_NSPIRE)		+= clk-nspire.o
  obj-$(CONFIG_COMMON_CLK_PALMAS)		+= clk-palmas.o
@@ -328,7 +328,7 @@
  obj-$(CONFIG_ARCH_VT8500)		+= clk-vt8500.o
  obj-$(CONFIG_COMMON_CLK_RS9_PCIE)	+= clk-renesas-pcie.o
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/clk/clk-proxo.c	2025-03-31 13:55:02.117201100 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/clk/clk-proxo.c	2025-04-05 13:10:25.747669300 +0900
 @@ -0,0 +1,409 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -740,7 +740,7 @@
 +MODULE_AUTHOR("Alex Helms <alexander.helms.jy@renesas.com");
 +MODULE_DESCRIPTION("Renesas ProXO common clock framework driver");
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/clk/clk-si5324.c	2025-03-31 13:55:02.121278300 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/clk/clk-si5324.c	2025-04-05 13:10:25.751809500 +0900
 @@ -0,0 +1,1239 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -1982,7 +1982,7 @@
 +MODULE_DESCRIPTION("Silicon Labs 5319/5324/5328 clock driver");
 +MODULE_LICENSE("GPL");
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/clk/clk-si5324.h	2025-03-31 13:55:02.121278300 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/clk/clk-si5324.h	2025-04-05 13:10:25.751809500 +0900
 @@ -0,0 +1,140 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
 +/*
@@ -2125,7 +2125,7 @@
 +
 +#endif
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/clk/si5324.h	2025-03-31 13:55:02.439387800 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/clk/si5324.h	2025-04-05 13:10:26.061610100 +0900
 @@ -0,0 +1,68 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
 +/*
@@ -2196,7 +2196,7 @@
 +
 +#endif
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/clk/si5324drv.c	2025-03-31 13:55:02.439387800 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/clk/si5324drv.c	2025-04-05 13:10:26.062607600 +0900
 @@ -0,0 +1,383 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -2582,7 +2582,7 @@
 +	return SI5324_SUCCESS;
 +}
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/clk/si5324drv.h	2025-03-31 13:55:02.440384900 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/clk/si5324drv.h	2025-04-05 13:10:26.062607600 +0900
 @@ -0,0 +1,100 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
 +/*
@@ -2685,7 +2685,7 @@
 +
 +#endif /* SI5324DRV_H_ */
 --- linux-6.6.70/drivers/clk/xilinx/clk-xlnx-clock-wizard.c	2025-03-31 13:53:10.663082500 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/clk/xilinx/clk-xlnx-clock-wizard.c	2025-03-31 13:55:02.567344600 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/clk/xilinx/clk-xlnx-clock-wizard.c	2025-04-05 13:10:26.181292400 +0900
 @@ -23,15 +23,43 @@
  #define WZRD_NUM_OUTPUTS	7
  #define WZRD_ACLK_MAX_FREQ	250000000UL
@@ -3604,7 +3604,7 @@
  };
  MODULE_DEVICE_TABLE(of, clk_wzrd_ids);
 --- linux-6.6.70/drivers/clk/xilinx/xlnx_vcu.c	2025-03-31 13:53:10.663082500 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/clk/xilinx/xlnx_vcu.c	2025-03-31 13:55:02.568467000 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/clk/xilinx/xlnx_vcu.c	2025-04-05 13:10:26.181292400 +0900
 @@ -11,11 +11,13 @@
  #include <linux/clk-provider.h>
  #include <linux/device.h>
@@ -3805,7 +3805,7 @@
  
  	clk_disable_unprepare(xvcu->aclk);
 --- linux-6.6.70/drivers/clk/zynqmp/divider.c	2025-03-31 13:53:10.667071600 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/clk/zynqmp/divider.c	2025-03-31 13:55:02.572481100 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/clk/zynqmp/divider.c	2025-04-05 13:10:26.187276500 +0900
 @@ -2,7 +2,8 @@
  /*
   * Zynq UltraScale+ MPSoC Divider support

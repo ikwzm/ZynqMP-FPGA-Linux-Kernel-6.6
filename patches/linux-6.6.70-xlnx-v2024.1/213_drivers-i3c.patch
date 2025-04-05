@@ -1,5 +1,5 @@
 --- linux-6.6.70/drivers/i3c/master/dw-i3c-master.c	2025-03-31 13:53:15.490488700 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/i3c/master/dw-i3c-master.c	2025-03-31 13:55:07.347946800 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/i3c/master/dw-i3c-master.c	2025-04-05 13:10:30.856419200 +0900
 @@ -218,6 +218,10 @@
  
  #define XFER_TIMEOUT (msecs_to_jiffies(1000))

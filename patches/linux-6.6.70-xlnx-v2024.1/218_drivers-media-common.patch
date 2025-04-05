@@ -1,5 +1,5 @@
 --- linux-6.6.70/drivers/media/common/v4l2-tpg/v4l2-tpg-core.c	2025-03-31 13:53:16.654321600 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/media/common/v4l2-tpg/v4l2-tpg-core.c	2025-03-31 13:55:08.590150100 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/media/common/v4l2-tpg/v4l2-tpg-core.c	2025-04-05 13:10:32.028706900 +0900
 @@ -319,6 +319,14 @@
  	case V4L2_PIX_FMT_YVU422M:
  		tpg->buffers = 3;

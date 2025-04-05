@@ -1,5 +1,5 @@
 --- linux-6.6.70/arch/microblaze/configs/mmu_defconfig	2025-03-31 13:53:05.878221000 +0900
-+++ linux-xlnx-6.6.70-2024.1/arch/microblaze/configs/mmu_defconfig	2025-03-31 13:54:57.705732800 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/microblaze/configs/mmu_defconfig	2025-04-05 13:10:21.496282100 +0900
 @@ -3,11 +3,9 @@
  CONFIG_AUDIT=y
  CONFIG_IKCONFIG=y
@@ -57,7 +57,7 @@
  CONFIG_DETECT_HUNG_TASK=y
  CONFIG_DEBUG_SPINLOCK=y
 --- linux-6.6.70/arch/microblaze/include/asm/sections.h	2025-03-31 13:53:05.892282800 +0900
-+++ linux-xlnx-6.6.70-2024.1/arch/microblaze/include/asm/sections.h	2025-03-31 13:54:57.719842700 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/microblaze/include/asm/sections.h	2025-04-05 13:10:21.510400200 +0900
 @@ -14,6 +14,9 @@
  extern char _ssbss[], _esbss[];
  extern unsigned long __ivt_start[], __ivt_end[];
@@ -69,7 +69,7 @@
  
  # endif /* !__ASSEMBLY__ */
 --- linux-6.6.70/arch/microblaze/kernel/head.S	2025-03-31 13:53:05.906287300 +0900
-+++ linux-xlnx-6.6.70-2024.1/arch/microblaze/kernel/head.S	2025-03-31 13:54:57.733873900 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/microblaze/kernel/head.S	2025-04-05 13:10:21.524421900 +0900
 @@ -173,9 +173,8 @@
  	tophys(r4,r3)			/* Load the kernel physical address */
  
@@ -82,7 +82,7 @@
  	or r9, r0, r0 /* TLB0 = 0 */
  	or r10, r0, r0 /* TLB1 = 0 */
 --- linux-6.6.70/arch/microblaze/kernel/setup.c	2025-03-31 13:53:05.910395500 +0900
-+++ linux-xlnx-6.6.70-2024.1/arch/microblaze/kernel/setup.c	2025-03-31 13:54:57.737863200 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/microblaze/kernel/setup.c	2025-04-05 13:10:21.528410600 +0900
 @@ -132,7 +132,7 @@
  	if (fdt)
  		pr_info("FDT at 0x%08x\n", fdt);
@@ -93,7 +93,7 @@
  #ifdef CONFIG_MTD_UCLINUX
  	pr_info("Found romfs @ 0x%08x (0x%08x)\n",
 --- linux-6.6.70/arch/microblaze/kernel/vmlinux.lds.S	2025-03-31 13:53:05.914384700 +0900
-+++ linux-xlnx-6.6.70-2024.1/arch/microblaze/kernel/vmlinux.lds.S	2025-03-31 13:54:57.741926800 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/microblaze/kernel/vmlinux.lds.S	2025-04-05 13:10:21.532496500 +0900
 @@ -119,12 +119,6 @@
  		CON_INITCALL
  	}
@@ -124,7 +124,7 @@
  	DISCARDS
  }
 --- linux-6.6.70/arch/microblaze/mm/init.c	2025-03-31 13:53:05.923423000 +0900
-+++ linux-xlnx-6.6.70-2024.1/arch/microblaze/mm/init.c	2025-03-31 13:54:57.749976800 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/microblaze/mm/init.c	2025-04-05 13:10:21.540554800 +0900
 @@ -192,6 +192,7 @@
  asmlinkage void __init mmu_init(void)
  {

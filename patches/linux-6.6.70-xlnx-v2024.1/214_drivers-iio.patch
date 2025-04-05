@@ -1,5 +1,5 @@
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/iio/adc/ti,ina260.yaml	2025-03-31 13:54:51.712302400 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/iio/adc/ti,ina260.yaml	2025-04-05 13:10:15.648295600 +0900
 @@ -0,0 +1,57 @@
 +# SPDX-License-Identifier: GPL-2.0-or-later
 +%YAML 1.2
@@ -59,7 +59,7 @@
 +    };
 +...
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/iio/adc/xlnx,versal-sysmon.yaml	2025-03-31 13:54:51.715322500 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/iio/adc/xlnx,versal-sysmon.yaml	2025-04-05 13:10:15.651356900 +0900
 @@ -0,0 +1,154 @@
 +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
 +# Copyright 2019 - 2020 Xilinx Inc.
@@ -216,7 +216,7 @@
 +        };
 +    };
 --- linux-6.6.70/Documentation/devicetree/bindings/iio/pressure/honeywell,mprls0025pa.yaml	2025-03-31 13:52:59.770260100 +0900
-+++ linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/iio/pressure/honeywell,mprls0025pa.yaml	2025-03-31 13:54:51.774786400 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/iio/pressure/honeywell,mprls0025pa.yaml	2025-04-05 13:10:15.704539300 +0900
 @@ -53,12 +53,10 @@
    honeywell,pmin-pascal:
      description:
@@ -231,7 +231,7 @@
    honeywell,transfer-function:
      description: |
 --- linux-6.6.70/drivers/iio/adc/Kconfig	2025-03-31 13:53:15.536023900 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/iio/adc/Kconfig	2025-03-31 13:55:07.391222800 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/iio/adc/Kconfig	2025-04-05 13:10:30.896690400 +0900
 @@ -525,6 +525,18 @@
  	  Say yes here to build support for TI INA2xx family of Power Monitors.
  	  This driver is mutually exclusive with the HWMON version.
@@ -287,7 +287,7 @@
 +
  endmenu
 --- linux-6.6.70/drivers/iio/adc/Makefile	2025-03-31 13:53:15.536023900 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/iio/adc/Makefile	2025-03-31 13:55:07.392223500 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/iio/adc/Makefile	2025-04-05 13:10:30.897687100 +0900
 @@ -51,6 +51,7 @@
  obj-$(CONFIG_IMX8QXP_ADC) += imx8qxp-adc.o
  obj-$(CONFIG_IMX93_ADC) += imx93_adc.o
@@ -304,7 +304,7 @@
 +obj-$(CONFIG_VERSAL_SYSMON) += versal-sysmon.o
 +obj-$(CONFIG_VERSAL_SYSMON_I2C) += versal-sysmon-i2c.o
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/iio/adc/ina260-adc.c	2025-03-31 13:55:07.412355500 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/iio/adc/ina260-adc.c	2025-04-05 13:10:30.917778900 +0900
 @@ -0,0 +1,558 @@
 +// SPDX-License-Identifier: GPL-2.0-or-later
 +/*
@@ -865,7 +865,7 @@
 +MODULE_DESCRIPTION("Texas Instruments INA 260 ADC driver");
 +MODULE_LICENSE("GPL");
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/iio/adc/versal-sysmon-core.c	2025-03-31 13:55:07.443596300 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/iio/adc/versal-sysmon-core.c	2025-04-05 13:10:30.947924300 +0900
 @@ -0,0 +1,1043 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -1911,7 +1911,7 @@
 +MODULE_DESCRIPTION("Xilinx Versal SysMon Driver");
 +MODULE_AUTHOR("Anand Ashok Dumbre <anand.ashok.dumbre@xilinx.com>");
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/iio/adc/versal-sysmon-i2c.c	2025-03-31 13:55:07.443596300 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/iio/adc/versal-sysmon-i2c.c	2025-04-05 13:10:30.948921700 +0900
 @@ -0,0 +1,160 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -2074,7 +2074,7 @@
 +MODULE_DESCRIPTION("Xilinx Versal I2C SysMon Driver");
 +MODULE_AUTHOR("Conall O Griofa <conall.ogriofa@amd.com>");
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/iio/adc/versal-sysmon.c	2025-03-31 13:55:07.444593500 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/iio/adc/versal-sysmon.c	2025-04-05 13:10:30.948921700 +0900
 @@ -0,0 +1,283 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -2360,7 +2360,7 @@
 +MODULE_DESCRIPTION("Xilinx Versal SysMon Driver");
 +MODULE_AUTHOR("Conall O Griofa <conall.ogriofa@amd.com>");
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/iio/adc/versal-sysmon.h	2025-03-31 13:55:07.444593500 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/iio/adc/versal-sysmon.h	2025-04-05 13:10:30.948921700 +0900
 @@ -0,0 +1,203 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
 +/*
@@ -2566,7 +2566,7 @@
 +void sysmon_write_reg(struct sysmon *sysmon, u32 offset, u32 data);
 +void sysmon_set_iio_dev_info(struct iio_dev *indio_dev);
 --- linux-6.6.70/drivers/iio/adc/xilinx-ams.c	2025-03-31 13:53:15.589011700 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/iio/adc/xilinx-ams.c	2025-03-31 13:55:07.445590200 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/iio/adc/xilinx-ams.c	2025-04-05 13:10:30.950988400 +0900
 @@ -117,22 +117,30 @@
  #define AMS_ALARM_TEMP_REMOTE		0x194
  #define AMS_ALARM_THRESHOLD_OFF_10	0x10
@@ -2995,7 +2995,7 @@
  	}
  
 --- linux-6.6.70/drivers/iio/adc/xilinx-xadc-core.c	2025-03-31 13:53:15.590007900 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/iio/adc/xilinx-xadc-core.c	2025-03-31 13:55:07.446588100 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/iio/adc/xilinx-xadc-core.c	2025-04-05 13:10:30.950988400 +0900
 @@ -391,8 +391,7 @@
  	xadc_write_reg(xadc, XADC_ZYNQ_REG_INTSTS, ~0);
  	xadc_write_reg(xadc, XADC_ZYNQ_REG_INTMSK, xadc->zynq_intmask);
@@ -3007,7 +3007,7 @@
  	if (pcap_rate > XADC_ZYNQ_PCAP_RATE_MAX) {
  		ret = clk_set_rate(xadc->clk, pcap_rate);
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/include/linux/iio/adc/versal-sysmon-events.h	2025-03-31 13:55:18.748732000 +0900
++++ linux-xlnx-6.6.70-v2024.1/include/linux/iio/adc/versal-sysmon-events.h	2025-04-05 13:10:41.781276900 +0900
 @@ -0,0 +1,55 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
 +/*

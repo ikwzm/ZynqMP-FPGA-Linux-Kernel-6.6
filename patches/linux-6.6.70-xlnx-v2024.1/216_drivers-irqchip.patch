@@ -1,5 +1,5 @@
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/interrupt-controller/xilinx,intc.txt	2025-03-31 13:54:51.887849100 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/interrupt-controller/xilinx,intc.txt	2025-04-05 13:10:15.819822400 +0900
 @@ -0,0 +1,56 @@
 +Xilinx Interrupt Controller
 +
@@ -58,7 +58,7 @@
 +	xlnx,num-intr-inputs = <0x1>;
 +};
 --- linux-6.6.70/drivers/irqchip/Kconfig	2025-03-31 13:53:16.370966600 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/irqchip/Kconfig	2025-03-31 13:55:08.312303500 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/irqchip/Kconfig	2025-04-05 13:10:31.692950300 +0900
 @@ -311,6 +311,13 @@
  	  This is used as a primary controller with MicroBlaze and can also
  	  be used as a secondary chained controller on other platforms.
@@ -74,7 +74,7 @@
  	bool
  	help
 --- linux-6.6.70/drivers/irqchip/irq-gic.c	2025-03-31 13:53:16.388023200 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/irqchip/irq-gic.c	2025-03-31 13:55:08.329449400 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/irqchip/irq-gic.c	2025-04-05 13:10:31.710149300 +0900
 @@ -820,18 +820,30 @@
  	return IRQ_SET_MASK_OK_DONE;
  }
@@ -125,7 +125,7 @@
  /*
   * gic_get_cpu_id - get the CPU interface ID for the specified CPU
 --- linux-6.6.70/drivers/irqchip/irq-xilinx-intc.c	2025-03-31 13:53:16.419350200 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/irqchip/irq-xilinx-intc.c	2025-03-31 13:55:08.359591400 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/irqchip/irq-xilinx-intc.c	2025-04-05 13:10:31.742313000 +0900
 @@ -41,6 +41,9 @@
  	struct		irq_domain *root_domain;
  	u32		intr_mask;
@@ -226,7 +226,7 @@
  IRQCHIP_DECLARE(xilinx_intc_opb, "xlnx,opb-intc-1.00.c", xilinx_intc_of_init);
 +#endif
 --- linux-6.6.70/drivers/irqchip/irqchip.c	2025-03-31 13:53:16.420347900 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/irqchip/irqchip.c	2025-03-31 13:55:08.360588600 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/irqchip/irqchip.c	2025-04-05 13:10:31.743310300 +0900
 @@ -15,6 +15,14 @@
  #include <linux/irqchip.h>
  #include <linux/platform_device.h>
@@ -311,7 +311,7 @@
 +EXPORT_SYMBOL_GPL(platform_irqchip_remove);
 +#endif
 --- linux-6.6.70/include/linux/irq.h	2025-03-31 13:53:26.852329800 +0900
-+++ linux-xlnx-6.6.70-2024.1/include/linux/irq.h	2025-03-31 13:55:18.798950600 +0900
++++ linux-xlnx-6.6.70-v2024.1/include/linux/irq.h	2025-04-05 13:10:41.825545000 +0900
 @@ -1117,6 +1117,21 @@
  	struct irq_chip_generic	*gc[];
  };
@@ -347,7 +347,7 @@
  /*
   * Allows interrupt handlers to find the irqchip that's been registered as the
 --- linux-6.6.70/include/linux/irqchip/arm-gic.h	2025-03-31 13:53:26.855324300 +0900
-+++ linux-xlnx-6.6.70-2024.1/include/linux/irqchip/arm-gic.h	2025-03-31 13:55:18.802940200 +0900
++++ linux-xlnx-6.6.70-v2024.1/include/linux/irqchip/arm-gic.h	2025-04-05 13:10:41.829623900 +0900
 @@ -134,6 +134,9 @@
  
  void gic_cascade_irq(unsigned int gic_nr, unsigned int irq);
@@ -359,7 +359,7 @@
  void gic_cpu_restore(struct gic_chip_data *gic);
  void gic_dist_save(struct gic_chip_data *gic);
 --- linux-6.6.70/include/linux/irqchip.h	2025-03-31 13:53:26.854324800 +0900
-+++ linux-xlnx-6.6.70-2024.1/include/linux/irqchip.h	2025-03-31 13:55:18.800945600 +0900
++++ linux-xlnx-6.6.70-v2024.1/include/linux/irqchip.h	2025-04-05 13:10:41.827539500 +0900
 @@ -37,14 +37,16 @@
  	OF_DECLARE_2(irqchip, name, compat, typecheck_irq_init_cb(fn))
  
@@ -405,7 +405,7 @@
  /*
   * This macro must be used by the different irqchip drivers to declare
 --- linux-6.6.70/include/linux/of_irq.h	2025-03-31 13:53:27.141722300 +0900
-+++ linux-xlnx-6.6.70-2024.1/include/linux/of_irq.h	2025-03-31 13:55:19.086360600 +0900
++++ linux-xlnx-6.6.70-v2024.1/include/linux/of_irq.h	2025-04-05 13:10:42.090588200 +0900
 @@ -10,7 +10,9 @@
  #include <linux/of.h>
  

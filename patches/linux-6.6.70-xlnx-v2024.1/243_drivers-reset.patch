@@ -1,5 +1,5 @@
 --- linux-6.6.70/Documentation/devicetree/bindings/power/reset/xlnx,zynqmp-power.yaml	2025-03-31 13:53:00.638456100 +0900
-+++ linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/power/reset/xlnx,zynqmp-power.yaml	2025-03-31 13:54:52.499839300 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/power/reset/xlnx,zynqmp-power.yaml	2025-04-05 13:10:16.401775800 +0900
 @@ -57,7 +57,7 @@
  
      firmware {

@@ -1,5 +1,5 @@
 --- linux-6.6.70/drivers/usb/host/xhci-plat.c	2025-03-31 13:53:24.487549700 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/usb/host/xhci-plat.c	2025-03-31 13:55:16.275213300 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/usb/host/xhci-plat.c	2025-04-05 13:10:39.381912000 +0900
 @@ -20,6 +20,7 @@
  #include <linux/acpi.h>
  #include <linux/usb/of.h>
@@ -150,7 +150,7 @@
  }
  
 --- linux-6.6.70/drivers/usb/host/xhci.c	2025-03-31 13:53:24.491568900 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/usb/host/xhci.c	2025-03-31 13:55:16.281365400 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/usb/host/xhci.c	2025-04-05 13:10:39.387895900 +0900
 @@ -189,7 +189,11 @@
  
  	xhci_dbg_trace(xhci, trace_xhci_dbg_init, "// Reset the HC");
@@ -179,7 +179,7 @@
  		return ret;
  
 --- linux-6.6.70/drivers/usb/host/xhci.h	2025-03-31 13:53:24.492564800 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/usb/host/xhci.h	2025-03-31 13:55:16.282363700 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/usb/host/xhci.h	2025-04-05 13:10:39.388893400 +0900
 @@ -1872,6 +1872,14 @@
  
  /* xHCI host controller glue */

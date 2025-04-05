@@ -1,5 +1,5 @@
 --- linux-6.6.70/Documentation/devicetree/bindings/crypto/xlnx,zynqmp-aes.yaml	2025-03-31 13:52:59.362467100 +0900
-+++ linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/crypto/xlnx,zynqmp-aes.yaml	2025-03-31 13:54:51.344970200 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/crypto/xlnx,zynqmp-aes.yaml	2025-04-05 13:10:15.305777800 +0900
 @@ -10,6 +10,8 @@
    - Kalyani Akula <kalyani.akula@amd.com>
    - Michal Simek <michal.simek@amd.com>
@@ -10,7 +10,7 @@
    The ZynqMP AES-GCM hardened cryptographic accelerator is used to
    encrypt or decrypt the data with provided key and initialization vector.
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/crypto/zynqmp-rsa.txt	2025-03-31 13:54:51.344970200 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/crypto/zynqmp-rsa.txt	2025-04-05 13:10:15.305777800 +0900
 @@ -0,0 +1,12 @@
 +Xilinx ZynqMP RSA hw acceleration support
 +
@@ -25,7 +25,7 @@
 +		compatible = "xlnx,zynqmp-rsa";
 +	};
 --- linux-6.6.70/drivers/crypto/Kconfig	2025-03-31 13:53:10.851856900 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/crypto/Kconfig	2025-03-31 13:55:02.776656400 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/crypto/Kconfig	2025-04-05 13:10:26.368043100 +0900
 @@ -658,6 +658,28 @@
  	  This will create /sys/kernel/debug/rk3288_crypto/stats for displaying
  	  the number of requests per algorithm and other internal stats.
@@ -84,7 +84,7 @@
  
  source "drivers/crypto/virtio/Kconfig"
 --- linux-6.6.70/drivers/crypto/xilinx/Makefile	2025-03-31 13:53:11.089158200 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/crypto/xilinx/Makefile	2025-03-31 13:55:03.106142200 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/crypto/xilinx/Makefile	2025-04-05 13:10:26.583100700 +0900
 @@ -1,3 +1,6 @@
  # SPDX-License-Identifier: GPL-2.0-only
 +obj-$(CONFIG_CRYPTO_DEV_XILINX_ECDSA) += xilinx-ecdsa.o
@@ -93,7 +93,7 @@
 +obj-$(CONFIG_CRYPTO_DEV_XILINX_RSA) += zynqmp-rsa.o
 +obj-$(CONFIG_CRYPTO_DEV_XILINX_RSA_AKCIPHER) += xilinx-rsa.o
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/crypto/xilinx/xilinx-ecdsa.c	2025-03-31 13:55:03.106142200 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/crypto/xilinx/xilinx-ecdsa.c	2025-04-05 13:10:26.584098100 +0900
 @@ -0,0 +1,438 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -534,7 +534,7 @@
 +MODULE_LICENSE("GPL");
 +MODULE_AUTHOR("Harsha <harsha.harsha@amd.com>");
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/crypto/xilinx/xilinx-rsa.c	2025-03-31 13:55:03.107139900 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/crypto/xilinx/xilinx-rsa.c	2025-04-05 13:10:26.584098100 +0900
 @@ -0,0 +1,595 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -1132,7 +1132,7 @@
 +MODULE_LICENSE("GPL");
 +MODULE_AUTHOR("Harsha <harsha.harsha@amd.com>");
 --- linux-6.6.70/drivers/crypto/xilinx/zynqmp-aes-gcm.c	2025-03-31 13:53:11.090155300 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/crypto/xilinx/zynqmp-aes-gcm.c	2025-03-31 13:55:03.107139900 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/crypto/xilinx/zynqmp-aes-gcm.c	2025-04-05 13:10:26.585095400 +0900
 @@ -1,7 +1,8 @@
  // SPDX-License-Identifier: GPL-2.0
  /*
@@ -1811,7 +1811,7 @@
 +
  MODULE_LICENSE("GPL");
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/crypto/xilinx/zynqmp-rsa.c	2025-03-31 13:55:03.108190100 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/crypto/xilinx/zynqmp-rsa.c	2025-04-05 13:10:26.585095400 +0900
 @@ -0,0 +1,274 @@
 +// SPDX-License-Identifier: GPL-2.0+
 +/*
@@ -2088,7 +2088,7 @@
 +MODULE_LICENSE("GPL");
 +MODULE_AUTHOR("Nava kishore Manne <navam@xilinx.com>");
 --- linux-6.6.70/drivers/crypto/xilinx/zynqmp-sha.c	2025-03-31 13:53:11.090155300 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/crypto/xilinx/zynqmp-sha.c	2025-03-31 13:55:03.108265700 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/crypto/xilinx/zynqmp-sha.c	2025-04-05 13:10:26.585095400 +0900
 @@ -2,6 +2,7 @@
  /*
   * Xilinx ZynqMP SHA Driver.

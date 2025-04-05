@@ -1,5 +1,5 @@
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/ptp/ptp-xilinx.yaml	2025-03-31 13:54:52.541891800 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/ptp/ptp-xilinx.yaml	2025-04-05 13:10:16.445560400 +0900
 @@ -0,0 +1,50 @@
 +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
 +%YAML 1.2
@@ -52,7 +52,7 @@
 +        xlnx,has-timer-syncer;
 +    };
 --- linux-6.6.70/drivers/ptp/Kconfig	2025-03-31 13:53:22.127918400 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/ptp/Kconfig	2025-03-31 13:55:14.026450900 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/ptp/Kconfig	2025-04-05 13:10:37.259925400 +0900
 @@ -178,6 +178,16 @@
  	  To compile this driver as a module, choose M here: the module
  	  will be called ptp_vmw.
@@ -71,7 +71,7 @@
  	tristate "OpenCompute TimeCard as PTP clock"
  	depends on PTP_1588_CLOCK
 --- linux-6.6.70/drivers/ptp/Makefile	2025-03-31 13:53:22.128944000 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/ptp/Makefile	2025-03-31 13:55:14.027448200 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/ptp/Makefile	2025-04-05 13:10:37.260923300 +0900
 @@ -11,6 +11,7 @@
  obj-$(CONFIG_PTP_1588_CLOCK_INES)	+= ptp_ines.o
  obj-$(CONFIG_PTP_1588_CLOCK_PCH)	+= ptp_pch.o
@@ -81,7 +81,7 @@
  ptp-qoriq-y				+= ptp_qoriq.o
  ptp-qoriq-$(CONFIG_DEBUG_FS)		+= ptp_qoriq_debugfs.o
 --- linux-6.6.70/drivers/ptp/ptp_clockmatrix.c	2025-03-31 13:53:22.129913600 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/ptp/ptp_clockmatrix.c	2025-03-31 13:55:14.028545000 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/ptp/ptp_clockmatrix.c	2025-04-05 13:10:37.261920400 +0900
 @@ -41,8 +41,8 @@
  static int _idtcm_adjfine(struct idtcm_channel *channel, long scaled_ppm);
  
@@ -447,7 +447,7 @@
  	wait_for_chip_ready(idtcm);
  
 --- linux-6.6.70/drivers/ptp/ptp_clockmatrix.h	2025-03-31 13:53:22.129913600 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/ptp/ptp_clockmatrix.h	2025-03-31 13:55:14.028545000 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/ptp/ptp_clockmatrix.h	2025-04-05 13:10:37.261920400 +0900
 @@ -19,32 +19,7 @@
  #define MAX_REF_CLK	(16)
  
@@ -544,7 +544,7 @@
 -
  #endif /* PTP_IDTCLOCKMATRIX_H */
 --- linux-6.6.70/drivers/ptp/ptp_idt82p33.h	2025-03-31 13:53:22.131936800 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/ptp/ptp_idt82p33.h	2025-03-31 13:55:14.030540100 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/ptp/ptp_idt82p33.h	2025-04-05 13:10:37.262917700 +0900
 @@ -23,25 +23,6 @@
  #define DDCO_THRESHOLD_NS	(5)
  #define IDT82P33_MAX_WRITE_COUNT	(512)
@@ -585,7 +585,7 @@
 -
  #endif /* PTP_IDT82P33_H */
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/ptp/ptp_xilinx.c	2025-03-31 13:55:14.035526600 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/ptp/ptp_xilinx.c	2025-04-05 13:10:37.268901800 +0900
 @@ -0,0 +1,535 @@
 +// SPDX-License-Identifier: GPL-2.0-only
 +/*
@@ -1122,9 +1122,9 @@
 +MODULE_AUTHOR("Xilinx, Inc.");
 +MODULE_DESCRIPTION("PTP Timer Syncer driver");
 +MODULE_LICENSE("GPL");
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/include/linux/ptp/ptp_xilinx.h
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/include/linux/ptp/ptp_xilinx.h
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/include/linux/ptp/ptp_xilinx.h	2025-03-31 13:55:19.234369700 +0900
++++ linux-xlnx-6.6.70-v2024.1/include/linux/ptp/ptp_xilinx.h	2025-04-05 13:10:42.236255000 +0900
 @@ -0,0 +1,30 @@
 +/* SPDX-License-Identifier: GPL-2.0-only */
 +/*

@@ -1,5 +1,5 @@
 --- linux-6.6.70/sound/pci/hda/cs35l56_hda_spi.c	2025-03-31 13:53:30.756133100 +0900
-+++ linux-xlnx-6.6.70-2024.1/sound/pci/hda/cs35l56_hda_spi.c	2025-03-31 13:55:22.603186900 +0900
++++ linux-xlnx-6.6.70-v2024.1/sound/pci/hda/cs35l56_hda_spi.c	2025-04-05 13:10:45.489111400 +0900
 @@ -29,7 +29,7 @@
  		return ret;
  	}

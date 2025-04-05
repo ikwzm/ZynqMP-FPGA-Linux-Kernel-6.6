@@ -1,5 +1,5 @@
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/w1/amd,axi-1wire-host.yaml	2025-03-31 13:54:53.100130000 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/w1/amd,axi-1wire-host.yaml	2025-04-05 13:10:16.965351700 +0900
 @@ -0,0 +1,44 @@
 +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
 +%YAML 1.2
@@ -46,7 +46,7 @@
 +
 +...
 --- linux-6.6.70/drivers/watchdog/of_xilinx_wdt.c	2025-03-31 13:53:25.007623500 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/watchdog/of_xilinx_wdt.c	2025-03-31 13:55:16.856081100 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/watchdog/of_xilinx_wdt.c	2025-04-05 13:10:39.891799000 +0900
 @@ -187,7 +187,7 @@
  
  	watchdog_set_nowayout(xilinx_wdt_wdd, enable_once);

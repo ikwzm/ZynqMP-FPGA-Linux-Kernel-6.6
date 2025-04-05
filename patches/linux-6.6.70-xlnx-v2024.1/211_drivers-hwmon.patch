@@ -1,5 +1,5 @@
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/hwmon/tps544.txt	2025-03-31 13:54:51.629776600 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/hwmon/tps544.txt	2025-04-05 13:10:15.577741400 +0900
 @@ -0,0 +1,14 @@
 +TPS544B25 power regulator
 +
@@ -16,7 +16,7 @@
 +	reg = <0x24>;
 +};
 --- linux-6.6.70/drivers/hwmon/pmbus/Kconfig	2025-03-31 13:53:15.331102200 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/hwmon/pmbus/Kconfig	2025-03-31 13:55:07.182778700 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/hwmon/pmbus/Kconfig	2025-04-05 13:10:30.692621700 +0900
 @@ -454,6 +454,26 @@
  	  This driver can also be built as a module. If so, the module will
  	  be called tps546d24
@@ -45,7 +45,7 @@
  	tristate "TI UCD90120, UCD90124, UCD90160, UCD90320, UCD9090, UCD90910"
  	help
 --- linux-6.6.70/drivers/hwmon/pmbus/Makefile	2025-03-31 13:53:15.331102200 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/hwmon/pmbus/Makefile	2025-03-31 13:55:07.182778700 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/hwmon/pmbus/Makefile	2025-04-05 13:10:30.692621700 +0900
 @@ -45,6 +45,7 @@
  obj-$(CONFIG_SENSORS_TPS40422)	+= tps40422.o
  obj-$(CONFIG_SENSORS_TPS53679)	+= tps53679.o
@@ -55,7 +55,7 @@
  obj-$(CONFIG_SENSORS_UCD9200)	+= ucd9200.o
  obj-$(CONFIG_SENSORS_XDPE122)	+= xdpe12284.o
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/hwmon/pmbus/tps544.c	2025-03-31 13:55:07.198961300 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/hwmon/pmbus/tps544.c	2025-04-05 13:10:30.710734100 +0900
 @@ -0,0 +1,361 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*

@@ -1,5 +1,5 @@
 --- linux-6.6.70/Documentation/devicetree/bindings/mfd/syscon.yaml	2025-03-31 13:53:00.284342700 +0900
-+++ linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/mfd/syscon.yaml	2025-03-31 13:54:52.089993500 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/mfd/syscon.yaml	2025-04-05 13:10:16.013382300 +0900
 @@ -69,6 +69,8 @@
                - rockchip,rk3588-qos
                - rockchip,rv1126-qos
@@ -10,7 +10,7 @@
            - const: syscon
  
 --- linux-6.6.70/drivers/mfd/rsmu_core.c	2025-03-31 13:53:17.951594000 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/mfd/rsmu_core.c	2025-03-31 13:55:09.875563300 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/mfd/rsmu_core.c	2025-04-05 13:10:33.238956900 +0900
 @@ -40,12 +40,12 @@
  	},
  };
@@ -39,7 +39,7 @@
  	default:
  		dev_err(rsmu->dev, "Unsupported RSMU device type: %d\n", rsmu->type);
 --- linux-6.6.70/drivers/mfd/rsmu_i2c.c	2025-03-31 13:53:17.952589700 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/mfd/rsmu_i2c.c	2025-03-31 13:55:09.875563300 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/mfd/rsmu_i2c.c	2025-04-05 13:10:33.239059500 +0900
 @@ -32,6 +32,8 @@
  #define	RSMU_SABRE_PAGE_ADDR		0x7F
  #define	RSMU_SABRE_PAGE_WINDOW		128
@@ -276,7 +276,7 @@
  };
  MODULE_DEVICE_TABLE(of, rsmu_i2c_of_match);
 --- linux-6.6.70/drivers/mfd/rsmu_spi.c	2025-03-31 13:53:17.952589700 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/mfd/rsmu_spi.c	2025-03-31 13:55:09.876532800 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/mfd/rsmu_spi.c	2025-04-05 13:10:33.239059500 +0900
 @@ -106,10 +106,10 @@
  			return 0;
  		page_reg = RSMU_CM_PAGE_ADDR;
@@ -293,7 +293,7 @@
  		break;
  	case RSMU_SABRE:
 --- linux-6.6.70/drivers/mfd/tps6594-spi.c	2025-03-31 13:53:17.971836500 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/mfd/tps6594-spi.c	2025-03-31 13:55:09.895720300 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/mfd/tps6594-spi.c	2025-04-05 13:10:33.259121300 +0900
 @@ -98,7 +98,7 @@
  	spi_set_drvdata(spi, tps);
  
@@ -304,7 +304,7 @@
  
  	tps->regmap = devm_regmap_init(dev, NULL, spi, &tps6594_spi_regmap_config);
 --- linux-6.6.70/include/linux/mfd/idt82p33_reg.h	2025-03-31 13:53:26.967094300 +0900
-+++ linux-xlnx-6.6.70-2024.1/include/linux/mfd/idt82p33_reg.h	2025-03-31 13:55:18.916477300 +0900
++++ linux-xlnx-6.6.70-v2024.1/include/linux/mfd/idt82p33_reg.h	2025-04-05 13:10:41.930304800 +0900
 @@ -22,6 +22,12 @@
  #define DPLL1_OPERATING_MODE_CNFG 0x120
  #define DPLL2_OPERATING_MODE_CNFG 0x1A0
@@ -372,7 +372,7 @@
 +
  #endif
 --- linux-6.6.70/include/linux/mfd/idt8a340_reg.h	2025-03-31 13:53:26.967094300 +0900
-+++ linux-xlnx-6.6.70-2024.1/include/linux/mfd/idt8a340_reg.h	2025-03-31 13:55:18.917474500 +0900
++++ linux-xlnx-6.6.70-v2024.1/include/linux/mfd/idt8a340_reg.h	2025-04-05 13:10:41.930304800 +0900
 @@ -7,20 +7,20 @@
  #ifndef HAVE_IDT8A340_REG
  #define HAVE_IDT8A340_REG
@@ -1158,7 +1158,7 @@
 +
  #endif
 --- linux-6.6.70/include/linux/mfd/rsmu.h	2025-03-31 13:53:27.008437700 +0900
-+++ linux-xlnx-6.6.70-2024.1/include/linux/mfd/rsmu.h	2025-03-31 13:55:18.954721800 +0900
++++ linux-xlnx-6.6.70-v2024.1/include/linux/mfd/rsmu.h	2025-04-05 13:10:41.965399100 +0900
 @@ -11,11 +11,11 @@
  #define RSMU_MAX_WRITE_COUNT	(255)
  #define RSMU_MAX_READ_COUNT	(255)
@@ -1174,7 +1174,7 @@
  
  /**
 --- linux-6.6.70/include/linux/mfd/syscon/xlnx-vcu.h	2025-03-31 13:53:27.027557400 +0900
-+++ linux-xlnx-6.6.70-2024.1/include/linux/mfd/syscon/xlnx-vcu.h	2025-03-31 13:55:18.968927300 +0900
++++ linux-xlnx-6.6.70-v2024.1/include/linux/mfd/syscon/xlnx-vcu.h	2025-04-05 13:10:41.979520900 +0900
 @@ -36,4 +36,32 @@
  #define VCU_GASKET_INIT			0x74
  #define VCU_GASKET_VALUE		0x03

@@ -1,5 +1,5 @@
 --- linux-6.6.70/Documentation/devicetree/bindings/mmc/arasan,sdhci.yaml	2025-03-31 13:53:00.311778600 +0900
-+++ linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/mmc/arasan,sdhci.yaml	2025-03-31 13:54:52.121372700 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/mmc/arasan,sdhci.yaml	2025-04-05 13:10:16.043662900 +0900
 @@ -226,8 +226,8 @@
            interrupt-parent = <&gic>;
            interrupts = <0 48 4>;

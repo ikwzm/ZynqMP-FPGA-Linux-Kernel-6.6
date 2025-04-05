@@ -1,5 +1,5 @@
 --- linux-6.6.70/drivers/media/usb/uvc/uvc_queue.c	2025-03-31 13:53:17.824054000 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/media/usb/uvc/uvc_queue.c	2025-03-31 13:55:09.732716300 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/media/usb/uvc/uvc_queue.c	2025-04-05 13:10:33.105019400 +0900
 @@ -181,14 +181,27 @@
  static void uvc_stop_streaming(struct vb2_queue *vq)
  {
@@ -29,7 +29,7 @@
  }
  
 --- linux-6.6.70/drivers/media/usb/uvc/uvcvideo.h	2025-03-31 13:53:17.826048600 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/media/usb/uvc/uvcvideo.h	2025-03-31 13:55:09.734710600 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/media/usb/uvc/uvcvideo.h	2025-04-05 13:10:33.107014000 +0900
 @@ -48,9 +48,9 @@
  #define DRIVER_VERSION		"1.1.1"
  

@@ -1,5 +1,5 @@
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/usb/microchip,usb2244.yaml	2025-03-31 13:54:53.076862300 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/usb/microchip,usb2244.yaml	2025-04-05 13:10:16.941234100 +0900
 @@ -0,0 +1,43 @@
 +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
 +%YAML 1.2
@@ -45,7 +45,7 @@
 +       reset-gpios = <&gpio 2 GPIO_ACTIVE_LOW>;
 +    };
 --- linux-6.6.70/drivers/usb/misc/Kconfig	2025-03-31 13:53:24.498655900 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/usb/misc/Kconfig	2025-03-31 13:55:16.288446400 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/usb/misc/Kconfig	2025-04-05 13:10:39.394949600 +0900
 @@ -260,6 +260,22 @@
  	  parameters may be set in devicetree or platform data.
  	  Say Y or M here if you need to configure such a device via SMBus.
@@ -70,7 +70,7 @@
  	tristate "USB3503 HSIC to USB20 Driver"
  	depends on I2C
 --- linux-6.6.70/drivers/usb/misc/Makefile	2025-03-31 13:53:24.499624700 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/usb/misc/Makefile	2025-03-31 13:55:16.289443500 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/usb/misc/Makefile	2025-04-05 13:10:39.395946900 +0900
 @@ -25,6 +25,8 @@
  obj-$(CONFIG_USB_SEVSEG)		+= usbsevseg.o
  obj-$(CONFIG_USB_YUREX)			+= yurex.o
@@ -81,7 +81,7 @@
  obj-$(CONFIG_USB_HSIC_USB4604)		+= usb4604.o
  obj-$(CONFIG_USB_CHAOSKEY)		+= chaoskey.o
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/usb/misc/usb2244.c	2025-03-31 13:55:16.302598400 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/usb/misc/usb2244.c	2025-04-05 13:10:39.407004900 +0900
 @@ -0,0 +1,67 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -151,7 +151,7 @@
 +MODULE_DESCRIPTION("USB2244 Ultra Fast SD-Controller");
 +MODULE_LICENSE("GPL");
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/usb/misc/usb5744.c	2025-03-31 13:55:16.304585800 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/usb/misc/usb5744.c	2025-04-05 13:10:39.409071300 +0900
 @@ -0,0 +1,177 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*

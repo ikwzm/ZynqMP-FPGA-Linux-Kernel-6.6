@@ -1,5 +1,5 @@
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/perf/xilinx-apm.yaml	2025-03-31 13:54:52.328684400 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/perf/xilinx-apm.yaml	2025-04-05 13:10:16.238550300 +0900
 @@ -0,0 +1,137 @@
 +# SPDX-License-Identifier: GPL-2.0-or-later OR BSD-2-Clause
 +%YAML 1.2
@@ -139,7 +139,7 @@
 +        xlnx,id-filter-32bit;
 +    };
 --- linux-6.6.70/drivers/uio/Kconfig	2025-03-31 13:53:24.278592200 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/uio/Kconfig	2025-03-31 13:55:16.062198500 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/uio/Kconfig	2025-04-05 13:10:39.180257700 +0900
 @@ -2,6 +2,7 @@
  menuconfig UIO
  	tristate "Userspace I/O drivers"
@@ -178,7 +178,7 @@
  	tristate "Generic driver for DFL (Device Feature List) bus"
  	depends on FPGA_DFL
 --- linux-6.6.70/drivers/uio/Makefile	2025-03-31 13:53:24.278592200 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/uio/Makefile	2025-03-31 13:55:16.062198500 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/uio/Makefile	2025-04-05 13:10:39.180257700 +0900
 @@ -1,4 +1,6 @@
  # SPDX-License-Identifier: GPL-2.0
 +uio-y := uio_core.o uio_dmabuf.o
@@ -196,7 +196,7 @@
 +obj-$(CONFIG_UIO_XILINX_AI_ENGINE) += uio_xilinx_ai_engine.o
  obj-$(CONFIG_UIO_DFL)	+= uio_dfl.o
 --- linux-6.6.70/drivers/uio/uio.c	2025-03-31 13:53:24.278592200 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/uio/uio.c	1970-01-01 09:00:00.000000000 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/uio/uio.c	1970-01-01 09:00:00.000000000 +0900
 @@ -1,1087 +0,0 @@
 -// SPDX-License-Identifier: GPL-2.0
 -/*
@@ -1286,7 +1286,7 @@
 -module_exit(uio_exit)
 -MODULE_LICENSE("GPL v2");
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/uio/uio_core.c	2025-03-31 13:55:16.064193800 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/uio/uio_core.c	2025-04-05 13:10:39.181254300 +0900
 @@ -0,0 +1,1130 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -2419,7 +2419,7 @@
 +module_exit(uio_exit)
 +MODULE_LICENSE("GPL v2");
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/uio/uio_dmabuf.c	2025-03-31 13:55:16.065191100 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/uio/uio_dmabuf.c	2025-04-05 13:10:39.182252300 +0900
 @@ -0,0 +1,210 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -2632,7 +2632,7 @@
 +	return 0;
 +}
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/uio/uio_dmabuf.h	2025-03-31 13:55:16.065191100 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/uio/uio_dmabuf.h	2025-04-05 13:10:39.182252300 +0900
 @@ -0,0 +1,26 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -2661,7 +2661,7 @@
 +
 +#endif
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/uio/uio_xilinx_ai_engine.c	2025-03-31 13:55:16.069302500 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/uio/uio_xilinx_ai_engine.c	2025-04-05 13:10:39.186241700 +0900
 @@ -0,0 +1,302 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -2966,7 +2966,7 @@
 +MODULE_AUTHOR("Xilinx, Inc.");
 +MODULE_LICENSE("GPL");
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/uio/uio_xilinx_apm.c	2025-03-31 13:55:16.069302500 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/uio/uio_xilinx_apm.c	2025-04-05 13:10:39.186241700 +0900
 @@ -0,0 +1,358 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -3326,9 +3326,9 @@
 +MODULE_AUTHOR("Xilinx Inc.");
 +MODULE_DESCRIPTION("Xilinx AXI Performance Monitor driver");
 +MODULE_LICENSE("GPL");
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/include/uapi/linux/uio/uio.h
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/include/uapi/linux/uio/uio.h
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/include/uapi/linux/uio/uio.h	2025-03-31 13:55:20.223023600 +0900
++++ linux-xlnx-6.6.70-v2024.1/include/uapi/linux/uio/uio.h	2025-04-05 13:10:43.191237000 +0900
 @@ -0,0 +1,65 @@
 +/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
 +/*

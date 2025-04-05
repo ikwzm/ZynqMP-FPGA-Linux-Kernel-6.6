@@ -1,5 +1,5 @@
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/Documentation/devicetree/configfs-overlays.txt	2025-03-31 13:54:53.132204900 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/configfs-overlays.txt	2025-04-05 13:10:16.995483900 +0900
 @@ -0,0 +1,31 @@
 +Howto use the configfs overlay interface.
 +
@@ -33,7 +33,7 @@
 +intended to be used by hardware managers in the kernel, while the copy interface
 +make sense for developers (since it avoids problems with namespaces).
 --- linux-6.6.70/drivers/of/Kconfig	2025-03-31 13:53:21.266868400 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/of/Kconfig	2025-03-31 13:55:13.186010100 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/of/Kconfig	2025-04-05 13:10:36.416212700 +0900
 @@ -102,4 +102,15 @@
  config OF_NUMA
  	bool
@@ -51,7 +51,7 @@
 +
  endif # OF
 --- linux-6.6.70/drivers/of/Makefile	2025-03-31 13:53:21.266868400 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/of/Makefile	2025-03-31 13:55:13.187007900 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/of/Makefile	2025-04-05 13:10:36.417210200 +0900
 @@ -1,6 +1,7 @@
  # SPDX-License-Identifier: GPL-2.0
  obj-y = base.o cpu.o device.o module.o platform.o property.o
@@ -61,7 +61,7 @@
  obj-$(CONFIG_OF_FLATTREE) += fdt.o
  obj-$(CONFIG_OF_EARLY_FLATTREE) += fdt_address.o
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/of/configfs.c	2025-03-31 13:55:13.188093000 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/of/configfs.c	2025-04-05 13:10:36.418207300 +0900
 @@ -0,0 +1,294 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*

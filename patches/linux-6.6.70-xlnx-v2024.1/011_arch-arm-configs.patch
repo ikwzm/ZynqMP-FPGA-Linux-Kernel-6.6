@@ -1,5 +1,5 @@
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/arch/arm/configs/xilinx_zynq_defconfig	2025-03-31 13:54:55.612401200 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm/configs/xilinx_zynq_defconfig	2025-04-05 13:10:19.418491300 +0900
 @@ -0,0 +1,229 @@
 +CONFIG_LOCALVERSION="-xilinx"
 +CONFIG_SYSVIPC=y

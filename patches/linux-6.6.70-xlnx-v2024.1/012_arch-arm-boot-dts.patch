@@ -1,5 +1,5 @@
 --- linux-6.6.70/arch/arm/boot/dts/xilinx/zynq-7000.dtsi	2025-03-31 13:53:03.531465900 +0900
-+++ linux-xlnx-6.6.70-2024.1/arch/arm/boot/dts/xilinx/zynq-7000.dtsi	2025-03-31 13:54:55.574956700 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm/boot/dts/xilinx/zynq-7000.dtsi	2025-04-05 13:10:19.381370900 +0900
 @@ -1,6 +1,9 @@
 -// SPDX-License-Identifier: GPL-2.0
 +// SPDX-License-Identifier: GPL-2.0+
@@ -129,7 +129,7 @@
  			interrupts = <1 13 0x301>;
  			compatible = "arm,cortex-a9-twd-timer";
 --- linux-6.6.70/arch/arm/boot/dts/xilinx/zynq-cc108.dts	2025-03-31 13:53:03.531465900 +0900
-+++ linux-xlnx-6.6.70-2024.1/arch/arm/boot/dts/xilinx/zynq-cc108.dts	2025-03-31 13:54:55.574956700 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm/boot/dts/xilinx/zynq-cc108.dts	2025-04-05 13:10:19.382368100 +0900
 @@ -18,6 +18,7 @@
  	aliases {
  		ethernet0 = &gem0;
@@ -193,7 +193,7 @@
  };
  
 --- linux-6.6.70/arch/arm/boot/dts/xilinx/zynq-ebaz4205.dts	2025-03-31 13:53:03.532463200 +0900
-+++ linux-xlnx-6.6.70-2024.1/arch/arm/boot/dts/xilinx/zynq-ebaz4205.dts	2025-03-31 13:54:55.574956700 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm/boot/dts/xilinx/zynq-ebaz4205.dts	2025-04-05 13:10:19.382368100 +0900
 @@ -50,6 +50,8 @@
  
  &nfc0 {
@@ -204,7 +204,7 @@
  	nand@0 {
  		reg = <0>;
 --- linux-6.6.70/arch/arm/boot/dts/xilinx/zynq-parallella.dts	2025-03-31 13:53:03.532463200 +0900
-+++ linux-xlnx-6.6.70-2024.1/arch/arm/boot/dts/xilinx/zynq-parallella.dts	2025-03-31 13:54:55.575954100 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm/boot/dts/xilinx/zynq-parallella.dts	2025-04-05 13:10:19.383365400 +0900
 @@ -46,7 +46,6 @@
  		compatible = "ethernet-phy-id0141.0e90",
  		             "ethernet-phy-ieee802.3-c22";
@@ -214,7 +214,7 @@
  		                   <0x3 0x11 0xfff0 0xa>;
  	};
 --- linux-6.6.70/arch/arm/boot/dts/xilinx/zynq-zc702.dts	2025-03-31 13:53:03.533460600 +0900
-+++ linux-xlnx-6.6.70-2024.1/arch/arm/boot/dts/xilinx/zynq-zc702.dts	2025-03-31 13:54:55.576951400 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm/boot/dts/xilinx/zynq-zc702.dts	2025-04-05 13:10:19.383365400 +0900
 @@ -1,6 +1,6 @@
 -// SPDX-License-Identifier: GPL-2.0
 +// SPDX-License-Identifier: GPL-2.0+
@@ -454,7 +454,7 @@
  	pinctrl-names = "default";
  	pinctrl-0 = <&pinctrl_uart1_default>;
 --- linux-6.6.70/arch/arm/boot/dts/xilinx/zynq-zc706.dts	2025-03-31 13:53:03.533460600 +0900
-+++ linux-xlnx-6.6.70-2024.1/arch/arm/boot/dts/xilinx/zynq-zc706.dts	2025-03-31 13:54:55.576951400 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm/boot/dts/xilinx/zynq-zc706.dts	2025-04-05 13:10:19.383365400 +0900
 @@ -1,6 +1,6 @@
 -// SPDX-License-Identifier: GPL-2.0
 +// SPDX-License-Identifier: GPL-2.0+
@@ -661,7 +661,7 @@
 +	reset-on-timeout;
 +};
 --- linux-6.6.70/arch/arm/boot/dts/xilinx/zynq-zc770-xm010.dts	2025-03-31 13:53:03.533460600 +0900
-+++ linux-xlnx-6.6.70-2024.1/arch/arm/boot/dts/xilinx/zynq-zc770-xm010.dts	2025-03-31 13:54:55.576951400 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm/boot/dts/xilinx/zynq-zc770-xm010.dts	2025-04-05 13:10:19.384362800 +0900
 @@ -15,6 +15,7 @@
  		ethernet0 = &gem0;
  		i2c0 = &i2c0;
@@ -731,7 +731,7 @@
  };
  
 --- linux-6.6.70/arch/arm/boot/dts/xilinx/zynq-zc770-xm011.dts	2025-03-31 13:53:03.534457900 +0900
-+++ linux-xlnx-6.6.70-2024.1/arch/arm/boot/dts/xilinx/zynq-zc770-xm011.dts	2025-03-31 13:54:55.577948700 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm/boot/dts/xilinx/zynq-zc770-xm011.dts	2025-04-05 13:10:19.384362800 +0900
 @@ -47,6 +47,36 @@
  	};
  };
@@ -778,7 +778,7 @@
  };
  
 --- linux-6.6.70/arch/arm/boot/dts/xilinx/zynq-zc770-xm012.dts	2025-03-31 13:53:03.534457900 +0900
-+++ linux-xlnx-6.6.70-2024.1/arch/arm/boot/dts/xilinx/zynq-zc770-xm012.dts	2025-03-31 13:54:55.577948700 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm/boot/dts/xilinx/zynq-zc770-xm012.dts	2025-04-05 13:10:19.384362800 +0900
 @@ -53,6 +53,40 @@
  	};
  };
@@ -828,7 +828,7 @@
  	status = "okay";
  };
 --- linux-6.6.70/arch/arm/boot/dts/xilinx/zynq-zc770-xm013.dts	2025-03-31 13:53:03.534457900 +0900
-+++ linux-xlnx-6.6.70-2024.1/arch/arm/boot/dts/xilinx/zynq-zc770-xm013.dts	2025-03-31 13:54:55.577948700 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm/boot/dts/xilinx/zynq-zc770-xm013.dts	2025-04-05 13:10:19.385360700 +0900
 @@ -15,6 +15,7 @@
  		ethernet0 = &gem1;
  		i2c0 = &i2c1;
@@ -898,7 +898,7 @@
  	status = "okay";
  };
 --- linux-6.6.70/arch/arm/boot/dts/xilinx/zynq-zed.dts	2025-03-31 13:53:03.535455200 +0900
-+++ linux-xlnx-6.6.70-2024.1/arch/arm/boot/dts/xilinx/zynq-zed.dts	2025-03-31 13:54:55.578992100 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm/boot/dts/xilinx/zynq-zed.dts	2025-04-05 13:10:19.385360700 +0900
 @@ -1,6 +1,6 @@
 -// SPDX-License-Identifier: GPL-2.0
 +// SPDX-License-Identifier: GPL-2.0+
@@ -989,7 +989,7 @@
  };
  
 --- linux-6.6.70/arch/arm/boot/dts/xilinx/zynq-zybo-z7.dts	2025-03-31 13:53:03.536452500 +0900
-+++ linux-xlnx-6.6.70-2024.1/arch/arm/boot/dts/xilinx/zynq-zybo-z7.dts	2025-03-31 13:54:55.579989800 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm/boot/dts/xilinx/zynq-zybo-z7.dts	2025-04-05 13:10:19.387355000 +0900
 @@ -49,7 +49,6 @@
  
  	ethernet_phy: ethernet-phy@0 {
@@ -999,7 +999,7 @@
  };
  
 --- linux-6.6.70/arch/arm/boot/dts/xilinx/zynq-zybo.dts	2025-03-31 13:53:03.536452500 +0900
-+++ linux-xlnx-6.6.70-2024.1/arch/arm/boot/dts/xilinx/zynq-zybo.dts	2025-03-31 13:54:55.580986700 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm/boot/dts/xilinx/zynq-zybo.dts	2025-04-05 13:10:19.387355000 +0900
 @@ -1,6 +1,6 @@
 -// SPDX-License-Identifier: GPL-2.0
 +// SPDX-License-Identifier: GPL-2.0+

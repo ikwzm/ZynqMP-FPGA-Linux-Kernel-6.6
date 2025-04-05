@@ -1,5 +1,5 @@
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/usb/ulpi-phy.yaml	2025-03-31 13:54:53.093060500 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/usb/ulpi-phy.yaml	2025-04-05 13:10:16.958262800 +0900
 @@ -0,0 +1,48 @@
 +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
 +%YAML 1.2
@@ -50,7 +50,7 @@
 +        external-drv-vbus;
 +    };
 --- linux-6.6.70/drivers/usb/phy/Kconfig	2025-03-31 13:53:24.539122900 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/usb/phy/Kconfig	2025-03-31 13:55:16.331875700 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/usb/phy/Kconfig	2025-04-05 13:10:39.434182200 +0900
 @@ -160,7 +160,7 @@
  
  config USB_ULPI
@@ -61,7 +61,7 @@
  	help
  	  Enable this to support ULPI connected USB OTG transceivers which
 --- linux-6.6.70/drivers/usb/phy/phy-ulpi.c	2025-03-31 13:53:24.547101800 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/usb/phy/phy-ulpi.c	2025-03-31 13:55:16.340957600 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/usb/phy/phy-ulpi.c	2025-04-05 13:10:39.442160500 +0900
 @@ -13,9 +13,16 @@
  #include <linux/kernel.h>
  #include <linux/slab.h>

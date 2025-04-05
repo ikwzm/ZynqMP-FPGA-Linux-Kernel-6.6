@@ -1,5 +1,5 @@
 --- linux-6.6.70/drivers/mtd/nand/raw/arasan-nand-controller.c	2025-03-31 13:53:18.238345700 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/mtd/nand/raw/arasan-nand-controller.c	2025-03-31 13:55:10.171347800 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/mtd/nand/raw/arasan-nand-controller.c	2025-04-05 13:10:33.539680300 +0900
 @@ -481,7 +481,7 @@
  		}
  
@@ -10,7 +10,7 @@
  		if (bf > 0) {
  			mtd->ecc_stats.corrected += bf;
 --- linux-6.6.70/drivers/mtd/spi-nor/atmel.c	2025-03-31 13:53:18.296578300 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/mtd/spi-nor/atmel.c	2025-03-31 13:55:10.229020900 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/mtd/spi-nor/atmel.c	2025-04-05 13:10:33.595972200 +0900
 @@ -23,10 +23,11 @@
  
  static int at25fs_nor_unlock(struct spi_nor *nor, loff_t ofs, uint64_t len)
@@ -73,7 +73,7 @@
  	return 0;
  }
 --- linux-6.6.70/drivers/mtd/spi-nor/core.c	2025-03-31 13:53:18.298637100 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/mtd/spi-nor/core.c	2025-03-31 13:55:10.232011400 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/mtd/spi-nor/core.c	2025-04-05 13:10:33.597966800 +0900
 @@ -21,6 +21,7 @@
  #include <linux/sizes.h>
  #include <linux/slab.h>
@@ -1820,7 +1820,7 @@
  }
  
 --- linux-6.6.70/drivers/mtd/spi-nor/core.h	2025-03-31 13:53:18.299634900 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/mtd/spi-nor/core.h	2025-03-31 13:55:10.232011400 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/mtd/spi-nor/core.h	2025-04-05 13:10:33.598964100 +0900
 @@ -11,6 +11,12 @@
  
  #define SPI_NOR_MAX_ID_LEN	6
@@ -1906,7 +1906,7 @@
  	const struct spi_nor_otp_organization otp_org;
  	const struct spi_nor_fixups *fixups;
 --- linux-6.6.70/drivers/mtd/spi-nor/debugfs.c	2025-03-31 13:53:18.299634900 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/mtd/spi-nor/debugfs.c	2025-03-31 13:55:10.232011400 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/mtd/spi-nor/debugfs.c	2025-04-05 13:10:33.598964100 +0900
 @@ -76,7 +76,7 @@
  static int spi_nor_params_show(struct seq_file *s, void *data)
  {
@@ -1926,7 +1926,7 @@
  	int i, cmd;
  
 --- linux-6.6.70/drivers/mtd/spi-nor/gigadevice.c	2025-03-31 13:53:18.301629000 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/mtd/spi-nor/gigadevice.c	2025-03-31 13:55:10.234004400 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/mtd/spi-nor/gigadevice.c	2025-04-05 13:10:33.600036200 +0900
 @@ -8,11 +8,175 @@
  
  #include "core.h"
@@ -2155,7 +2155,7 @@
  
  const struct spi_nor_manufacturer spi_nor_gigadevice = {
 --- linux-6.6.70/drivers/mtd/spi-nor/issi.c	2025-03-31 13:53:18.302626200 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/mtd/spi-nor/issi.c	2025-03-31 13:55:10.235001200 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/mtd/spi-nor/issi.c	2025-04-05 13:10:33.601034000 +0900
 @@ -8,11 +8,148 @@
  
  #include "core.h"
@@ -2422,7 +2422,7 @@
  
  static const struct spi_nor_fixups issi_fixups = {
 --- linux-6.6.70/drivers/mtd/spi-nor/macronix.c	2025-03-31 13:53:18.302626200 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/mtd/spi-nor/macronix.c	2025-03-31 13:55:10.235001200 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/mtd/spi-nor/macronix.c	2025-04-05 13:10:33.601034000 +0900
 @@ -8,6 +8,134 @@
  
  #include "core.h"
@@ -2627,7 +2627,7 @@
  	return 0;
  }
 --- linux-6.6.70/drivers/mtd/spi-nor/micron-st.c	2025-03-31 13:53:18.303652100 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/mtd/spi-nor/micron-st.c	2025-03-31 13:55:10.235001200 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/mtd/spi-nor/micron-st.c	2025-04-05 13:10:33.602031200 +0900
 @@ -8,9 +8,6 @@
  
  #include "core.h"
@@ -2854,7 +2854,7 @@
  	if (nor->info->mfr_flags & USE_FSR)
  		params->ready = micron_st_nor_ready;
 --- linux-6.6.70/drivers/mtd/spi-nor/otp.c	2025-03-31 13:53:18.303652100 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/mtd/spi-nor/otp.c	2025-03-31 13:55:10.235970200 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/mtd/spi-nor/otp.c	2025-04-05 13:10:33.602031200 +0900
 @@ -11,8 +11,31 @@
  
  #include "core.h"
@@ -2962,7 +2962,7 @@
  
  	if (WARN_ON(!is_power_of_2(spi_nor_otp_region_len(nor))))
 --- linux-6.6.70/drivers/mtd/spi-nor/sfdp.c	2025-03-31 13:53:18.304621000 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/mtd/spi-nor/sfdp.c	2025-03-31 13:55:10.235970200 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/mtd/spi-nor/sfdp.c	2025-04-05 13:10:33.603028600 +0900
 @@ -436,7 +436,7 @@
  static int spi_nor_parse_bfpt(struct spi_nor *nor,
  			      const struct sfdp_parameter_header *bfpt_header)
@@ -3109,7 +3109,7 @@
  
  		case SFDP_PROFILE1_ID:
 --- linux-6.6.70/drivers/mtd/spi-nor/spansion.c	2025-03-31 13:53:18.304621000 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/mtd/spi-nor/spansion.c	2025-03-31 13:55:10.236981200 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/mtd/spi-nor/spansion.c	2025-04-05 13:10:33.603028600 +0900
 @@ -32,6 +32,8 @@
  #define SPINOR_REG_CYPRESS_CFR2_MEMLAT_11_24	0xb
  #define SPINOR_REG_CYPRESS_CFR2_ADRBYT		BIT(7)
@@ -3499,7 +3499,7 @@
  	u8 mfr_flags = nor->info->mfr_flags;
  
 --- linux-6.6.70/drivers/mtd/spi-nor/sst.c	2025-03-31 13:53:18.305618300 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/mtd/spi-nor/sst.c	2025-03-31 13:55:10.236981200 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/mtd/spi-nor/sst.c	2025-04-05 13:10:33.604025900 +0900
 @@ -20,10 +20,11 @@
  
  static int sst26vf_nor_unlock(struct spi_nor *nor, loff_t ofs, uint64_t len)
@@ -3552,7 +3552,7 @@
  		FLAGS(SPI_NOR_HAS_LOCK | SPI_NOR_SWP_IS_VOLATILE)
  		PARSE_SFDP
 --- linux-6.6.70/drivers/mtd/spi-nor/swp.c	2025-03-31 13:53:18.305618300 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/mtd/spi-nor/swp.c	2025-03-31 13:55:10.238104500 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/mtd/spi-nor/swp.c	2025-04-05 13:10:33.604025900 +0900
 @@ -7,6 +7,7 @@
   */
  #include <linux/mtd/mtd.h>
@@ -3881,7 +3881,7 @@
  
  	mtd->_lock = spi_nor_lock;
 --- linux-6.6.70/drivers/mtd/spi-nor/winbond.c	2025-03-31 13:53:18.306615800 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/mtd/spi-nor/winbond.c	2025-03-31 13:55:10.240128600 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/mtd/spi-nor/winbond.c	2025-04-05 13:10:33.606020500 +0900
 @@ -10,6 +10,7 @@
  
  #define WINBOND_NOR_OP_RDEAR	0xc8	/* Read Extended Address Register */
@@ -4011,7 +4011,7 @@
  	if (params->otp.org->n_regions)
  		params->otp.ops = &winbond_nor_otp_ops;
 --- linux-6.6.70/drivers/mtd/spi-nor/xilinx.c	2025-03-31 13:53:18.306615800 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/mtd/spi-nor/xilinx.c	2025-03-31 13:55:10.240128600 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/mtd/spi-nor/xilinx.c	2025-04-05 13:10:33.607017900 +0900
 @@ -56,7 +56,8 @@
   */
  static u32 s3an_nor_convert_addr(struct spi_nor *nor, u32 addr)
@@ -4063,7 +4063,7 @@
  	return 0;
  }
 --- linux-6.6.70/include/linux/mtd/spi-nor.h	2025-03-31 13:53:27.098130200 +0900
-+++ linux-xlnx-6.6.70-2024.1/include/linux/mtd/spi-nor.h	2025-03-31 13:55:19.042286900 +0900
++++ linux-xlnx-6.6.70-v2024.1/include/linux/mtd/spi-nor.h	2025-04-05 13:10:42.047932500 +0900
 @@ -49,6 +49,9 @@
  #define SPINOR_OP_SRSTEN	0x66	/* Software Reset Enable */
  #define SPINOR_OP_SRST		0x99	/* Software Reset */

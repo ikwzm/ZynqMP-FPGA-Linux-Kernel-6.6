@@ -1,5 +1,5 @@
 --- linux-6.6.70/Documentation/devicetree/bindings/Makefile	2025-03-31 13:52:59.070451800 +0900
-+++ linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/Makefile	2025-03-31 13:54:51.047148800 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/Makefile	2025-04-05 13:10:14.982318700 +0900
 @@ -6,7 +6,7 @@
  DT_SCHEMA_LINT = $(shell which yamllint || \
    echo "warning: python package 'yamllint' not installed, skipping" >&2)
@@ -10,7 +10,7 @@
  PHONY += check_dtschema_version
  check_dtschema_version:
 --- linux-6.6.70/Documentation/devicetree/bindings/reserved-memory/framebuffer.yaml	2025-03-31 13:53:00.759397600 +0900
-+++ linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/reserved-memory/framebuffer.yaml	1970-01-01 09:00:00.000000000 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/reserved-memory/framebuffer.yaml	1970-01-01 09:00:00.000000000 +0900
 @@ -1,52 +0,0 @@
 -# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
 -%YAML 1.2
@@ -65,7 +65,7 @@
 -    };
 -...
 --- linux-6.6.70/Documentation/devicetree/bindings/reserved-memory/memory-region.yaml	2025-03-31 13:53:00.759397600 +0900
-+++ linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/reserved-memory/memory-region.yaml	1970-01-01 09:00:00.000000000 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/reserved-memory/memory-region.yaml	1970-01-01 09:00:00.000000000 +0900
 @@ -1,40 +0,0 @@
 -# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
 -%YAML 1.2
@@ -108,12 +108,12 @@
 -
 -...
 --- linux-6.6.70/Documentation/devicetree/bindings/reserved-memory/reserved-memory.txt	2025-03-31 13:53:00.761392600 +0900
-+++ linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/reserved-memory/reserved-memory.txt	2025-03-31 13:54:52.663602900 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/reserved-memory/reserved-memory.txt	2025-04-05 13:10:16.535491800 +0900
 @@ -1 +1 @@
 -This file has been moved to reserved-memory.yaml.
 +This file has been moved to reserved-memory.yaml in the dtschema repository.
 --- linux-6.6.70/Documentation/devicetree/bindings/reserved-memory/reserved-memory.yaml	2025-03-31 13:53:00.762389900 +0900
-+++ linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/reserved-memory/reserved-memory.yaml	1970-01-01 09:00:00.000000000 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/reserved-memory/reserved-memory.yaml	1970-01-01 09:00:00.000000000 +0900
 @@ -1,181 +0,0 @@
 -# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
 -%YAML 1.2
@@ -297,7 +297,7 @@
 -    };
 -...
 --- linux-6.6.70/Documentation/devicetree/bindings/reserved-memory/shared-dma-pool.yaml	2025-03-31 13:53:00.762389900 +0900
-+++ linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/reserved-memory/shared-dma-pool.yaml	1970-01-01 09:00:00.000000000 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/reserved-memory/shared-dma-pool.yaml	1970-01-01 09:00:00.000000000 +0900
 @@ -1,97 +0,0 @@
 -# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
 -%YAML 1.2
@@ -397,7 +397,7 @@
 -
 -...
 --- linux-6.6.70/MAINTAINERS	2025-03-31 13:53:02.278292500 +0900
-+++ linux-xlnx-6.6.70-2024.1/MAINTAINERS	2025-03-31 13:54:54.331852700 +0900
++++ linux-xlnx-6.6.70-v2024.1/MAINTAINERS	2025-04-05 13:10:18.101966000 +0900
 @@ -891,6 +891,14 @@
  F:	drivers/infiniband/hw/efa/
  F:	include/uapi/rdma/efa-abi.h

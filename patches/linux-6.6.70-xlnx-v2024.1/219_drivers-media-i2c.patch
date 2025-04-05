@@ -1,5 +1,5 @@
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/media/i2c/onnn,ap1302.yaml	2025-03-31 13:54:51.961245700 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/media/i2c/onnn,ap1302.yaml	2025-04-05 13:10:15.889360700 +0900
 @@ -0,0 +1,202 @@
 +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
 +%YAML 1.2
@@ -204,7 +204,7 @@
 +
 +...
 --- linux-6.6.70/Documentation/devicetree/bindings/media/i2c/ov8856.yaml	2025-03-31 13:52:59.941973400 +0900
-+++ linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/media/i2c/ov8856.yaml	2025-03-31 13:54:51.963240600 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/media/i2c/ov8856.yaml	2025-04-05 13:10:15.891355800 +0900
 @@ -67,19 +67,17 @@
  
          properties:
@@ -237,7 +237,7 @@
          required:
            - link-frequencies
 --- linux-6.6.70/Documentation/devicetree/bindings/media/i2c/ti,ds90ub960.yaml	2025-03-31 13:52:59.954978700 +0900
-+++ linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/media/i2c/ti,ds90ub960.yaml	2025-03-31 13:54:51.978273800 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/media/i2c/ti,ds90ub960.yaml	2025-04-05 13:10:15.904433100 +0900
 @@ -69,6 +69,7 @@
              maxItems: 1
  
@@ -247,7 +247,7 @@
                The I2C address used for the serializer. Transactions to this
                address on the I2C bus where the deserializer resides are
 --- linux-6.6.70/drivers/media/i2c/Kconfig	2025-03-31 13:53:16.864540200 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/media/i2c/Kconfig	2025-03-31 13:55:08.754614300 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/media/i2c/Kconfig	2025-04-05 13:10:32.195790700 +0900
 @@ -1332,6 +1332,19 @@
  menu "Video improvement chips"
  	visible if !MEDIA_HIDE_ANCILLARY_SUBDRV
@@ -269,7 +269,7 @@
  	tristate "NEC Electronics uPD64031A Ghost Reduction"
  	depends on VIDEO_DEV && I2C
 --- linux-6.6.70/drivers/media/i2c/Makefile	2025-03-31 13:53:16.864540200 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/media/i2c/Makefile	2025-03-31 13:55:08.754614300 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/media/i2c/Makefile	2025-04-05 13:10:32.195790700 +0900
 @@ -17,6 +17,7 @@
  obj-$(CONFIG_VIDEO_ADV7842) += adv7842.o
  obj-$(CONFIG_VIDEO_AK7375) += ak7375.o
@@ -279,7 +279,7 @@
  obj-$(CONFIG_VIDEO_AR0521) += ar0521.o
  obj-$(CONFIG_VIDEO_BT819) += bt819.o
 --- linux-6.6.70/drivers/media/i2c/adv7511-v4l2.c	2025-03-31 13:53:16.876664800 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/media/i2c/adv7511-v4l2.c	2025-03-31 13:55:08.761754100 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/media/i2c/adv7511-v4l2.c	2025-04-05 13:10:32.202858800 +0900
 @@ -51,6 +51,7 @@
  #define ADV7511_MAX_HEIGHT 1200
  #define ADV7511_MIN_PIXELCLOCK 20000000
@@ -883,7 +883,7 @@
  			  client->addr << 1, client->adapter->name);
  	return 0;
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/media/i2c/ap1302.c	2025-03-31 13:55:08.764741800 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/media/i2c/ap1302.c	2025-04-05 13:10:32.205850500 +0900
 @@ -0,0 +1,2917 @@
 +// SPDX-License-Identifier: GPL-2.0-only
 +/*
@@ -3803,7 +3803,7 @@
 +MODULE_DESCRIPTION("ON Semiconductor AP1302 ISP driver");
 +MODULE_LICENSE("GPL");
 --- linux-6.6.70/drivers/media/i2c/ov5640.c	2025-03-31 13:53:16.926429900 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/media/i2c/ov5640.c	2025-03-31 13:55:08.810164700 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/media/i2c/ov5640.c	2025-04-05 13:10:32.251183400 +0900
 @@ -1982,6 +1982,7 @@
  			light_freq = 50;
  		} else {

@@ -1,5 +1,5 @@
 --- linux-6.6.70/Documentation/devicetree/bindings/spi/spi-controller.yaml	2025-03-31 13:53:01.046414400 +0900
-+++ linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/spi/spi-controller.yaml	2025-03-31 13:54:52.989500200 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/spi/spi-controller.yaml	2025-04-05 13:10:16.857714300 +0900
 @@ -161,4 +161,12 @@
              reg = <2>, <3>;
              stacked-memories = /bits/ 64 <0x10000000 0x10000000>;
@@ -14,7 +14,7 @@
 +
      };
 --- linux-6.6.70/Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml	2025-03-31 13:53:01.049484300 +0900
-+++ linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml	2025-03-31 13:54:52.993488900 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml	2025-04-05 13:10:16.861785200 +0900
 @@ -113,6 +113,11 @@
      minItems: 2
      maxItems: 4
@@ -28,7 +28,7 @@
  allOf:
    - $ref: cdns,qspi-nor-peripheral-props.yaml#
 --- linux-6.6.70/Documentation/devicetree/bindings/spi/spi-zynqmp-qspi.yaml	2025-03-31 13:53:01.052480500 +0900
-+++ linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/spi/spi-zynqmp-qspi.yaml	2025-03-31 13:54:52.996481500 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/spi/spi-zynqmp-qspi.yaml	2025-04-05 13:10:16.864776900 +0900
 @@ -37,6 +37,12 @@
  
    power-domains:
@@ -50,7 +50,7 @@
        };
      };
 --- linux-6.6.70/drivers/spi/spi-cadence-quadspi.c	2025-03-31 13:53:23.163943800 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/spi/spi-cadence-quadspi.c	2025-03-31 13:55:14.955274000 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/spi/spi-cadence-quadspi.c	2025-04-05 13:10:38.157783800 +0900
 @@ -29,6 +29,7 @@
  #include <linux/spi/spi.h>
  #include <linux/spi/spi-mem.h>
@@ -777,7 +777,7 @@
  
  static DEFINE_SIMPLE_DEV_PM_OPS(cqspi_dev_pm_ops, cqspi_suspend, cqspi_resume);
 --- linux-6.6.70/drivers/spi/spi-mem.c	2025-03-31 13:53:23.186079500 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/spi/spi-mem.c	2025-03-31 13:55:14.977489500 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/spi/spi-mem.c	2025-04-05 13:10:38.178918000 +0900
 @@ -384,6 +384,7 @@
  		xfers[xferpos].tx_buf = tmpbuf + op->addr.nbytes + 1;
  		xfers[xferpos].len = op->dummy.nbytes;
@@ -787,7 +787,7 @@
  		spi_message_add_tail(&xfers[xferpos], &msg);
  		xferpos++;
 --- linux-6.6.70/drivers/spi/spi-xilinx.c	2025-03-31 13:53:23.215406000 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/spi/spi-xilinx.c	2025-03-31 13:55:15.017938300 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/spi/spi-xilinx.c	2025-04-05 13:10:38.209132800 +0900
 @@ -16,10 +16,11 @@
  #include <linux/of.h>
  #include <linux/platform_device.h>
@@ -1882,7 +1882,7 @@
  };
  module_platform_driver(xilinx_spi_driver);
 --- linux-6.6.70/drivers/spi/spi-zynq-qspi.c	2025-03-31 13:53:23.216403400 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/spi/spi-zynq-qspi.c	2025-03-31 13:55:15.019044100 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/spi/spi-zynq-qspi.c	2025-04-05 13:10:38.210130600 +0900
 @@ -16,6 +16,7 @@
  #include <linux/spi/spi.h>
  #include <linux/workqueue.h>
@@ -2139,7 +2139,7 @@
  	/* QSPI controller initializations */
  	zynq_qspi_init_hw(xqspi, ctlr->num_chipselect);
 --- linux-6.6.70/drivers/spi/spi-zynqmp-gqspi.c	2025-03-31 13:53:23.217400700 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/spi/spi-zynqmp-gqspi.c	2025-03-31 13:55:15.019044100 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/spi/spi-zynqmp-gqspi.c	2025-04-05 13:10:38.211127700 +0900
 @@ -21,6 +21,7 @@
  #include <linux/spinlock.h>
  #include <linux/workqueue.h>
@@ -2521,7 +2521,7 @@
  	ret = devm_spi_register_controller(&pdev->dev, ctlr);
  	if (ret) {
 --- linux-6.6.70/drivers/spi/spi.c	2025-03-31 13:53:23.218496200 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/spi/spi.c	2025-03-31 13:55:15.020041900 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/spi/spi.c	2025-04-05 13:10:38.211127700 +0900
 @@ -622,10 +622,21 @@
  {
  	struct spi_device *spi = to_spi_device(dev);
@@ -2970,7 +2970,7 @@
  		int ret;
  
 --- linux-6.6.70/include/linux/spi/spi-mem.h	2025-03-31 13:53:27.448643200 +0900
-+++ linux-xlnx-6.6.70-2024.1/include/linux/spi/spi-mem.h	2025-03-31 13:55:19.375597200 +0900
++++ linux-xlnx-6.6.70-v2024.1/include/linux/spi/spi-mem.h	2025-04-05 13:10:42.375057600 +0900
 @@ -55,6 +55,8 @@
  
  #define SPI_MEM_OP_NO_DATA	{ }
@@ -2991,7 +2991,7 @@
  
  /**
 --- linux-6.6.70/include/linux/spi/spi.h	2025-03-31 13:53:27.449612700 +0900
-+++ linux-xlnx-6.6.70-2024.1/include/linux/spi/spi.h	2025-03-31 13:55:19.375597200 +0900
++++ linux-xlnx-6.6.70-v2024.1/include/linux/spi/spi.h	2025-04-05 13:10:42.376054900 +0900
 @@ -20,6 +20,9 @@
  
  #include <uapi/linux/spi/spi.h>

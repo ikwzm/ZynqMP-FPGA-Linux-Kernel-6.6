@@ -1,5 +1,5 @@
 --- linux-6.6.70/kernel/irq/handle.c	2025-03-31 13:53:28.704658200 +0900
-+++ linux-xlnx-6.6.70-2024.1/kernel/irq/handle.c	2025-03-31 13:55:20.465120200 +0900
++++ linux-xlnx-6.6.70-v2024.1/kernel/irq/handle.c	2025-04-05 13:10:43.430523500 +0900
 @@ -215,7 +215,11 @@
  }
  
@@ -13,7 +13,7 @@
  	if (handle_arch_irq)
  		return -EBUSY;
 --- linux-6.6.70/kernel/irq/irqdesc.c	2025-03-31 13:53:28.706652900 +0900
-+++ linux-xlnx-6.6.70-2024.1/kernel/irq/irqdesc.c	2025-03-31 13:55:20.467114900 +0900
++++ linux-xlnx-6.6.70-v2024.1/kernel/irq/irqdesc.c	2025-04-05 13:10:43.432518000 +0900
 @@ -383,9 +383,7 @@
  {
  	return mtree_load(&sparse_irqs, irq);
@@ -25,7 +25,7 @@
  #ifdef CONFIG_SMP
  static void free_masks(struct irq_desc *desc)
 --- linux-6.6.70/kernel/irq/msi.c	2025-03-31 13:53:28.709695300 +0900
-+++ linux-xlnx-6.6.70-2024.1/kernel/irq/msi.c	2025-03-31 13:55:20.469175600 +0900
++++ linux-xlnx-6.6.70-v2024.1/kernel/irq/msi.c	2025-04-05 13:10:43.434512700 +0900
 @@ -1627,6 +1627,7 @@
  	msi_domain_free_irqs_all_locked(dev, domid);
  	msi_unlock_descs(dev);

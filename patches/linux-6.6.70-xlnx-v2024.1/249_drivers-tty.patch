@@ -1,5 +1,5 @@
 --- linux-6.6.70/Documentation/admin-guide/devices.txt	2025-03-31 13:52:58.800721800 +0900
-+++ linux-xlnx-6.6.70-2024.1/Documentation/admin-guide/devices.txt	2025-03-31 13:54:50.778094300 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/admin-guide/devices.txt	2025-04-05 13:10:14.735034100 +0900
 @@ -2704,6 +2704,9 @@
  		    ...
  		 185 = /dev/ttyNX15		Hilscher netX serial port 15
@@ -11,7 +11,7 @@
  		    ...
  		 190 = /dev/ttyUL3		Xilinx uartlite - port 3
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/serial/arm,dcc.yaml	2025-03-31 13:54:52.725804300 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/serial/arm,dcc.yaml	2025-04-05 13:10:16.599171900 +0900
 @@ -0,0 +1,30 @@
 +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
 +%YAML 1.2
@@ -44,7 +44,7 @@
 +      compatible = "arm,dcc";
 +    };
 --- linux-6.6.70/Documentation/devicetree/bindings/serial/cdns,uart.yaml	2025-03-31 13:53:00.823841500 +0900
-+++ linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/serial/cdns,uart.yaml	2025-03-31 13:54:52.727798900 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/serial/cdns,uart.yaml	2025-04-05 13:10:16.601166900 +0900
 @@ -55,6 +55,7 @@
  
  allOf:
@@ -54,7 +54,7 @@
        properties:
          compatible:
 --- linux-6.6.70/Documentation/devicetree/bindings/serial/xlnx,opb-uartlite.yaml	2025-03-31 13:53:00.838901700 +0900
-+++ linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/serial/xlnx,opb-uartlite.yaml	2025-03-31 13:54:52.742871100 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/serial/xlnx,opb-uartlite.yaml	2025-04-05 13:10:16.617226300 +0900
 @@ -15,6 +15,7 @@
        enum:
          - xlnx,xps-uartlite-1.00.a
@@ -64,7 +64,7 @@
    reg:
      maxItems: 1
 --- linux-6.6.70/drivers/tty/hvc/hvc_dcc.c	2025-03-31 13:53:24.136177100 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/tty/hvc/hvc_dcc.c	2025-03-31 13:55:15.895808300 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/tty/hvc/hvc_dcc.c	2025-04-05 13:10:39.065533900 +0900
 @@ -47,6 +47,14 @@
  static int __init dcc_early_console_setup(struct earlycon_device *device,
  					  const char *opt)
@@ -81,7 +81,7 @@
  
  	return 0;
 --- linux-6.6.70/drivers/tty/serial/Kconfig	2025-03-31 13:53:24.172565200 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/tty/serial/Kconfig	2025-03-31 13:55:15.935071500 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/tty/serial/Kconfig	2025-04-05 13:10:39.102810100 +0900
 @@ -532,6 +532,9 @@
  	help
  	  Set this to the number of uartlites in your system, or the number
@@ -93,7 +93,7 @@
  config SERIAL_SUNCORE
  	bool
 --- linux-6.6.70/drivers/tty/serial/uartlite.c	2025-03-31 13:53:24.225256600 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/tty/serial/uartlite.c	2025-03-31 13:55:15.981484100 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/tty/serial/uartlite.c	2025-04-05 13:10:39.147043000 +0900
 @@ -24,8 +24,13 @@
  #include <linux/pm_runtime.h>
  
@@ -109,7 +109,7 @@
  
  /* ---------------------------------------------------------------------
 --- linux-6.6.70/drivers/tty/serial/xilinx_uartps.c	2025-03-31 13:53:24.229397700 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/tty/serial/xilinx_uartps.c	2025-03-31 13:55:15.984476100 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/tty/serial/xilinx_uartps.c	2025-04-05 13:10:39.149115000 +0900
 @@ -22,7 +22,9 @@
  #include <linux/of.h>
  #include <linux/module.h>

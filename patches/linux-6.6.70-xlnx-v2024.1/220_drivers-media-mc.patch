@@ -1,5 +1,5 @@
 --- linux-6.6.70/drivers/media/mc/mc-entity.c	2025-03-31 13:53:16.962780800 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/media/mc/mc-entity.c	2025-03-31 13:55:08.846249600 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/media/mc/mc-entity.c	2025-04-05 13:10:32.287388000 +0900
 @@ -302,7 +302,36 @@
  #define stack_top(en)	((en)->stack[(en)->top].entity)
  

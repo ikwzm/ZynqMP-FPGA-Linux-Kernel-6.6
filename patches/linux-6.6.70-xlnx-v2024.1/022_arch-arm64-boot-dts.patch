@@ -1,5 +1,5 @@
 --- linux-6.6.70/arch/arm64/boot/dts/xilinx/Makefile	2025-03-31 13:53:05.089322600 +0900
-+++ linux-xlnx-6.6.70-2024.1/arch/arm64/boot/dts/xilinx/Makefile	2025-03-31 13:54:56.929869500 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm64/boot/dts/xilinx/Makefile	2025-04-05 13:10:20.727427600 +0900
 @@ -17,9 +17,66 @@
  dtb-$(CONFIG_ARCH_ZYNQMP) += zynqmp-zcu106-revA.dtb
  dtb-$(CONFIG_ARCH_ZYNQMP) += zynqmp-zcu111-revA.dtb
@@ -153,7 +153,7 @@
 +dtb-$(CONFIG_ARCH_ZYNQMP) += versal-net-vn-p-b2197-00-revA-x-prc-09-revA.dtb
 +dtb-$(CONFIG_ARCH_ZYNQMP) += versal-net-vn-p-b2197-00-revA-x-prc-09-i3c-revA.dtb
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/arch/arm64/boot/dts/xilinx/versal-clk.dtsi	2025-03-31 13:54:56.930866700 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm64/boot/dts/xilinx/versal-clk.dtsi	2025-04-05 13:10:20.727427600 +0900
 @@ -0,0 +1,327 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -483,7 +483,7 @@
 +	xlnx,nodeid = <PM_REGNODE_SYSMON_ROOT_3>;
 +};
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/arch/arm64/boot/dts/xilinx/versal-emb-plus-ve2302-revA.dts	2025-03-31 13:54:56.931863900 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm64/boot/dts/xilinx/versal-emb-plus-ve2302-revA.dts	2025-04-05 13:10:20.728424800 +0900
 @@ -0,0 +1,66 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -552,7 +552,7 @@
 +			"", "", ""; /* 55 - 57 */
 +};
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/arch/arm64/boot/dts/xilinx/versal-net-clk-ccf.dtsi	2025-03-31 13:54:56.931863900 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm64/boot/dts/xilinx/versal-net-clk-ccf.dtsi	2025-04-05 13:10:20.728424800 +0900
 @@ -0,0 +1,419 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -974,7 +974,7 @@
 +	power-domains = <&versal_net_firmware PM_DEV_LPD_SWDT_1>;
 +};
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/arch/arm64/boot/dts/xilinx/versal-net-clk.dtsi	2025-03-31 13:54:56.931863900 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm64/boot/dts/xilinx/versal-net-clk.dtsi	2025-04-05 13:10:20.728424800 +0900
 @@ -0,0 +1,240 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -1217,7 +1217,7 @@
 +	clocks = <&clk150>;
 +};
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/arch/arm64/boot/dts/xilinx/versal-net-emu-rev1.9.dts	2025-03-31 13:54:56.932861500 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm64/boot/dts/xilinx/versal-net-emu-rev1.9.dts	2025-04-05 13:10:20.729478900 +0900
 @@ -0,0 +1,168 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -1388,7 +1388,7 @@
 +	};
 +};
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/arch/arm64/boot/dts/xilinx/versal-net-ipp-rev1.9-ospi.dts	2025-03-31 13:54:56.932861500 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm64/boot/dts/xilinx/versal-net-ipp-rev1.9-ospi.dts	2025-04-05 13:10:20.729478900 +0900
 @@ -0,0 +1,22 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -1413,7 +1413,7 @@
 +	status = "disabled";
 +};
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/arch/arm64/boot/dts/xilinx/versal-net-ipp-rev1.9.dts	2025-03-31 13:54:56.932861500 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm64/boot/dts/xilinx/versal-net-ipp-rev1.9.dts	2025-04-05 13:10:20.729478900 +0900
 @@ -0,0 +1,776 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -2192,7 +2192,7 @@
 +	};
 +};
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/arch/arm64/boot/dts/xilinx/versal-net-vn-p-b2197-00-revA.dts	2025-03-31 13:54:56.933858100 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm64/boot/dts/xilinx/versal-net-vn-p-b2197-00-revA.dts	2025-04-05 13:10:20.730476800 +0900
 @@ -0,0 +1,99 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -2294,7 +2294,7 @@
 +	status = "okay";
 +};
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/arch/arm64/boot/dts/xilinx/versal-net-vn-x-b2197-00-revA.dts	2025-03-31 13:54:56.933858100 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm64/boot/dts/xilinx/versal-net-vn-x-b2197-00-revA.dts	2025-04-05 13:10:20.730476800 +0900
 @@ -0,0 +1,196 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -2493,7 +2493,7 @@
 +	status = "okay";
 +};
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/arch/arm64/boot/dts/xilinx/versal-net.dtsi	2025-03-31 13:54:56.934856300 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm64/boot/dts/xilinx/versal-net.dtsi	2025-04-05 13:10:20.731473800 +0900
 @@ -0,0 +1,765 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -3261,7 +3261,7 @@
 +	};
 +};
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/arch/arm64/boot/dts/xilinx/versal-v350-revA.dts	2025-03-31 13:54:56.934856300 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm64/boot/dts/xilinx/versal-v350-revA.dts	2025-04-05 13:10:20.731473800 +0900
 @@ -0,0 +1,84 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -3348,7 +3348,7 @@
 +	status = "disabled"; /* communication with MSP432 */
 +};
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/arch/arm64/boot/dts/xilinx/versal-vc-p-a2197-00-revA-x-prc-01-revA-ospi.dts	2025-03-31 13:54:56.934856300 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm64/boot/dts/xilinx/versal-vc-p-a2197-00-revA-x-prc-01-revA-ospi.dts	2025-04-05 13:10:20.731473800 +0900
 @@ -0,0 +1,91 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -3442,7 +3442,7 @@
 +	status = "okay";
 +};
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/arch/arm64/boot/dts/xilinx/versal-vc-p-a2197-00-revA-x-prc-01-revA.dts	2025-03-31 13:54:56.935855900 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm64/boot/dts/xilinx/versal-vc-p-a2197-00-revA-x-prc-01-revA.dts	2025-04-05 13:10:20.732471100 +0900
 @@ -0,0 +1,164 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -3609,7 +3609,7 @@
 +	status = "okay";
 +};
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/arch/arm64/boot/dts/xilinx/versal-vc-p-a2197-00-revA-x-prc-02-revA.dts	2025-03-31 13:54:56.935855900 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm64/boot/dts/xilinx/versal-vc-p-a2197-00-revA-x-prc-02-revA.dts	2025-04-05 13:10:20.732471100 +0900
 @@ -0,0 +1,132 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -3744,7 +3744,7 @@
 +	};
 +};
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/arch/arm64/boot/dts/xilinx/versal-vc-p-a2197-00-revA-x-prc-03-revA.dts	2025-03-31 13:54:56.935855900 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm64/boot/dts/xilinx/versal-vc-p-a2197-00-revA-x-prc-03-revA.dts	2025-04-05 13:10:20.732471100 +0900
 @@ -0,0 +1,111 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -3858,7 +3858,7 @@
 +	};
 +};
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/arch/arm64/boot/dts/xilinx/versal-vc-p-a2197-00-revA-x-prc-04-revA-ospi.dts	2025-03-31 13:54:56.936876200 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm64/boot/dts/xilinx/versal-vc-p-a2197-00-revA-x-prc-04-revA-ospi.dts	2025-04-05 13:10:20.733468100 +0900
 @@ -0,0 +1,30 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -3891,7 +3891,7 @@
 +	status = "disabled";
 +};
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/arch/arm64/boot/dts/xilinx/versal-vc-p-a2197-00-revA-x-prc-04-revA.dts	2025-03-31 13:54:56.936876200 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm64/boot/dts/xilinx/versal-vc-p-a2197-00-revA-x-prc-04-revA.dts	2025-04-05 13:10:20.733468100 +0900
 @@ -0,0 +1,142 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -4036,7 +4036,7 @@
 +	phy-names = "usb3-phy";
 +};
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/arch/arm64/boot/dts/xilinx/versal-vc-p-a2197-00-revA-x-prc-05-revA.dts	2025-03-31 13:54:56.936876200 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm64/boot/dts/xilinx/versal-vc-p-a2197-00-revA-x-prc-05-revA.dts	2025-04-05 13:10:20.733468100 +0900
 @@ -0,0 +1,128 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -4167,7 +4167,7 @@
 +	phy-names = "usb3-phy";
 +};
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/arch/arm64/boot/dts/xilinx/versal-vc-p-a2197-00-revA.dts	2025-03-31 13:54:56.937847200 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm64/boot/dts/xilinx/versal-vc-p-a2197-00-revA.dts	2025-04-05 13:10:20.734465900 +0900
 @@ -0,0 +1,55 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -4225,7 +4225,7 @@
 +	status = "okay";
 +};
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/arch/arm64/boot/dts/xilinx/versal-vck190-rev1.1-x-ebm-01-revA.dts	2025-03-31 13:54:56.937847200 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm64/boot/dts/xilinx/versal-vck190-rev1.1-x-ebm-01-revA.dts	2025-04-05 13:10:20.734465900 +0900
 @@ -0,0 +1,16 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -4244,7 +4244,7 @@
 +	model = "Xilinx Versal vck190 Eval board rev1.1 (QSPI)";
 +};
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/arch/arm64/boot/dts/xilinx/versal-vck190-rev1.1-x-ebm-02-revA.dts	2025-03-31 13:54:56.937847200 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm64/boot/dts/xilinx/versal-vck190-rev1.1-x-ebm-02-revA.dts	2025-04-05 13:10:20.734465900 +0900
 @@ -0,0 +1,16 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -4263,7 +4263,7 @@
 +	model = "Xilinx Versal vck190 Eval board rev1.1 (EMMC)";
 +};
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/arch/arm64/boot/dts/xilinx/versal-vck190-rev1.1-x-ebm-03-revA.dts	2025-03-31 13:54:56.938914400 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm64/boot/dts/xilinx/versal-vck190-rev1.1-x-ebm-03-revA.dts	2025-04-05 13:10:20.735463100 +0900
 @@ -0,0 +1,16 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -4282,7 +4282,7 @@
 +	model = "Xilinx Versal vck190 Eval board rev1.1 (OSPI)";
 +};
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/arch/arm64/boot/dts/xilinx/versal-vck190-rev1.1.dts	2025-03-31 13:54:56.938914400 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm64/boot/dts/xilinx/versal-vck190-rev1.1.dts	2025-04-05 13:10:20.735463100 +0900
 @@ -0,0 +1,15 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -4300,7 +4300,7 @@
 +	model = "Xilinx Versal vck190 Eval board rev1.1";
 +};
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/arch/arm64/boot/dts/xilinx/versal-vck190-revA-x-ebm-01-revA.dts	2025-03-31 13:54:56.938914400 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm64/boot/dts/xilinx/versal-vck190-revA-x-ebm-01-revA.dts	2025-04-05 13:10:20.735463100 +0900
 @@ -0,0 +1,16 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -4319,7 +4319,7 @@
 +	model = "Xilinx Versal vck190 Eval board revA (QSPI)";
 +};
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/arch/arm64/boot/dts/xilinx/versal-vck190-revA-x-ebm-02-revA.dts	2025-03-31 13:54:56.939912200 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm64/boot/dts/xilinx/versal-vck190-revA-x-ebm-02-revA.dts	2025-04-05 13:10:20.736460400 +0900
 @@ -0,0 +1,16 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -4338,7 +4338,7 @@
 +	model = "Xilinx Versal vck190 Eval board revA (EMMC)";
 +};
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/arch/arm64/boot/dts/xilinx/versal-vck190-revA-x-ebm-03-revA.dts	2025-03-31 13:54:56.939912200 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm64/boot/dts/xilinx/versal-vck190-revA-x-ebm-03-revA.dts	2025-04-05 13:10:20.736460400 +0900
 @@ -0,0 +1,16 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -4357,7 +4357,7 @@
 +	model = "Xilinx Versal vck190 Eval board revA (OSPI)";
 +};
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/arch/arm64/boot/dts/xilinx/versal-vck190-revA.dts	2025-03-31 13:54:56.939912200 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm64/boot/dts/xilinx/versal-vck190-revA.dts	2025-04-05 13:10:20.736460400 +0900
 @@ -0,0 +1,15 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -4375,7 +4375,7 @@
 +	model = "Xilinx Versal vck190 Eval board revA";
 +};
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/arch/arm64/boot/dts/xilinx/versal-vck5000-revA.dts	2025-03-31 13:54:56.940909400 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm64/boot/dts/xilinx/versal-vck5000-revA.dts	2025-04-05 13:10:20.737457700 +0900
 @@ -0,0 +1,83 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -4461,7 +4461,7 @@
 +	status = "disabled"; /* communication with MSP432 */
 +};
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/arch/arm64/boot/dts/xilinx/versal-vek280-revA.dts	2025-03-31 13:54:56.940909400 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm64/boot/dts/xilinx/versal-vek280-revA.dts	2025-04-05 13:10:20.737457700 +0900
 @@ -0,0 +1,188 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -4652,7 +4652,7 @@
 +	status = "okay";
 +};
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/arch/arm64/boot/dts/xilinx/versal-vek280-revB.dts	2025-03-31 13:54:56.940909400 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm64/boot/dts/xilinx/versal-vek280-revB.dts	2025-04-05 13:10:20.737457700 +0900
 @@ -0,0 +1,191 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -4846,7 +4846,7 @@
 +	status = "okay";
 +};
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/arch/arm64/boot/dts/xilinx/versal-vhk158-revA.dts	2025-03-31 13:54:56.941906700 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm64/boot/dts/xilinx/versal-vhk158-revA.dts	2025-04-05 13:10:20.738455000 +0900
 @@ -0,0 +1,189 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -5038,7 +5038,7 @@
 +	status = "okay";
 +};
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/arch/arm64/boot/dts/xilinx/versal-vmk180-rev1.1-x-ebm-01-revA.dts	2025-03-31 13:54:56.941906700 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm64/boot/dts/xilinx/versal-vmk180-rev1.1-x-ebm-01-revA.dts	2025-04-05 13:10:20.738455000 +0900
 @@ -0,0 +1,20 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -5061,7 +5061,7 @@
 +#include "versal-x-ebm-01-revA.dtsi"
 +};
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/arch/arm64/boot/dts/xilinx/versal-vmk180-rev1.1-x-ebm-02-revA.dts	2025-03-31 13:54:56.941906700 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm64/boot/dts/xilinx/versal-vmk180-rev1.1-x-ebm-02-revA.dts	2025-04-05 13:10:20.738455000 +0900
 @@ -0,0 +1,20 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -5084,7 +5084,7 @@
 +#include "versal-x-ebm-02-revA.dtsi"
 +};
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/arch/arm64/boot/dts/xilinx/versal-vmk180-rev1.1-x-ebm-03-revA.dts	2025-03-31 13:54:56.942904000 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm64/boot/dts/xilinx/versal-vmk180-rev1.1-x-ebm-03-revA.dts	2025-04-05 13:10:20.739540900 +0900
 @@ -0,0 +1,20 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -5107,7 +5107,7 @@
 +#include "versal-x-ebm-03-revA.dtsi"
 +};
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/arch/arm64/boot/dts/xilinx/versal-vmk180-rev1.1.dts	2025-03-31 13:54:56.942904000 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm64/boot/dts/xilinx/versal-vmk180-rev1.1.dts	2025-04-05 13:10:20.739540900 +0900
 @@ -0,0 +1,21 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -5131,7 +5131,7 @@
 +	clk-phase-uhs-ddr50 = <126>, <36>;
 +};
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/arch/arm64/boot/dts/xilinx/versal-vmk180-revA-x-ebm-01-revA.dts	2025-03-31 13:54:56.943901300 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm64/boot/dts/xilinx/versal-vmk180-revA-x-ebm-01-revA.dts	2025-04-05 13:10:20.739540900 +0900
 @@ -0,0 +1,20 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -5154,7 +5154,7 @@
 +#include "versal-x-ebm-01-revA.dtsi"
 +};
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/arch/arm64/boot/dts/xilinx/versal-vmk180-revA-x-ebm-02-revA.dts	2025-03-31 13:54:56.943901300 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm64/boot/dts/xilinx/versal-vmk180-revA-x-ebm-02-revA.dts	2025-04-05 13:10:20.740538700 +0900
 @@ -0,0 +1,20 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -5177,7 +5177,7 @@
 +#include "versal-x-ebm-02-revA.dtsi"
 +};
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/arch/arm64/boot/dts/xilinx/versal-vmk180-revA-x-ebm-03-revA.dts	2025-03-31 13:54:56.943901300 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm64/boot/dts/xilinx/versal-vmk180-revA-x-ebm-03-revA.dts	2025-04-05 13:10:20.740538700 +0900
 @@ -0,0 +1,24 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -5204,7 +5204,7 @@
 +#include "versal-x-ebm-03-revA.dtsi"
 +};
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/arch/arm64/boot/dts/xilinx/versal-vmk180-revA.dts	2025-03-31 13:54:56.944898700 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm64/boot/dts/xilinx/versal-vmk180-revA.dts	2025-04-05 13:10:20.741535900 +0900
 @@ -0,0 +1,171 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -5378,7 +5378,7 @@
 +	status = "okay";
 +};
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/arch/arm64/boot/dts/xilinx/versal-vp-x-a2785-00-revA.dts	2025-03-31 13:54:56.944898700 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm64/boot/dts/xilinx/versal-vp-x-a2785-00-revA.dts	2025-04-05 13:10:20.741535900 +0900
 @@ -0,0 +1,144 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -5525,7 +5525,7 @@
 +	status = "okay";
 +};
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/arch/arm64/boot/dts/xilinx/versal-vpk120-revA.dts	2025-03-31 13:54:56.945896100 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm64/boot/dts/xilinx/versal-vpk120-revA.dts	2025-04-05 13:10:20.741535900 +0900
 @@ -0,0 +1,175 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -5703,7 +5703,7 @@
 +	status = "okay";
 +};
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/arch/arm64/boot/dts/xilinx/versal-vpk120-revB.dts	2025-03-31 13:54:56.945896100 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm64/boot/dts/xilinx/versal-vpk120-revB.dts	2025-04-05 13:10:20.742533200 +0900
 @@ -0,0 +1,186 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -5892,7 +5892,7 @@
 +	status = "okay";
 +};
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/arch/arm64/boot/dts/xilinx/versal-vpk180-revA.dts	2025-03-31 13:54:56.945896100 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm64/boot/dts/xilinx/versal-vpk180-revA.dts	2025-04-05 13:10:20.742533200 +0900
 @@ -0,0 +1,176 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -6071,7 +6071,7 @@
 +	status = "okay";
 +};
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/arch/arm64/boot/dts/xilinx/versal-x-ebm-01-revA.dtsi	2025-03-31 13:54:56.946893300 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm64/boot/dts/xilinx/versal-x-ebm-01-revA.dtsi	2025-04-05 13:10:20.742533200 +0900
 @@ -0,0 +1,29 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -6103,7 +6103,7 @@
 +	};
 +};
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/arch/arm64/boot/dts/xilinx/versal-x-ebm-01-revA.dtso	2025-03-31 13:54:56.946893300 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm64/boot/dts/xilinx/versal-x-ebm-01-revA.dtso	2025-04-05 13:10:20.743530600 +0900
 @@ -0,0 +1,23 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -6129,7 +6129,7 @@
 +	};
 +};
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/arch/arm64/boot/dts/xilinx/versal-x-ebm-02-revA.dtsi	2025-03-31 13:54:56.946893300 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm64/boot/dts/xilinx/versal-x-ebm-02-revA.dtsi	2025-04-05 13:10:20.743530600 +0900
 @@ -0,0 +1,15 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -6147,7 +6147,7 @@
 +bus-width = <8>;
 +xlnx,mio-bank = <0>;
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/arch/arm64/boot/dts/xilinx/versal-x-ebm-02-revA.dtso	2025-03-31 13:54:56.947890700 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm64/boot/dts/xilinx/versal-x-ebm-02-revA.dtso	2025-04-05 13:10:20.743530600 +0900
 @@ -0,0 +1,23 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -6173,7 +6173,7 @@
 +	};
 +};
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/arch/arm64/boot/dts/xilinx/versal-x-ebm-03-revA.dtsi	2025-03-31 13:54:56.947890700 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm64/boot/dts/xilinx/versal-x-ebm-03-revA.dtsi	2025-04-05 13:10:20.744527900 +0900
 @@ -0,0 +1,40 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -6216,7 +6216,7 @@
 +	};
 +};
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/arch/arm64/boot/dts/xilinx/versal-x-ebm-03-revA.dtso	2025-03-31 13:54:56.947890700 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm64/boot/dts/xilinx/versal-x-ebm-03-revA.dtso	2025-04-05 13:10:20.744527900 +0900
 @@ -0,0 +1,23 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -6242,7 +6242,7 @@
 +	};
 +};
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/arch/arm64/boot/dts/xilinx/versal.dtsi	2025-03-31 13:54:56.948953900 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm64/boot/dts/xilinx/versal.dtsi	2025-04-05 13:10:20.744527900 +0900
 @@ -0,0 +1,689 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -6934,7 +6934,7 @@
 +	};
 +};
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/arch/arm64/boot/dts/xilinx/x-prc-07-i3c-revA.dtso	2025-03-31 13:54:56.948953900 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm64/boot/dts/xilinx/x-prc-07-i3c-revA.dtso	2025-04-05 13:10:20.745525400 +0900
 @@ -0,0 +1,34 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -6971,7 +6971,7 @@
 +	};
 +};
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/arch/arm64/boot/dts/xilinx/x-prc-07-revA.dtso	2025-03-31 13:54:56.948953900 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm64/boot/dts/xilinx/x-prc-07-revA.dtso	2025-04-05 13:10:20.745525400 +0900
 @@ -0,0 +1,170 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -7144,7 +7144,7 @@
 +	snps,ulpi-ext-vbus-drv;
 +};
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/arch/arm64/boot/dts/xilinx/x-prc-08-revA.dtso	2025-03-31 13:54:56.949951600 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm64/boot/dts/xilinx/x-prc-08-revA.dtso	2025-04-05 13:10:20.745525400 +0900
 @@ -0,0 +1,125 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -7272,7 +7272,7 @@
 +	status = "okay";
 +};
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/arch/arm64/boot/dts/xilinx/x-prc-09-i3c-revA.dtso	2025-03-31 13:54:56.949951600 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm64/boot/dts/xilinx/x-prc-09-i3c-revA.dtso	2025-04-05 13:10:20.746522600 +0900
 @@ -0,0 +1,47 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -7322,7 +7322,7 @@
 +	};
 +};
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/arch/arm64/boot/dts/xilinx/x-prc-09-revA.dtso	2025-03-31 13:54:56.949951600 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm64/boot/dts/xilinx/x-prc-09-revA.dtso	2025-04-05 13:10:20.746522600 +0900
 @@ -0,0 +1,140 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -7465,7 +7465,7 @@
 +	status = "okay";
 +};
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/arch/arm64/boot/dts/xilinx/zynqmp-a2197-revA.dts	2025-03-31 13:54:56.950948800 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm64/boot/dts/xilinx/zynqmp-a2197-revA.dts	2025-04-05 13:10:20.746522600 +0900
 @@ -0,0 +1,89 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -7557,7 +7557,7 @@
 +	};
 +};
 --- linux-6.6.70/arch/arm64/boot/dts/xilinx/zynqmp-clk-ccf.dtsi	2025-03-31 13:53:05.090320300 +0900
-+++ linux-xlnx-6.6.70-2024.1/arch/arm64/boot/dts/xilinx/zynqmp-clk-ccf.dtsi	2025-03-31 13:54:56.950948800 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm64/boot/dts/xilinx/zynqmp-clk-ccf.dtsi	2025-04-05 13:10:20.747519900 +0900
 @@ -182,6 +182,22 @@
  	clocks = <&zynqmp_clk I2C1_REF>;
  };
@@ -7623,7 +7623,7 @@
 +	clocks = <&zynqmp_clk DP_AUDIO_REF>;
 +};
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/arch/arm64/boot/dts/xilinx/zynqmp-dlc21-revA.dts	2025-03-31 13:54:56.950948800 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm64/boot/dts/xilinx/zynqmp-dlc21-revA.dts	2025-04-05 13:10:20.747519900 +0900
 @@ -0,0 +1,219 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -7845,7 +7845,7 @@
 +	};
 +};
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/arch/arm64/boot/dts/xilinx/zynqmp-e-a2197-00-revA.dts	2025-03-31 13:54:56.951946100 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm64/boot/dts/xilinx/zynqmp-e-a2197-00-revA.dts	2025-04-05 13:10:20.747519900 +0900
 @@ -0,0 +1,684 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -8532,7 +8532,7 @@
 +	status = "okay";
 +};
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/arch/arm64/boot/dts/xilinx/zynqmp-e-a2197-00-revB.dts	2025-03-31 13:54:56.951946100 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm64/boot/dts/xilinx/zynqmp-e-a2197-00-revB.dts	2025-04-05 13:10:20.748517200 +0900
 @@ -0,0 +1,34 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -8569,7 +8569,7 @@
 +	};
 +};
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/arch/arm64/boot/dts/xilinx/zynqmp-g-a2197-00-revA.dts	2025-03-31 13:54:56.952943400 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm64/boot/dts/xilinx/zynqmp-g-a2197-00-revA.dts	2025-04-05 13:10:20.748517200 +0900
 @@ -0,0 +1,316 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -8888,7 +8888,7 @@
 +	maximum-speed = "high-speed";
 +};
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/arch/arm64/boot/dts/xilinx/zynqmp-m-a2197-01-revA.dts	2025-03-31 13:54:56.952943400 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm64/boot/dts/xilinx/zynqmp-m-a2197-01-revA.dts	2025-04-05 13:10:20.749588000 +0900
 @@ -0,0 +1,489 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -9380,7 +9380,7 @@
 +	status = "disabled";
 +};
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/arch/arm64/boot/dts/xilinx/zynqmp-m-a2197-02-revA.dts	2025-03-31 13:54:56.953940700 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm64/boot/dts/xilinx/zynqmp-m-a2197-02-revA.dts	2025-04-05 13:10:20.749588000 +0900
 @@ -0,0 +1,491 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -9874,7 +9874,7 @@
 +	status = "disabled";
 +};
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/arch/arm64/boot/dts/xilinx/zynqmp-m-a2197-03-revA.dts	2025-03-31 13:54:56.953940700 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm64/boot/dts/xilinx/zynqmp-m-a2197-03-revA.dts	2025-04-05 13:10:20.749588000 +0900
 @@ -0,0 +1,485 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -10362,7 +10362,7 @@
 +	status = "disabled";
 +};
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/arch/arm64/boot/dts/xilinx/zynqmp-p-a2197-00-revA-x-prc-01-revA.dtso	2025-03-31 13:54:56.953940700 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm64/boot/dts/xilinx/zynqmp-p-a2197-00-revA-x-prc-01-revA.dtso	2025-04-05 13:10:20.750585700 +0900
 @@ -0,0 +1,76 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -10441,7 +10441,7 @@
 +	};
 +};
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/arch/arm64/boot/dts/xilinx/zynqmp-p-a2197-00-revA-x-prc-02-revA.dtso	2025-03-31 13:54:56.954938000 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm64/boot/dts/xilinx/zynqmp-p-a2197-00-revA-x-prc-02-revA.dtso	2025-04-05 13:10:20.750585700 +0900
 @@ -0,0 +1,76 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -10520,7 +10520,7 @@
 +	};
 +};
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/arch/arm64/boot/dts/xilinx/zynqmp-p-a2197-00-revA-x-prc-03-revA.dtso	2025-03-31 13:54:56.954938000 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm64/boot/dts/xilinx/zynqmp-p-a2197-00-revA-x-prc-03-revA.dtso	2025-04-05 13:10:20.750585700 +0900
 @@ -0,0 +1,80 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -10603,7 +10603,7 @@
 +	};
 +};
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/arch/arm64/boot/dts/xilinx/zynqmp-p-a2197-00-revA-x-prc-04-revA.dtso	2025-03-31 13:54:56.954938000 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm64/boot/dts/xilinx/zynqmp-p-a2197-00-revA-x-prc-04-revA.dtso	2025-04-05 13:10:20.751583000 +0900
 @@ -0,0 +1,86 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -10692,7 +10692,7 @@
 +	};
 +};
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/arch/arm64/boot/dts/xilinx/zynqmp-p-a2197-00-revA-x-prc-05-revA.dtso	2025-03-31 13:54:56.955935600 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm64/boot/dts/xilinx/zynqmp-p-a2197-00-revA-x-prc-05-revA.dtso	2025-04-05 13:10:20.751583000 +0900
 @@ -0,0 +1,86 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -10781,7 +10781,7 @@
 +	};
 +};
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/arch/arm64/boot/dts/xilinx/zynqmp-p-a2197-00-revA.dts	2025-03-31 13:54:56.955935600 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm64/boot/dts/xilinx/zynqmp-p-a2197-00-revA.dts	2025-04-05 13:10:20.752580300 +0900
 @@ -0,0 +1,608 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -11392,7 +11392,7 @@
 +	status = "okay";
 +};
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/arch/arm64/boot/dts/xilinx/zynqmp-sc-revB.dts	2025-03-31 13:54:56.956932700 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm64/boot/dts/xilinx/zynqmp-sc-revB.dts	2025-04-05 13:10:20.752580300 +0900
 @@ -0,0 +1,430 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -11825,7 +11825,7 @@
 +	};
 +};
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/arch/arm64/boot/dts/xilinx/zynqmp-sc-revC.dts	2025-03-31 13:54:56.956932700 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm64/boot/dts/xilinx/zynqmp-sc-revC.dts	2025-04-05 13:10:20.752580300 +0900
 @@ -0,0 +1,37 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -11865,7 +11865,7 @@
 +	};
 +};
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/arch/arm64/boot/dts/xilinx/zynqmp-sc-vek280-revA.dtso	2025-03-31 13:54:56.956932700 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm64/boot/dts/xilinx/zynqmp-sc-vek280-revA.dtso	2025-04-05 13:10:20.753577600 +0900
 @@ -0,0 +1,278 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -12146,7 +12146,7 @@
 +	};
 +};
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/arch/arm64/boot/dts/xilinx/zynqmp-sc-vek280-revB.dtso	2025-03-31 13:54:56.957930100 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm64/boot/dts/xilinx/zynqmp-sc-vek280-revB.dtso	2025-04-05 13:10:20.753577600 +0900
 @@ -0,0 +1,15 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -12164,7 +12164,7 @@
 +		     "xlnx,zynqmp-vek280", "xlnx,zynqmp";
 +};
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/arch/arm64/boot/dts/xilinx/zynqmp-sc-vhk158-revA.dtso	2025-03-31 13:54:56.957930100 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm64/boot/dts/xilinx/zynqmp-sc-vhk158-revA.dtso	2025-04-05 13:10:20.753577600 +0900
 @@ -0,0 +1,405 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -12572,7 +12572,7 @@
 +	};
 +};
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/arch/arm64/boot/dts/xilinx/zynqmp-sc-vm-p-m1369-00-revA.dtso	2025-03-31 13:54:56.957930100 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm64/boot/dts/xilinx/zynqmp-sc-vm-p-m1369-00-revA.dtso	2025-04-05 13:10:20.754574900 +0900
 @@ -0,0 +1,426 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -13001,7 +13001,7 @@
 +	};*/
 +};
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/arch/arm64/boot/dts/xilinx/zynqmp-sc-vn-p-b2197-00-revA.dtso	2025-03-31 13:54:56.958965900 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm64/boot/dts/xilinx/zynqmp-sc-vn-p-b2197-00-revA.dtso	2025-04-05 13:10:20.754574900 +0900
 @@ -0,0 +1,496 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -13500,7 +13500,7 @@
 +	};
 +};
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/arch/arm64/boot/dts/xilinx/zynqmp-sc-vpk120-revB.dtso	2025-03-31 13:54:56.958965900 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm64/boot/dts/xilinx/zynqmp-sc-vpk120-revB.dtso	2025-04-05 13:10:20.754574900 +0900
 @@ -0,0 +1,355 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -13858,7 +13858,7 @@
 +	};
 +};
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/arch/arm64/boot/dts/xilinx/zynqmp-sc-vpk180-revA.dtso	2025-03-31 13:54:56.958965900 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm64/boot/dts/xilinx/zynqmp-sc-vpk180-revA.dtso	2025-04-05 13:10:20.755572300 +0900
 @@ -0,0 +1,496 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -14357,7 +14357,7 @@
 +	};
 +};
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/arch/arm64/boot/dts/xilinx/zynqmp-sc-vpk180-revB.dtso	2025-03-31 13:54:56.959963700 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm64/boot/dts/xilinx/zynqmp-sc-vpk180-revB.dtso	2025-04-05 13:10:20.755572300 +0900
 @@ -0,0 +1,432 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -14792,7 +14792,7 @@
 +	};
 +};
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/arch/arm64/boot/dts/xilinx/zynqmp-sck-kd-g-revA.dtso	2025-03-31 13:54:56.959963700 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm64/boot/dts/xilinx/zynqmp-sck-kd-g-revA.dtso	2025-04-05 13:10:20.756569700 +0900
 @@ -0,0 +1,373 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -15168,7 +15168,7 @@
 +	status = "disabled";
 +};
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/arch/arm64/boot/dts/xilinx/zynqmp-sck-kr-g-revA.dtso	2025-03-31 13:54:56.960960800 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm64/boot/dts/xilinx/zynqmp-sck-kr-g-revA.dtso	2025-04-05 13:10:20.756569700 +0900
 @@ -0,0 +1,403 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -15574,7 +15574,7 @@
 +	pinctrl-0 = <&pinctrl_uart1_default>;
 +};
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/arch/arm64/boot/dts/xilinx/zynqmp-sck-kr-g-revB.dtso	2025-03-31 13:54:56.960960800 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm64/boot/dts/xilinx/zynqmp-sck-kr-g-revB.dtso	2025-04-05 13:10:20.756569700 +0900
 @@ -0,0 +1,403 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -15980,7 +15980,7 @@
 +	pinctrl-0 = <&pinctrl_uart1_default>;
 +};
 --- linux-6.6.70/arch/arm64/boot/dts/xilinx/zynqmp-sck-kv-g-revA.dtso	2025-03-31 13:53:05.090320300 +0900
-+++ linux-xlnx-6.6.70-2024.1/arch/arm64/boot/dts/xilinx/zynqmp-sck-kv-g-revA.dtso	2025-03-31 13:54:56.960960800 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm64/boot/dts/xilinx/zynqmp-sck-kv-g-revA.dtso	2025-04-05 13:10:20.757567000 +0900
 @@ -22,6 +22,17 @@
  /plugin/;
  
@@ -16135,7 +16135,7 @@
  	status = "okay";
  	pinctrl-names = "default";
 --- linux-6.6.70/arch/arm64/boot/dts/xilinx/zynqmp-sck-kv-g-revB.dtso	2025-03-31 13:53:05.090320300 +0900
-+++ linux-xlnx-6.6.70-2024.1/arch/arm64/boot/dts/xilinx/zynqmp-sck-kv-g-revB.dtso	2025-03-31 13:54:56.961958200 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm64/boot/dts/xilinx/zynqmp-sck-kv-g-revB.dtso	2025-04-05 13:10:20.757567000 +0900
 @@ -17,6 +17,17 @@
  /plugin/;
  
@@ -16295,7 +16295,7 @@
  	status = "okay";
  	pinctrl-names = "default";
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/arch/arm64/boot/dts/xilinx/zynqmp-sm-k24-revA.dts	2025-03-31 13:54:56.961958200 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm64/boot/dts/xilinx/zynqmp-sm-k24-revA.dts	2025-04-05 13:10:20.757567000 +0900
 @@ -0,0 +1,23 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -16321,7 +16321,7 @@
 +	};
 +};
 --- linux-6.6.70/arch/arm64/boot/dts/xilinx/zynqmp-sm-k26-revA.dts	2025-03-31 13:53:05.091317600 +0900
-+++ linux-xlnx-6.6.70-2024.1/arch/arm64/boot/dts/xilinx/zynqmp-sm-k26-revA.dts	2025-03-31 13:54:56.961958200 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm64/boot/dts/xilinx/zynqmp-sm-k26-revA.dts	2025-04-05 13:10:20.758564300 +0900
 @@ -1,8 +1,9 @@
  // SPDX-License-Identifier: GPL-2.0
  /*
@@ -16393,7 +16393,7 @@
  		};
  	};
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/arch/arm64/boot/dts/xilinx/zynqmp-smk-k24-revA.dts	2025-03-31 13:54:56.962955500 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm64/boot/dts/xilinx/zynqmp-smk-k24-revA.dts	2025-04-05 13:10:20.758564300 +0900
 @@ -0,0 +1,21 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -16417,7 +16417,7 @@
 +	status = "disabled";
 +};
 --- linux-6.6.70/arch/arm64/boot/dts/xilinx/zynqmp-smk-k26-revA.dts	2025-03-31 13:53:05.091317600 +0900
-+++ linux-xlnx-6.6.70-2024.1/arch/arm64/boot/dts/xilinx/zynqmp-smk-k26-revA.dts	2025-03-31 13:54:56.962955500 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm64/boot/dts/xilinx/zynqmp-smk-k26-revA.dts	2025-04-05 13:10:20.758564300 +0900
 @@ -1,8 +1,9 @@
  // SPDX-License-Identifier: GPL-2.0
  /*
@@ -16442,7 +16442,7 @@
  		     "xlnx,zynqmp";
  };
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/arch/arm64/boot/dts/xilinx/zynqmp-vp-x-a2785-00-revA.dts	2025-03-31 13:54:56.963952800 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm64/boot/dts/xilinx/zynqmp-vp-x-a2785-00-revA.dts	2025-04-05 13:10:20.759607300 +0900
 @@ -0,0 +1,442 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -16887,7 +16887,7 @@
 +	};
 +};
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/arch/arm64/boot/dts/xilinx/zynqmp-vpk120-revA.dts	2025-03-31 13:54:56.963952800 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm64/boot/dts/xilinx/zynqmp-vpk120-revA.dts	2025-04-05 13:10:20.759607300 +0900
 @@ -0,0 +1,608 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -17498,7 +17498,7 @@
 +	};
 +};
 --- linux-6.6.70/arch/arm64/boot/dts/xilinx/zynqmp-zc1232-revA.dts	2025-03-31 13:53:05.091317600 +0900
-+++ linux-xlnx-6.6.70-2024.1/arch/arm64/boot/dts/xilinx/zynqmp-zc1232-revA.dts	2025-03-31 13:54:56.963952800 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm64/boot/dts/xilinx/zynqmp-zc1232-revA.dts	2025-04-05 13:10:20.760605100 +0900
 @@ -40,13 +40,29 @@
  &qspi {
  	status = "okay";
@@ -17531,7 +17531,7 @@
  };
  
 --- linux-6.6.70/arch/arm64/boot/dts/xilinx/zynqmp-zc1254-revA.dts	2025-03-31 13:53:05.092314700 +0900
-+++ linux-xlnx-6.6.70-2024.1/arch/arm64/boot/dts/xilinx/zynqmp-zc1254-revA.dts	2025-03-31 13:54:56.964950200 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm64/boot/dts/xilinx/zynqmp-zc1254-revA.dts	2025-04-05 13:10:20.760605100 +0900
 @@ -48,6 +48,22 @@
  		spi-tx-bus-width = <4>;
  		spi-rx-bus-width = <4>; /* FIXME also DUAL configuration possible */
@@ -17556,7 +17556,7 @@
  };
  
 --- linux-6.6.70/arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm015-dc1.dts	2025-03-31 13:53:05.092314700 +0900
-+++ linux-xlnx-6.6.70-2024.1/arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm015-dc1.dts	2025-03-31 13:54:56.964950200 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm015-dc1.dts	2025-04-05 13:10:20.760605100 +0900
 @@ -98,8 +98,12 @@
  	phy-mode = "rgmii-id";
  	pinctrl-names = "default";
@@ -17616,7 +17616,7 @@
  };
  
 --- linux-6.6.70/arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm016-dc2.dts	2025-03-31 13:53:05.092314700 +0900
-+++ linux-xlnx-6.6.70-2024.1/arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm016-dc2.dts	2025-03-31 13:54:56.964950200 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm016-dc2.dts	2025-04-05 13:10:20.761602200 +0900
 @@ -91,12 +91,16 @@
  	phy-mode = "rgmii-id";
  	pinctrl-names = "default";
@@ -17728,7 +17728,7 @@
  			groups = "gpio0_6_grp", "gpio0_7_grp";
  			function = "gpio0";
 --- linux-6.6.70/arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm017-dc3.dts	2025-03-31 13:53:05.093312000 +0900
-+++ linux-xlnx-6.6.70-2024.1/arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm017-dc3.dts	2025-03-31 13:54:56.965947500 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm017-dc3.dts	2025-04-05 13:10:20.761602200 +0900
 @@ -88,8 +88,12 @@
  	status = "okay";
  	phy-handle = <&phy0>;
@@ -17825,7 +17825,7 @@
  
  &psgtr {
 --- linux-6.6.70/arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm018-dc4.dts	2025-03-31 13:53:05.093312000 +0900
-+++ linux-xlnx-6.6.70-2024.1/arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm018-dc4.dts	2025-03-31 13:54:56.965947500 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm018-dc4.dts	2025-04-05 13:10:20.761602200 +0900
 @@ -116,17 +116,21 @@
  	status = "okay";
  	phy-mode = "rgmii-id";
@@ -17883,7 +17883,7 @@
  };
  
 --- linux-6.6.70/arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm019-dc5.dts	2025-03-31 13:53:05.094309400 +0900
-+++ linux-xlnx-6.6.70-2024.1/arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm019-dc5.dts	2025-03-31 13:54:56.965947500 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm019-dc5.dts	2025-04-05 13:10:20.762599500 +0900
 @@ -77,8 +77,12 @@
  	phy-mode = "rgmii-id";
  	pinctrl-names = "default";
@@ -17918,7 +17918,7 @@
  			groups = "gpio0_76_grp", "gpio0_77_grp";
  			function = "gpio0";
 --- linux-6.6.70/arch/arm64/boot/dts/xilinx/zynqmp-zcu100-revC.dts	2025-03-31 13:53:05.094309400 +0900
-+++ linux-xlnx-6.6.70-2024.1/arch/arm64/boot/dts/xilinx/zynqmp-zcu100-revC.dts	2025-03-31 13:54:56.966944800 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm64/boot/dts/xilinx/zynqmp-zcu100-revC.dts	2025-04-05 13:10:20.762599500 +0900
 @@ -123,13 +123,13 @@
  		io-channels = <&u35 0>, <&u35 1>, <&u35 2>, <&u35 3>;
  	};
@@ -17945,7 +17945,7 @@
  			groups = "gpio0_4_grp", "gpio0_5_grp";
  			function = "gpio0";
 --- linux-6.6.70/arch/arm64/boot/dts/xilinx/zynqmp-zcu102-revA.dts	2025-03-31 13:53:05.095306700 +0900
-+++ linux-xlnx-6.6.70-2024.1/arch/arm64/boot/dts/xilinx/zynqmp-zcu102-revA.dts	2025-03-31 13:54:56.967942200 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm64/boot/dts/xilinx/zynqmp-zcu102-revA.dts	2025-04-05 13:10:20.763596900 +0900
 @@ -603,7 +603,7 @@
  				reg = <0x5d>;
  				temperature-stability = <50>; /* copy from zc702 */
@@ -18037,7 +18037,7 @@
  };
  
 --- linux-6.6.70/arch/arm64/boot/dts/xilinx/zynqmp-zcu104-revA.dts	2025-03-31 13:53:05.096304100 +0900
-+++ linux-xlnx-6.6.70-2024.1/arch/arm64/boot/dts/xilinx/zynqmp-zcu104-revA.dts	2025-03-31 13:54:56.968980900 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm64/boot/dts/xilinx/zynqmp-zcu104-revA.dts	2025-04-05 13:10:20.764594300 +0900
 @@ -272,7 +272,7 @@
  		};
  	};
@@ -18071,7 +18071,7 @@
  };
  
 --- linux-6.6.70/arch/arm64/boot/dts/xilinx/zynqmp-zcu104-revC.dts	2025-03-31 13:53:05.096304100 +0900
-+++ linux-xlnx-6.6.70-2024.1/arch/arm64/boot/dts/xilinx/zynqmp-zcu104-revC.dts	2025-03-31 13:54:56.968980900 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm64/boot/dts/xilinx/zynqmp-zcu104-revC.dts	2025-04-05 13:10:20.764594300 +0900
 @@ -284,7 +284,7 @@
  		};
  	};
@@ -18105,7 +18105,7 @@
  };
  
 --- linux-6.6.70/arch/arm64/boot/dts/xilinx/zynqmp-zcu106-revA.dts	2025-03-31 13:53:05.096304100 +0900
-+++ linux-xlnx-6.6.70-2024.1/arch/arm64/boot/dts/xilinx/zynqmp-zcu106-revA.dts	2025-03-31 13:54:56.968980900 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm64/boot/dts/xilinx/zynqmp-zcu106-revA.dts	2025-04-05 13:10:20.765591500 +0900
 @@ -605,7 +605,7 @@
  				reg = <0x5d>;
  				temperature-stability = <50>; /* copy from zc702 */
@@ -18197,7 +18197,7 @@
  };
  
 --- linux-6.6.70/arch/arm64/boot/dts/xilinx/zynqmp-zcu111-revA.dts	2025-03-31 13:53:05.097301400 +0900
-+++ linux-xlnx-6.6.70-2024.1/arch/arm64/boot/dts/xilinx/zynqmp-zcu111-revA.dts	2025-03-31 13:54:56.969978600 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm64/boot/dts/xilinx/zynqmp-zcu111-revA.dts	2025-04-05 13:10:20.765591500 +0900
 @@ -589,7 +589,7 @@
  		};
  	};
@@ -18252,7 +18252,7 @@
  };
  
 --- linux-6.6.70/arch/arm64/boot/dts/xilinx/zynqmp-zcu1275-revA.dts	2025-03-31 13:53:05.097301400 +0900
-+++ linux-xlnx-6.6.70-2024.1/arch/arm64/boot/dts/xilinx/zynqmp-zcu1275-revA.dts	2025-03-31 13:54:56.969978600 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm64/boot/dts/xilinx/zynqmp-zcu1275-revA.dts	2025-04-05 13:10:20.765591500 +0900
 @@ -1,6 +1,6 @@
  // SPDX-License-Identifier: GPL-2.0+
  /*
@@ -18305,7 +18305,7 @@
  };
  
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/arch/arm64/boot/dts/xilinx/zynqmp-zcu1275-revB.dts	2025-03-31 13:54:56.969978600 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm64/boot/dts/xilinx/zynqmp-zcu1275-revB.dts	2025-04-05 13:10:20.766588800 +0900
 @@ -0,0 +1,112 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -18420,7 +18420,7 @@
 +	xlnx,mio-bank = <1>;
 +};
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/arch/arm64/boot/dts/xilinx/zynqmp-zcu1285-revA.dts	2025-03-31 13:54:56.970975800 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm64/boot/dts/xilinx/zynqmp-zcu1285-revA.dts	2025-04-05 13:10:20.766588800 +0900
 @@ -0,0 +1,102 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -18525,7 +18525,7 @@
 +	xlnx,mio-bank = <1>;
 +};
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/arch/arm64/boot/dts/xilinx/zynqmp-zcu208-revA.dts	2025-03-31 13:54:56.970975800 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm64/boot/dts/xilinx/zynqmp-zcu208-revA.dts	2025-04-05 13:10:20.766588800 +0900
 @@ -0,0 +1,712 @@
 +// SPDX-License-Identifier: GPL-2.0+
 +/*
@@ -19240,7 +19240,7 @@
 +	maximum-speed = "super-speed";
 +};
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/arch/arm64/boot/dts/xilinx/zynqmp-zcu216-revA.dts	2025-03-31 13:54:56.970975800 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm64/boot/dts/xilinx/zynqmp-zcu216-revA.dts	2025-04-05 13:10:20.767586200 +0900
 @@ -0,0 +1,715 @@
 +// SPDX-License-Identifier: GPL-2.0+
 +/*
@@ -19958,7 +19958,7 @@
 +	maximum-speed = "super-speed";
 +};
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/arch/arm64/boot/dts/xilinx/zynqmp-zcu670-revA.dts	2025-03-31 13:54:56.971973200 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm64/boot/dts/xilinx/zynqmp-zcu670-revA.dts	2025-04-05 13:10:20.767586200 +0900
 @@ -0,0 +1,669 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -20630,7 +20630,7 @@
 +	snps,usb3_lpm_capable;
 +};
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/arch/arm64/boot/dts/xilinx/zynqmp-zcu670-revB.dts	2025-03-31 13:54:56.971973200 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm64/boot/dts/xilinx/zynqmp-zcu670-revB.dts	2025-04-05 13:10:20.767586200 +0900
 @@ -0,0 +1,672 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -21305,7 +21305,7 @@
 +	snps,usb3_lpm_capable;
 +};
 --- linux-6.6.70/arch/arm64/boot/dts/xilinx/zynqmp.dtsi	2025-03-31 13:53:05.097301400 +0900
-+++ linux-xlnx-6.6.70-2024.1/arch/arm64/boot/dts/xilinx/zynqmp.dtsi	2025-03-31 13:54:56.972970600 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm64/boot/dts/xilinx/zynqmp.dtsi	2025-04-05 13:10:20.768583500 +0900
 @@ -24,6 +24,13 @@
  	#address-cells = <2>;
  	#size-cells = <2>;
@@ -21947,7 +21947,7 @@
  				#address-cells = <1>;
  				#size-cells = <0>;
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/include/dt-bindings/clock/xlnx-versal-net-clk.h	2025-03-31 13:55:18.270471300 +0900
++++ linux-xlnx-6.6.70-v2024.1/include/dt-bindings/clock/xlnx-versal-net-clk.h	2025-04-05 13:10:41.322846300 +0900
 @@ -0,0 +1,73 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
 +/*
@@ -22023,7 +22023,7 @@
 +
 +#endif
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/include/dt-bindings/power/xlnx-versal-net-power.h	2025-03-31 13:55:18.386366600 +0900
++++ linux-xlnx-6.6.70-v2024.1/include/dt-bindings/power/xlnx-versal-net-power.h	2025-04-05 13:10:41.435579700 +0900
 @@ -0,0 +1,38 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
 +/*
@@ -22064,7 +22064,7 @@
 +
 +#endif
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/include/dt-bindings/power/xlnx-versal-power.h	2025-03-31 13:55:18.386366600 +0900
++++ linux-xlnx-6.6.70-v2024.1/include/dt-bindings/power/xlnx-versal-power.h	2025-04-05 13:10:41.435579700 +0900
 @@ -0,0 +1,54 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
 +/*
@@ -22121,7 +22121,7 @@
 +
 +#endif
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/include/dt-bindings/power/xlnx-versal-regnode.h	2025-03-31 13:55:18.386366600 +0900
++++ linux-xlnx-6.6.70-v2024.1/include/dt-bindings/power/xlnx-versal-regnode.h	2025-04-05 13:10:41.436577200 +0900
 @@ -0,0 +1,14 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
 +/*
@@ -22138,7 +22138,7 @@
 +
 +#endif
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/include/dt-bindings/reset/xlnx-versal-net-resets.h	2025-03-31 13:55:18.430663800 +0900
++++ linux-xlnx-6.6.70-v2024.1/include/dt-bindings/reset/xlnx-versal-net-resets.h	2025-04-05 13:10:41.478728300 +0900
 @@ -0,0 +1,53 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
 +/*

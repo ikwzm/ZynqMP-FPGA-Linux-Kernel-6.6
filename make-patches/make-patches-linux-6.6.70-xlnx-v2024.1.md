@@ -10,13 +10,13 @@ shell$ git clone --depth 1 -b v6.6.70 git://git.kernel.org/pub/scm/linux/kernel/
 ### Get linux-xlnx v6.6_LTS_2024.1_merge_6.6.70
 
 ```console
-shell$ git clone --depth 1 -b xlnx_rebase_v6.6_LTS_2024.1_merge_6.6.70 https://github.com/Xilinx/linux-xlnx.git linux-xlnx-6.6.70-2024.1
+shell$ git clone --depth 1 -b xlnx_rebase_v6.6_LTS_2024.1_merge_6.6.70 https://github.com/Xilinx/linux-xlnx.git linux-xlnx-6.6.70-v2024.1
 ```
 
 ### Make diff-linux-6.6.70-xlnx-v2024.1.txt
 
 ```console
-shell$ ruby ./make-patches/source-tree-diff-list.rb -t linux-6.6.70-xlnx-v2024.1 -A linux-6.6.70 -B linux-xlnx-6.6.70-2024.1 -o ./make-patches/diff-linux-6.6.70-xlnx-v2024.1.txt linux-6.6.70 linux-xlnx-6.6.70-2024.1 -v
+shell$ ruby ./make-patches/source-tree-diff-list.rb -t linux-6.6.70-xlnx-v2024.1 -A linux-6.6.70 -B linux-xlnx-6.6.70-v2024.1 -o ./make-patches/diff-linux-6.6.70-xlnx-v2024.1.txt linux-6.6.70 linux-xlnx-6.6.70-v2024.1 -v
 ## source-tree-diff-list.rb 0.1.1
 ## NAME: linux-6.6.70-xlnx-v2024.1
 ## A   : {name: linux-6.6.70, path: linux-6.6.70}

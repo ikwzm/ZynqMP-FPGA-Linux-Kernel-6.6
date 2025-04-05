@@ -1,5 +1,5 @@
 --- linux-6.6.70/arch/arm/mach-zynq/Makefile	2025-03-31 13:53:04.323611200 +0900
-+++ linux-xlnx-6.6.70-2024.1/arch/arm/mach-zynq/Makefile	2025-03-31 13:54:56.149870100 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm/mach-zynq/Makefile	2025-04-05 13:10:19.962243700 +0900
 @@ -4,5 +4,5 @@
  #
  
@@ -8,7 +8,7 @@
 +obj-y				:= common.o efuse.o slcr.o pm.o
  obj-$(CONFIG_SMP)		+= headsmp.o platsmp.o
 --- linux-6.6.70/arch/arm/mach-zynq/common.c	2025-03-31 13:53:04.324608500 +0900
-+++ linux-xlnx-6.6.70-2024.1/arch/arm/mach-zynq/common.c	2025-03-31 13:54:56.149870100 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm/mach-zynq/common.c	2025-04-05 13:10:19.962243700 +0900
 @@ -176,6 +176,7 @@
  
  static void __init zynq_irq_init(void)
@@ -18,7 +18,7 @@
  	irqchip_init();
  }
 --- linux-6.6.70/arch/arm/mach-zynq/common.h	2025-03-31 13:53:04.324608500 +0900
-+++ linux-xlnx-6.6.70-2024.1/arch/arm/mach-zynq/common.h	2025-03-31 13:54:56.150868800 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm/mach-zynq/common.h	2025-04-05 13:10:19.963241500 +0900
 @@ -17,6 +17,9 @@
  extern void zynq_slcr_cpu_state_write(int cpu, bool die);
  extern u32 zynq_slcr_get_device_id(void);
@@ -30,7 +30,7 @@
  extern char zynq_secondary_trampoline;
  extern char zynq_secondary_trampoline_jump;
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/arch/arm/mach-zynq/efuse.c	2025-03-31 13:54:56.150868800 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm/mach-zynq/efuse.c	2025-04-05 13:10:19.963241500 +0900
 @@ -0,0 +1,78 @@
 +/*
 + * Xilinx EFUSE driver
@@ -111,7 +111,7 @@
 +	return 0;
 +}
 --- linux-6.6.70/arch/arm/mach-zynq/platsmp.c	2025-03-31 13:53:04.325605800 +0900
-+++ linux-xlnx-6.6.70-2024.1/arch/arm/mach-zynq/platsmp.c	2025-03-31 13:54:56.151869000 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm/mach-zynq/platsmp.c	2025-04-05 13:10:19.964238100 +0900
 @@ -83,6 +83,9 @@
  
  static int zynq_boot_secondary(unsigned int cpu, struct task_struct *idle)
@@ -123,7 +123,7 @@
  }
  
 --- linux-6.6.70/arch/arm/mach-zynq/slcr.c	2025-03-31 13:53:04.325605800 +0900
-+++ linux-xlnx-6.6.70-2024.1/arch/arm/mach-zynq/slcr.c	2025-03-31 13:54:56.152862800 +0900
++++ linux-xlnx-6.6.70-v2024.1/arch/arm/mach-zynq/slcr.c	2025-04-05 13:10:19.964238100 +0900
 @@ -10,7 +10,6 @@
  #include <linux/mfd/syscon.h>
  #include <linux/of_address.h>

@@ -1,5 +1,5 @@
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/phy/xlnx,gt-quad-base.yaml	2025-03-31 13:54:52.393885900 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/phy/xlnx,gt-quad-base.yaml	2025-04-05 13:10:16.301161200 +0900
 @@ -0,0 +1,49 @@
 +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
 +%YAML 1.2
@@ -51,7 +51,7 @@
 +   };
 +...
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/phy/xlnx,v-hmdi-phy1.yaml	2025-03-31 13:54:52.393885900 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/phy/xlnx,v-hmdi-phy1.yaml	2025-04-05 13:10:16.301161200 +0900
 @@ -0,0 +1,280 @@
 +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) %YAML 1.2
 +%YAML 1.2
@@ -334,7 +334,7 @@
 +   };
 +...
 --- linux-6.6.70/drivers/phy/xilinx/Kconfig	2025-03-31 13:53:21.616839500 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/phy/xilinx/Kconfig	2025-03-31 13:55:13.511798000 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/phy/xilinx/Kconfig	2025-04-05 13:10:36.758969000 +0900
 @@ -11,3 +11,21 @@
  	help
  	  Enable this to support ZynqMP High Speed Gigabit Transceiver
@@ -358,7 +358,7 @@
 +	  It is designed for enabling gt quad base configuration for Xilinx
 +	  Displayport Tx and Rx subsystems.
 --- linux-6.6.70/drivers/phy/xilinx/Makefile	2025-03-31 13:53:21.616839500 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/phy/xilinx/Makefile	2025-03-31 13:55:13.512795300 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/phy/xilinx/Makefile	2025-04-05 13:10:36.760049000 +0900
 @@ -1,3 +1,10 @@
  # SPDX-License-Identifier: GPL-2.0
  
@@ -371,7 +371,7 @@
 +xilinx-hdmiphy-objs += xhdmiphy_mmcm.o
 +obj-$(CONFIG_PHY_XILINX_DPGTQUAD)	+= xilinx_dpgtquadphy.o
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/phy/xilinx/xhdmiphy.c	2025-03-31 13:55:13.514792000 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/phy/xilinx/xhdmiphy.c	2025-04-05 13:10:36.761046800 +0900
 @@ -0,0 +1,942 @@
 +// SPDX-License-Identifier: GPL-2.0-only
 +/*
@@ -1316,7 +1316,7 @@
 +MODULE_AUTHOR("Rajesh Gugulothu <gugulothu.rajesh@xilinx.com");
 +MODULE_DESCRIPTION("Xilinx HDMI PHY driver");
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/phy/xilinx/xhdmiphy.h	2025-03-31 13:55:13.514792000 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/phy/xilinx/xhdmiphy.h	2025-04-05 13:10:36.762044100 +0900
 @@ -0,0 +1,1163 @@
 +/* SPDX-License-Identifier: GPL-2.0-only */
 +
@@ -2482,7 +2482,7 @@
 +#endif /* XHDMIPHY_H_ */
 +/** @} */
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/phy/xilinx/xhdmiphy_core.c	2025-03-31 13:55:13.515787500 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/phy/xilinx/xhdmiphy_core.c	2025-04-05 13:10:36.762044100 +0900
 @@ -0,0 +1,1123 @@
 +// SPDX-License-Identifier: GPL-2.0-only
 +
@@ -3608,7 +3608,7 @@
 +	return 0;
 +}
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/phy/xilinx/xhdmiphy_gt_helper.c	2025-03-31 13:55:13.515787500 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/phy/xilinx/xhdmiphy_gt_helper.c	2025-04-05 13:10:36.763041300 +0900
 @@ -0,0 +1,1398 @@
 +// SPDX-License-Identifier: GPL-2.0-only
 +
@@ -5009,7 +5009,7 @@
 +	},
 +};
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/phy/xilinx/xhdmiphy_mmcm.c	2025-03-31 13:55:13.515787500 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/phy/xilinx/xhdmiphy_mmcm.c	2025-04-05 13:10:36.763041300 +0900
 @@ -0,0 +1,1877 @@
 +// SPDX-License-Identifier: GPL-2.0-only
 +
@@ -6889,7 +6889,7 @@
 +	return 1;
 +}
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/phy/xilinx/xhdmiphy_modules.c	2025-03-31 13:55:13.516786100 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/phy/xilinx/xhdmiphy_modules.c	2025-04-05 13:10:36.764038600 +0900
 @@ -0,0 +1,2027 @@
 +// SPDX-License-Identifier: GPL-2.0-only
 +
@@ -8919,7 +8919,7 @@
 +	xhdmiphy_write(inst, XHDMIPHY_INTR_STS_REG, event_ack);
 +}
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/phy/xilinx/xilinx_dpgtquadphy.c	2025-03-31 13:55:13.516786100 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/phy/xilinx/xilinx_dpgtquadphy.c	2025-04-05 13:10:36.764038600 +0900
 @@ -0,0 +1,181 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -9103,7 +9103,7 @@
 +MODULE_AUTHOR("Jagadeesh Banisetti <jbaniset@xilinx.com>");
 +MODULE_DESCRIPTION("Xilinx driver for GT Quad Base");
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/include/linux/phy/phy-hdmi.h	2025-03-31 13:55:19.119562800 +0900
++++ linux-xlnx-6.6.70-v2024.1/include/linux/phy/phy-hdmi.h	2025-04-05 13:10:42.122700700 +0900
 @@ -0,0 +1,233 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
 +
@@ -9339,7 +9339,7 @@
 +
 +#endif /* __PHY_HDMI_H_ */
 --- linux-6.6.70/include/linux/phy/phy.h	2025-03-31 13:53:27.179046100 +0900
-+++ linux-xlnx-6.6.70-2024.1/include/linux/phy/phy.h	2025-03-31 13:55:19.125546700 +0900
++++ linux-xlnx-6.6.70-v2024.1/include/linux/phy/phy.h	2025-04-05 13:10:42.129682800 +0900
 @@ -18,6 +18,7 @@
  
  #include <linux/phy/phy-dp.h>

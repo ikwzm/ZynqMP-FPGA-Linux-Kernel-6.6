@@ -1,5 +1,5 @@
 --- linux-6.6.70/Documentation/ABI/testing/sysfs-class-fpga-bridge	2025-03-31 13:52:58.613625500 +0900
-+++ linux-xlnx-6.6.70-2024.1/Documentation/ABI/testing/sysfs-class-fpga-bridge	2025-03-31 13:54:50.572104700 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/ABI/testing/sysfs-class-fpga-bridge	2025-04-05 13:10:14.554595100 +0900
 @@ -9,3 +9,12 @@
  KernelVersion:	4.5
  Contact:	Alan Tull <atull@opensource.altera.com>
@@ -14,7 +14,7 @@
 +		compiled with #define DEBUG which is enabled by default
 +		when CONFIG_DEBUG_KERNEL is setup.
 --- linux-6.6.70/Documentation/devicetree/bindings/fpga/fpga-region.txt	2025-03-31 13:52:59.542593200 +0900
-+++ linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/fpga/fpga-region.txt	1970-01-01 09:00:00.000000000 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/fpga/fpga-region.txt	1970-01-01 09:00:00.000000000 +0900
 @@ -1,479 +0,0 @@
 -FPGA Region Device Tree Binding
 -
@@ -496,7 +496,7 @@
 -[2] tspace.library.utoronto.ca/bitstream/1807/67932/1/Byma_Stuart_A_201411_MAS_thesis.pdf
 -[3] https://www.xilinx.com/support/documentation/sw_manuals/xilinx14_1/ug702.pdf
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/fpga/fpga-region.yaml	2025-03-31 13:54:51.541296400 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/fpga/fpga-region.yaml	2025-04-05 13:10:15.496963600 +0900
 @@ -0,0 +1,358 @@
 +# SPDX-License-Identifier: GPL-2.0
 +%YAML 1.2
@@ -857,7 +857,7 @@
 +      };
 +    };
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/fpga/xlnx,afi-fpga.txt	2025-03-31 13:54:51.543291000 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/fpga/xlnx,afi-fpga.txt	2025-04-05 13:10:15.498958300 +0900
 @@ -0,0 +1,67 @@
 +Xilinx ZynqMp AFI interface Manager
 +
@@ -927,7 +927,7 @@
 +		 <&zynqmp_reset 118>, <&zynqmp_reset 119>;
 +};
 --- linux-6.6.70/Documentation/devicetree/bindings/fpga/xlnx,versal-fpga.yaml	2025-03-31 13:52:59.545587600 +0900
-+++ linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/fpga/xlnx,versal-fpga.yaml	2025-03-31 13:54:51.545284900 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/fpga/xlnx,versal-fpga.yaml	2025-04-05 13:10:15.500040600 +0900
 @@ -26,7 +26,7 @@
  
  examples:
@@ -938,7 +938,7 @@
      };
  
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/fpga/xlnx,zynq-afi-fpga.txt	2025-03-31 13:54:51.545284900 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/fpga/xlnx,zynq-afi-fpga.txt	2025-04-05 13:10:15.501038400 +0900
 @@ -0,0 +1,19 @@
 +Xilinx Zynq AFI interface Manager
 +
@@ -960,7 +960,7 @@
 +	xlnx,afi-buswidth = <1>;
 +};
 --- linux-6.6.70/drivers/fpga/Kconfig	2025-03-31 13:53:11.410151400 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/fpga/Kconfig	2025-03-31 13:55:03.386741200 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/fpga/Kconfig	2025-04-05 13:10:26.870033600 +0900
 @@ -12,6 +12,16 @@
  
  if FPGA
@@ -1004,7 +1004,7 @@
  	tristate "FPGA Bridge Framework"
  	help
 --- linux-6.6.70/drivers/fpga/Makefile	2025-03-31 13:53:11.411148800 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/fpga/Makefile	2025-03-31 13:55:03.386741200 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/fpga/Makefile	2025-04-05 13:10:26.870033600 +0900
 @@ -17,8 +17,10 @@
  obj-$(CONFIG_FPGA_MGR_TS73XX)		+= ts73xx-fpga.o
  obj-$(CONFIG_FPGA_MGR_XILINX_SPI)	+= xilinx-spi.o
@@ -1017,7 +1017,7 @@
  obj-$(CONFIG_FPGA_MGR_LATTICE_SYSCONFIG)	+= lattice-sysconfig.o
  obj-$(CONFIG_FPGA_MGR_LATTICE_SYSCONFIG_SPI)	+= lattice-sysconfig-spi.o
 --- linux-6.6.70/drivers/fpga/fpga-bridge.c	2025-03-31 13:53:11.421168900 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/fpga/fpga-bridge.c	2025-03-31 13:55:03.396778100 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/fpga/fpga-bridge.c	2025-04-05 13:10:26.880084000 +0900
 @@ -13,6 +13,12 @@
  #include <linux/slab.h>
  #include <linux/spinlock.h>
@@ -1066,7 +1066,7 @@
  };
  ATTRIBUTE_GROUPS(fpga_bridge);
 --- linux-6.6.70/drivers/fpga/fpga-mgr.c	2025-03-31 13:53:11.421168900 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/fpga/fpga-mgr.c	2025-03-31 13:55:03.396778100 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/fpga/fpga-mgr.c	2025-04-05 13:10:26.880084000 +0900
 @@ -8,6 +8,9 @@
   * With code from the mailing list:
   * Copyright (C) 2013 Xilinx, Inc.
@@ -1499,7 +1499,7 @@
  	 * If the low level driver provides a method for putting fpga into
  	 * a desired state upon unregister, do it.
 --- linux-6.6.70/drivers/fpga/of-fpga-region.c	2025-03-31 13:53:11.424160900 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/fpga/of-fpga-region.c	2025-03-31 13:55:03.400912100 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/fpga/of-fpga-region.c	2025-04-05 13:10:26.958143100 +0900
 @@ -230,6 +230,16 @@
  	if (of_property_read_bool(overlay, "encrypted-fpga-config"))
  		info->flags |= FPGA_MGR_ENCRYPTED_BITSTREAM;
@@ -1518,7 +1518,7 @@
  				     &firmware_name)) {
  		info->firmware_name = devm_kstrdup(dev, firmware_name,
 --- linux-6.6.70/drivers/fpga/versal-fpga.c	2025-03-31 13:53:11.429185900 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/fpga/versal-fpga.c	2025-03-31 13:55:03.404900200 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/fpga/versal-fpga.c	2025-04-05 13:10:26.962208600 +0900
 @@ -19,6 +19,18 @@
  	return 0;
  }
@@ -1556,7 +1556,7 @@
  		dev_err(dev, "no usable DMA configuration\n");
  		return ret;
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/fpga/xilinx-afi.c	2025-03-31 13:55:03.404900200 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/fpga/xilinx-afi.c	2025-04-05 13:10:26.963206000 +0900
 @@ -0,0 +1,96 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -1655,7 +1655,7 @@
 +MODULE_AUTHOR("Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>");
 +MODULE_LICENSE("GPL");
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/fpga/zynq-afi.c	2025-03-31 13:55:03.405897000 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/fpga/zynq-afi.c	2025-04-05 13:10:26.964203200 +0900
 @@ -0,0 +1,81 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -1739,7 +1739,7 @@
 +MODULE_AUTHOR("Nava kishore Manne <nava.manne@xilinx.com>");
 +MODULE_LICENSE("GPL");
 --- linux-6.6.70/drivers/fpga/zynqmp-fpga.c	2025-03-31 13:53:11.430182900 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/fpga/zynqmp-fpga.c	2025-03-31 13:55:03.406897100 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/fpga/zynqmp-fpga.c	2025-04-05 13:10:26.964203200 +0900
 @@ -9,20 +9,85 @@
  #include <linux/kernel.h>
  #include <linux/module.h>
@@ -2090,7 +2090,7 @@
  				     &zynqmp_fpga_ops, priv);
  	return PTR_ERR_OR_ZERO(mgr);
 --- linux-6.6.70/include/linux/fpga/fpga-mgr.h	2025-03-31 13:53:26.739732100 +0900
-+++ linux-xlnx-6.6.70-2024.1/include/linux/fpga/fpga-mgr.h	2025-03-31 13:55:18.667158700 +0900
++++ linux-xlnx-6.6.70-v2024.1/include/linux/fpga/fpga-mgr.h	2025-04-05 13:10:41.714866000 +0900
 @@ -9,8 +9,11 @@
  #define _LINUX_FPGA_MGR_H
  

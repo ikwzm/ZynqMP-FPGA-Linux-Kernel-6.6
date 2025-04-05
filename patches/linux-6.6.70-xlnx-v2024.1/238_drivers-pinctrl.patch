@@ -1,5 +1,5 @@
 --- linux-6.6.70/Documentation/devicetree/bindings/pinctrl/xlnx,zynq-pinctrl.yaml	2025-03-31 13:53:00.622234500 +0900
-+++ linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/pinctrl/xlnx,zynq-pinctrl.yaml	2025-03-31 13:54:52.480708800 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/pinctrl/xlnx,zynq-pinctrl.yaml	2025-04-05 13:10:16.383698200 +0900
 @@ -39,7 +39,7 @@
        phandle to the SLCR.
  
@@ -10,7 +10,7 @@
      patternProperties:
        '^mux':
 --- linux-6.6.70/Documentation/devicetree/bindings/pinctrl/xlnx,zynqmp-pinctrl.yaml	2025-03-31 13:53:00.623262100 +0900
-+++ linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/pinctrl/xlnx,zynqmp-pinctrl.yaml	2025-03-31 13:54:52.480708800 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/pinctrl/xlnx,zynqmp-pinctrl.yaml	2025-04-05 13:10:16.384695700 +0900
 @@ -31,7 +31,7 @@
      const: xlnx,zynqmp-pinctrl
  
@@ -423,7 +423,7 @@
  
            bias-pull-up: true
 --- linux-6.6.70/drivers/pinctrl/pinctrl-zynqmp.c	2025-03-31 13:53:21.742915100 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/pinctrl/pinctrl-zynqmp.c	2025-03-31 13:55:13.644906300 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/pinctrl/pinctrl-zynqmp.c	2025-04-05 13:10:36.884778100 +0900
 @@ -43,6 +43,12 @@
  #define DRIVE_STRENGTH_8MA	8
  #define DRIVE_STRENGTH_12MA	12

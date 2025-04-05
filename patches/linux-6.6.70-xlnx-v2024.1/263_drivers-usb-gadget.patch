@@ -1,5 +1,5 @@
 --- linux-6.6.70/drivers/usb/gadget/function/f_tcm.c	2025-03-31 13:53:24.374537700 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/usb/gadget/function/f_tcm.c	2025-03-31 13:55:16.162153900 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/usb/gadget/function/f_tcm.c	2025-04-05 13:10:39.273755700 +0900
 @@ -1633,8 +1633,10 @@
  
  CONFIGFS_ATTR(tcm_usbg_tpg_, nexus);
@@ -45,7 +45,7 @@
  {
  	struct f_uas		*fu = to_f_uas(f);
 --- linux-6.6.70/drivers/usb/gadget/function/uvc_video.c	2025-03-31 13:53:24.394713900 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/usb/gadget/function/uvc_video.c	2025-03-31 13:55:16.180279700 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/usb/gadget/function/uvc_video.c	2025-04-05 13:10:39.291898200 +0900
 @@ -463,10 +463,10 @@
  			req->no_interrupt = 1;
  		}

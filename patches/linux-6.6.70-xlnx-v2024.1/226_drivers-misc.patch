@@ -1,5 +1,5 @@
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/misc/xlnx,dpu.yaml	2025-03-31 13:54:52.118262700 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/misc/xlnx,dpu.yaml	2025-04-05 13:10:16.040671100 +0900
 @@ -0,0 +1,91 @@
 +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
 +%YAML 1.2
@@ -93,7 +93,7 @@
 +        interrupt-names = "dpu0_interrupt";
 +    };
 --- linux-6.6.70/Documentation/devicetree/bindings/misc/xlnx,sd-fec.txt	2025-03-31 13:53:00.309791300 +0900
-+++ linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/misc/xlnx,sd-fec.txt	1970-01-01 09:00:00.000000000 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/misc/xlnx,sd-fec.txt	1970-01-01 09:00:00.000000000 +0900
 @@ -1,58 +0,0 @@
 -* Xilinx SDFEC(16nm) IP *
 -
@@ -154,7 +154,7 @@
 -		xlnx,sdfec-dout-width = <1>;
 -	};
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/misc/xlnx,sd-fec.yaml	2025-03-31 13:54:52.118262700 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/misc/xlnx,sd-fec.yaml	2025-04-05 13:10:16.040671100 +0900
 @@ -0,0 +1,140 @@
 +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
 +%YAML 1.2
@@ -297,7 +297,7 @@
 +    };
 +
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/soc/xilinx/xlnx,ai-engine.yaml	2025-03-31 13:54:52.789141200 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/soc/xilinx/xlnx,ai-engine.yaml	2025-04-05 13:10:16.680965700 +0900
 @@ -0,0 +1,199 @@
 +# SPDX-License-Identifier: GPL-2.0
 +%YAML 1.2
@@ -499,7 +499,7 @@
 +      };
 +    };
 --- linux-6.6.70/Documentation/misc-devices/xilinx_sdfec.rst	2025-03-31 13:53:01.580556900 +0900
-+++ linux-xlnx-6.6.70-2024.1/Documentation/misc-devices/xilinx_sdfec.rst	2025-03-31 13:54:53.580377900 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/misc-devices/xilinx_sdfec.rst	2025-04-05 13:10:17.416370800 +0900
 @@ -29,7 +29,7 @@
    - Does not support shared LDPC code table wraparound
  
@@ -510,7 +510,7 @@
  
  Modes of Operation
 --- linux-6.6.70/drivers/misc/Kconfig	2025-03-31 13:53:17.992074600 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/misc/Kconfig	2025-03-31 13:55:09.910992900 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/misc/Kconfig	2025-04-05 13:10:33.273167600 +0900
 @@ -479,6 +479,45 @@
  
  	  If unsure, say N.
@@ -575,7 +575,7 @@
  source "drivers/misc/eeprom/Kconfig"
  source "drivers/misc/cb710/Kconfig"
 --- linux-6.6.70/drivers/misc/Makefile	2025-03-31 13:53:17.992074600 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/misc/Makefile	2025-03-31 13:55:09.910992900 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/misc/Makefile	2025-04-05 13:10:33.274164200 +0900
 @@ -58,7 +58,9 @@
  obj-$(CONFIG_PVPANIC)   	+= pvpanic/
  obj-$(CONFIG_UACCE)		+= uacce/
@@ -594,7 +594,7 @@
 +rsmu-objs			:= rsmu_cdev.o rsmu_cm.o rsmu_sabre.o
 +obj-$(CONFIG_RSMU)		+= rsmu.o
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/misc/rsmu_cdev.c	2025-03-31 13:55:10.003918100 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/misc/rsmu_cdev.c	2025-04-05 13:10:33.365622200 +0900
 @@ -0,0 +1,423 @@
 +// SPDX-License-Identifier: GPL-2.0+
 +/*
@@ -1020,7 +1020,7 @@
 +MODULE_DESCRIPTION("Renesas SMU character device driver");
 +MODULE_LICENSE("GPL");
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/misc/rsmu_cdev.h	2025-03-31 13:55:10.003918100 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/misc/rsmu_cdev.h	2025-04-05 13:10:33.365622200 +0900
 @@ -0,0 +1,131 @@
 +/* SPDX-License-Identifier: GPL-2.0+ */
 +/*
@@ -1154,7 +1154,7 @@
 +};
 +#endif
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/misc/rsmu_cm.c	2025-03-31 13:55:10.004915500 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/misc/rsmu_cm.c	2025-04-05 13:10:33.366620100 +0900
 @@ -0,0 +1,530 @@
 +// SPDX-License-Identifier: GPL-2.0+
 +/*
@@ -1687,7 +1687,7 @@
 +	.get_reference_monitor_status = rsmu_cm_get_reference_monitor_status
 +};
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/misc/rsmu_sabre.c	2025-03-31 13:55:10.004915500 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/misc/rsmu_sabre.c	2025-04-05 13:10:33.366620100 +0900
 @@ -0,0 +1,350 @@
 +// SPDX-License-Identifier: GPL-2.0+
 +/*
@@ -2039,9 +2039,9 @@
 +	.get_fw_version = NULL,
 +	.load_firmware = rsmu_sabre_load_firmware,
 +};
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/misc/xilinx-ai-engine/Makefile
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/drivers/misc/xilinx-ai-engine/Makefile
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/misc/xilinx-ai-engine/Makefile	2025-03-31 13:55:10.032120900 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/misc/xilinx-ai-engine/Makefile	2025-04-05 13:10:33.396757000 +0900
 @@ -0,0 +1,31 @@
 +# SPDX-License-Identifier: GPL-2.0-only
 +#
@@ -2074,9 +2074,9 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/misc/xi
 +				   ai-engine-sysfs-lock.o	\
 +				   ai-engine-sysfs-status.o	\
 +				   ai-engine-status-dump.o
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/misc/xilinx-ai-engine/ai-engine-aie.c
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/drivers/misc/xilinx-ai-engine/ai-engine-aie.c
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/misc/xilinx-ai-engine/ai-engine-aie.c	2025-03-31 13:55:10.033118100 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/misc/xilinx-ai-engine/ai-engine-aie.c	2025-04-05 13:10:33.397753500 +0900
 @@ -0,0 +1,2542 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -4620,9 +4620,9 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/misc/xi
 +
 +	return 0;
 +}
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/misc/xilinx-ai-engine/ai-engine-aieml.c
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/drivers/misc/xilinx-ai-engine/ai-engine-aieml.c
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/misc/xilinx-ai-engine/ai-engine-aieml.c	2025-03-31 13:55:10.033118100 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/misc/xilinx-ai-engine/ai-engine-aieml.c	2025-04-05 13:10:33.397753500 +0900
 @@ -0,0 +1,2800 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -7424,9 +7424,9 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/misc/xi
 +
 +	return 0;
 +}
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/misc/xilinx-ai-engine/ai-engine-aperture.c
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/drivers/misc/xilinx-ai-engine/ai-engine-aperture.c
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/misc/xilinx-ai-engine/ai-engine-aperture.c	2025-03-31 13:55:10.034115400 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/misc/xilinx-ai-engine/ai-engine-aperture.c	2025-04-05 13:10:33.398751700 +0900
 @@ -0,0 +1,604 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -8032,9 +8032,9 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/misc/xi
 +	kfree(aperture);
 +	return ERR_PTR(ret);
 +}
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/misc/xilinx-ai-engine/ai-engine-clock.c
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/drivers/misc/xilinx-ai-engine/ai-engine-clock.c
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/misc/xilinx-ai-engine/ai-engine-clock.c	2025-03-31 13:55:10.034115400 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/misc/xilinx-ai-engine/ai-engine-clock.c	2025-04-05 13:10:33.398751700 +0900
 @@ -0,0 +1,529 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -8565,9 +8565,9 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/misc/xi
 +	return 0;
 +}
 +EXPORT_SYMBOL_GPL(aie_partition_get_freq_req);
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/misc/xilinx-ai-engine/ai-engine-dev-v1_0.c
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/drivers/misc/xilinx-ai-engine/ai-engine-dev-v1_0.c
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/misc/xilinx-ai-engine/ai-engine-dev-v1_0.c	2025-03-31 13:55:10.034115400 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/misc/xilinx-ai-engine/ai-engine-dev-v1_0.c	2025-04-05 13:10:33.399769600 +0900
 @@ -0,0 +1,202 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -8771,9 +8771,9 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/misc/xi
 +	dev_info(&pdev->dev, "ai-enginee-v1.0 device node is probed.\n");
 +	return 0;
 +}
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/misc/xilinx-ai-engine/ai-engine-dev.c
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/drivers/misc/xilinx-ai-engine/ai-engine-dev.c
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/misc/xilinx-ai-engine/ai-engine-dev.c	2025-03-31 13:55:10.035112700 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/misc/xilinx-ai-engine/ai-engine-dev.c	2025-04-05 13:10:33.399833600 +0900
 @@ -0,0 +1,844 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -9619,9 +9619,9 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/misc/xi
 +MODULE_AUTHOR("Xilinx, Inc.");
 +MODULE_LICENSE("GPL");
 +MODULE_IMPORT_NS(DMA_BUF);
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/misc/xilinx-ai-engine/ai-engine-dma.c
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/drivers/misc/xilinx-ai-engine/ai-engine-dma.c
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/misc/xilinx-ai-engine/ai-engine-dma.c	2025-03-31 13:55:10.035112700 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/misc/xilinx-ai-engine/ai-engine-dma.c	2025-04-05 13:10:33.399833600 +0900
 @@ -0,0 +1,718 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -10341,9 +10341,9 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/misc/xi
 +
 +	return 0;
 +}
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/misc/xilinx-ai-engine/ai-engine-internal.h
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/drivers/misc/xilinx-ai-engine/ai-engine-internal.h
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/misc/xilinx-ai-engine/ai-engine-internal.h	2025-03-31 13:55:10.036110000 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/misc/xilinx-ai-engine/ai-engine-internal.h	2025-04-05 13:10:33.400830600 +0900
 @@ -0,0 +1,1464 @@
 +/* SPDX-License-Identifier: GPL-2.0-only */
 +/*
@@ -11809,9 +11809,9 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/misc/xi
 +		    struct aie_location *loc);
 +
 +#endif /* AIE_INTERNAL_H */
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/misc/xilinx-ai-engine/ai-engine-interrupt.c
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/drivers/misc/xilinx-ai-engine/ai-engine-interrupt.c
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/misc/xilinx-ai-engine/ai-engine-interrupt.c	2025-03-31 13:55:10.036110000 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/misc/xilinx-ai-engine/ai-engine-interrupt.c	2025-04-05 13:10:33.400830600 +0900
 @@ -0,0 +1,1520 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -13333,9 +13333,9 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/misc/xi
 +	kfree(aie_errs);
 +}
 +EXPORT_SYMBOL_GPL(aie_free_errors);
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/misc/xilinx-ai-engine/ai-engine-mem.c
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/drivers/misc/xilinx-ai-engine/ai-engine-mem.c
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/misc/xilinx-ai-engine/ai-engine-mem.c	2025-03-31 13:55:10.037107300 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/misc/xilinx-ai-engine/ai-engine-mem.c	2025-04-05 13:10:33.401828600 +0900
 @@ -0,0 +1,304 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -13641,9 +13641,9 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/misc/xi
 +	}
 +	return false;
 +}
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/misc/xilinx-ai-engine/ai-engine-overlay.c
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/drivers/misc/xilinx-ai-engine/ai-engine-overlay.c
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/misc/xilinx-ai-engine/ai-engine-overlay.c	2025-03-31 13:55:10.037107300 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/misc/xilinx-ai-engine/ai-engine-overlay.c	2025-04-05 13:10:33.401828600 +0900
 @@ -0,0 +1,124 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -13769,9 +13769,9 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/misc/xi
 +{
 +	of_overlay_notifier_unregister(&aie_of_nb);
 +}
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/misc/xilinx-ai-engine/ai-engine-part.c
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/drivers/misc/xilinx-ai-engine/ai-engine-part.c
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/misc/xilinx-ai-engine/ai-engine-part.c	2025-03-31 13:55:10.037107300 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/misc/xilinx-ai-engine/ai-engine-part.c	2025-04-05 13:10:33.402825200 +0900
 @@ -0,0 +1,1200 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -14973,9 +14973,9 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/misc/xi
 +	else
 +		return (apart->range.size.row - tattr->start_row);
 +}
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/misc/xilinx-ai-engine/ai-engine-res.c
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/drivers/misc/xilinx-ai-engine/ai-engine-res.c
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/misc/xilinx-ai-engine/ai-engine-res.c	2025-03-31 13:55:10.038104700 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/misc/xilinx-ai-engine/ai-engine-res.c	2025-04-05 13:10:33.402825200 +0900
 @@ -0,0 +1,466 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -15443,9 +15443,9 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/misc/xi
 +
 +	return rsbit;
 +}
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/misc/xilinx-ai-engine/ai-engine-reset.c
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/drivers/misc/xilinx-ai-engine/ai-engine-reset.c
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/misc/xilinx-ai-engine/ai-engine-reset.c	2025-03-31 13:55:10.038104700 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/misc/xilinx-ai-engine/ai-engine-reset.c	2025-04-05 13:10:33.402825200 +0900
 @@ -0,0 +1,552 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -15999,9 +15999,9 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/misc/xi
 +	mutex_unlock(&apart->mlock);
 +	return ret;
 +}
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/misc/xilinx-ai-engine/ai-engine-rscmgr.c
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/drivers/misc/xilinx-ai-engine/ai-engine-rscmgr.c
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/misc/xilinx-ai-engine/ai-engine-rscmgr.c	2025-03-31 13:55:10.039102100 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/misc/xilinx-ai-engine/ai-engine-rscmgr.c	2025-04-05 13:10:33.403822700 +0900
 @@ -0,0 +1,1674 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -17677,9 +17677,9 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/misc/xi
 +
 +	return 0;
 +}
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/misc/xilinx-ai-engine/ai-engine-status-dump.c
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/drivers/misc/xilinx-ai-engine/ai-engine-status-dump.c
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/misc/xilinx-ai-engine/ai-engine-status-dump.c	2025-03-31 13:55:10.039176700 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/misc/xilinx-ai-engine/ai-engine-status-dump.c	2025-04-05 13:10:33.403822700 +0900
 @@ -0,0 +1,377 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -18058,9 +18058,9 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/misc/xi
 +	return 0;
 +}
 +EXPORT_SYMBOL_GPL(aie_get_tile_info);
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/misc/xilinx-ai-engine/ai-engine-sysfs-clock.c
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/drivers/misc/xilinx-ai-engine/ai-engine-sysfs-clock.c
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/misc/xilinx-ai-engine/ai-engine-sysfs-clock.c	2025-03-31 13:55:10.039176700 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/misc/xilinx-ai-engine/ai-engine-sysfs-clock.c	2025-04-05 13:10:33.404819900 +0900
 @@ -0,0 +1,37 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -18099,9 +18099,9 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/misc/xi
 +
 +	return scnprintf(buffer, PAGE_SIZE, "%llu\n", freq);
 +}
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/misc/xilinx-ai-engine/ai-engine-sysfs-core.c
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/drivers/misc/xilinx-ai-engine/ai-engine-sysfs-core.c
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/misc/xilinx-ai-engine/ai-engine-sysfs-core.c	2025-03-31 13:55:10.040174500 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/misc/xilinx-ai-engine/ai-engine-sysfs-core.c	2025-04-05 13:10:33.404819900 +0900
 @@ -0,0 +1,191 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -18294,9 +18294,9 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/misc/xi
 +	mutex_unlock(&apart->mlock);
 +	return len;
 +}
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/misc/xilinx-ai-engine/ai-engine-sysfs-dma.c
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/drivers/misc/xilinx-ai-engine/ai-engine-sysfs-dma.c
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/misc/xilinx-ai-engine/ai-engine-sysfs-dma.c	2025-03-31 13:55:10.041171900 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/misc/xilinx-ai-engine/ai-engine-sysfs-dma.c	2025-04-05 13:10:33.406814600 +0900
 @@ -0,0 +1,108 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -18406,9 +18406,9 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/misc/xi
 +	mutex_unlock(&apart->mlock);
 +	return len;
 +}
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/misc/xilinx-ai-engine/ai-engine-sysfs-error.c
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/drivers/misc/xilinx-ai-engine/ai-engine-sysfs-error.c
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/misc/xilinx-ai-engine/ai-engine-sysfs-error.c	2025-03-31 13:55:10.041171900 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/misc/xilinx-ai-engine/ai-engine-sysfs-error.c	2025-04-05 13:10:33.406814600 +0900
 @@ -0,0 +1,382 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -18792,9 +18792,9 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/misc/xi
 +	mutex_unlock(&apart->mlock);
 +	return len;
 +}
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/misc/xilinx-ai-engine/ai-engine-sysfs-event.c
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/drivers/misc/xilinx-ai-engine/ai-engine-sysfs-event.c
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/misc/xilinx-ai-engine/ai-engine-sysfs-event.c	2025-03-31 13:55:10.041171900 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/misc/xilinx-ai-engine/ai-engine-sysfs-event.c	2025-04-05 13:10:33.406814600 +0900
 @@ -0,0 +1,134 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -18930,9 +18930,9 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/misc/xi
 +	mutex_unlock(&apart->mlock);
 +	return len;
 +}
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/misc/xilinx-ai-engine/ai-engine-sysfs-info.c
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/drivers/misc/xilinx-ai-engine/ai-engine-sysfs-info.c
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/misc/xilinx-ai-engine/ai-engine-sysfs-info.c	2025-03-31 13:55:10.042168500 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/misc/xilinx-ai-engine/ai-engine-sysfs-info.c	2025-04-05 13:10:33.407812700 +0900
 @@ -0,0 +1,79 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -19013,9 +19013,9 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/misc/xi
 +	mutex_unlock(&aperture->mlock);
 +	return len;
 +}
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/misc/xilinx-ai-engine/ai-engine-sysfs-lock.c
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/drivers/misc/xilinx-ai-engine/ai-engine-sysfs-lock.c
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/misc/xilinx-ai-engine/ai-engine-sysfs-lock.c	2025-03-31 13:55:10.042168500 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/misc/xilinx-ai-engine/ai-engine-sysfs-lock.c	2025-04-05 13:10:33.407812700 +0900
 @@ -0,0 +1,78 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -19095,9 +19095,9 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/misc/xi
 +	mutex_unlock(&apart->mlock);
 +	return len;
 +}
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/misc/xilinx-ai-engine/ai-engine-sysfs-status.c
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/drivers/misc/xilinx-ai-engine/ai-engine-sysfs-status.c
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/misc/xilinx-ai-engine/ai-engine-sysfs-status.c	2025-03-31 13:55:10.042168500 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/misc/xilinx-ai-engine/ai-engine-sysfs-status.c	2025-04-05 13:10:33.407812700 +0900
 @@ -0,0 +1,124 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -19223,9 +19223,9 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/misc/xi
 +	mutex_unlock(&apart->mlock);
 +	return len;
 +}
-diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/misc/xilinx-ai-engine/ai-engine-sysfs.c
+diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-v2024.1/drivers/misc/xilinx-ai-engine/ai-engine-sysfs.c
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/misc/xilinx-ai-engine/ai-engine-sysfs.c	2025-03-31 13:55:10.043166500 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/misc/xilinx-ai-engine/ai-engine-sysfs.c	2025-04-05 13:10:33.408809300 +0900
 @@ -0,0 +1,448 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -19676,7 +19676,7 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/misc/xi
 +	sysfs_remove_group(&atile->dev.kobj, atile->attr_grp);
 +}
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/misc/xilinx_puf.c	2025-03-31 13:55:10.043166500 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/misc/xilinx_puf.c	2025-04-05 13:10:33.408809300 +0900
 @@ -0,0 +1,309 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -19988,7 +19988,7 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/misc/xi
 +MODULE_LICENSE("GPL");
 +MODULE_DESCRIPTION("Xilinx Versal PUF driver");
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/misc/xlnx_dpu.c	2025-03-31 13:55:10.045160900 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/misc/xlnx_dpu.c	2025-04-05 13:10:33.410883000 +0900
 @@ -0,0 +1,1368 @@
 +// SPDX-License-Identifier: GPL-2.0 OR Apache-2.0
 +/*
@@ -21359,7 +21359,7 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/misc/xi
 +MODULE_AUTHOR("Ye Yang <ye.yang@xilinx.com>");
 +MODULE_LICENSE("GPL");
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/misc/xlnx_dpu.h	2025-03-31 13:55:10.045160900 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/misc/xlnx_dpu.h	2025-04-05 13:10:33.410883000 +0900
 @@ -0,0 +1,201 @@
 +/* SPDX-License-Identifier: GPL-2.0 OR Apache-2.0 */
 +/*
@@ -21563,7 +21563,7 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/misc/xi
 +
 +#endif /* _DPU_UAPI_H_ */
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/include/linux/xlnx-ai-engine.h	2025-03-31 13:55:19.512756800 +0900
++++ linux-xlnx-6.6.70-v2024.1/include/linux/xlnx-ai-engine.h	2025-04-05 13:10:42.509912600 +0900
 @@ -0,0 +1,267 @@
 +/* SPDX-License-Identifier: GPL-2.0-or-later */
 +/*
@@ -21833,7 +21833,7 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/misc/xi
 +#endif /* CONFIG_XILINX_AIE */
 +#endif
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/include/uapi/linux/rsmu.h	2025-03-31 13:55:20.181753000 +0900
++++ linux-xlnx-6.6.70-v2024.1/include/uapi/linux/rsmu.h	2025-04-05 13:10:43.150988700 +0900
 @@ -0,0 +1,182 @@
 +/* SPDX-License-Identifier: GPL-2.0+ WITH Linux-syscall-note */
 +/*
@@ -22018,7 +22018,7 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/misc/xi
 +#define RSMU_REG_WRITE  _IOR(RSMU_MAGIC, 101, struct rsmu_reg_rw)
 +#endif /* __UAPI_LINUX_RSMU_CDEV_H */
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/include/uapi/linux/xlnx-ai-engine.h	2025-03-31 13:55:20.262106900 +0900
++++ linux-xlnx-6.6.70-v2024.1/include/uapi/linux/xlnx-ai-engine.h	2025-04-05 13:10:43.232432100 +0900
 @@ -0,0 +1,672 @@
 +/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
 +/*
@@ -22693,7 +22693,7 @@ diff -urN '--label=/dev/null' /dev/null linux-xlnx-6.6.70-2024.1/drivers/misc/xi
 +					struct aie_tiles_array)
 +#endif
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/include/uapi/misc/xilinx_puf.h	2025-03-31 13:55:20.266096200 +0900
++++ linux-xlnx-6.6.70-v2024.1/include/uapi/misc/xilinx_puf.h	2025-04-05 13:10:43.236421400 +0900
 @@ -0,0 +1,79 @@
 +/* SPDX-License-Identifier: GPL-2.0+ WITH Linux-syscall-note */
 +/*

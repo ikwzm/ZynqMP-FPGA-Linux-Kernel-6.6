@@ -1,5 +1,5 @@
 --- linux-6.6.70/Documentation/devicetree/bindings/pci/xlnx,nwl-pcie.yaml	2025-03-31 13:53:00.486970300 +0900
-+++ linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/pci/xlnx,nwl-pcie.yaml	2025-03-31 13:54:52.321651000 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/pci/xlnx,nwl-pcie.yaml	2025-04-05 13:10:16.232566300 +0900
 @@ -118,7 +118,7 @@
              compatible = "xlnx,nwl-pcie-2.11";
              reg = <0x0 0xfd0e0000 0x0 0x1000>,
@@ -10,7 +10,7 @@
              ranges = <0x02000000 0x0 0xe0000000 0x0 0xe0000000 0x0 0x10000000>,
                       <0x43000000 0x00000006 0x0 0x00000006 0x0 0x00000002 0x0>;
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/pci/xlnx,xdma-host.yaml	2025-03-31 13:54:52.322648300 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/pci/xlnx,xdma-host.yaml	2025-04-05 13:10:16.233563600 +0900
 @@ -0,0 +1,114 @@
 +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
 +%YAML 1.2
@@ -127,7 +127,7 @@
 +        };
 +    };
 --- linux-6.6.70/drivers/pci/controller/Kconfig	2025-03-31 13:53:21.317255600 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/pci/controller/Kconfig	2025-03-31 13:55:13.235457300 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/pci/controller/Kconfig	2025-04-05 13:10:36.465607000 +0900
 @@ -324,6 +324,17 @@
  	  Say 'Y' here if you want kernel to support the Xilinx AXI PCIe
  	  Host Bridge driver.
@@ -147,7 +147,7 @@
  	bool "Xilinx NWL PCIe controller"
  	depends on ARCH_ZYNQMP || COMPILE_TEST
 --- linux-6.6.70/drivers/pci/controller/Makefile	2025-03-31 13:53:21.317255600 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/pci/controller/Makefile	2025-03-31 13:55:13.236454100 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/pci/controller/Makefile	2025-04-05 13:10:36.465607000 +0900
 @@ -17,6 +17,7 @@
  obj-$(CONFIG_PCIE_XILINX) += pcie-xilinx.o
  obj-$(CONFIG_PCIE_XILINX_NWL) += pcie-xilinx-nwl.o
@@ -157,7 +157,7 @@
  obj-$(CONFIG_PCI_XGENE) += pci-xgene.o
  obj-$(CONFIG_PCI_XGENE_MSI) += pci-xgene-msi.o
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/pci/controller/pcie-xilinx-common.h	2025-03-31 13:55:13.282893400 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/pci/controller/pcie-xilinx-common.h	2025-04-05 13:10:36.553080200 +0900
 @@ -0,0 +1,31 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
 +/*
@@ -191,7 +191,7 @@
 +#define XILINX_PCIE_INTR_MST_SLVERR		27
 +#define XILINX_PCIE_INTR_SLV_PCIE_TIMEOUT	28
 --- linux-6.6.70/drivers/pci/controller/pcie-xilinx-cpm.c	2025-03-31 13:53:21.362785900 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/pci/controller/pcie-xilinx-cpm.c	2025-03-31 13:55:13.282893400 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/pci/controller/pcie-xilinx-cpm.c	2025-04-05 13:10:36.553080200 +0900
 @@ -16,11 +16,9 @@
  #include <linux/of_address.h>
  #include <linux/of_pci.h>
@@ -268,7 +268,7 @@
  		dev_err(dev, "Failed to map INTx interrupt\n");
  		return -ENXIO;
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/pci/controller/pcie-xilinx-dma-pl.c	2025-03-31 13:55:13.283862000 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/pci/controller/pcie-xilinx-dma-pl.c	2025-04-05 13:10:36.554077300 +0900
 @@ -0,0 +1,803 @@
 +// SPDX-License-Identifier: GPL-2.0-only
 +/*
@@ -1074,7 +1074,7 @@
 +
 +builtin_platform_driver(xilinx_pl_dma_pcie_driver);
 --- linux-6.6.70/drivers/pci/controller/pcie-xilinx-nwl.c	2025-03-31 13:53:21.363782700 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/pci/controller/pcie-xilinx-nwl.c	2025-03-31 13:55:13.283862000 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/pci/controller/pcie-xilinx-nwl.c	2025-04-05 13:10:36.554077300 +0900
 @@ -126,7 +126,7 @@
  #define E_ECAM_CR_ENABLE		BIT(0)
  #define E_ECAM_SIZE_LOC			GENMASK(20, 16)

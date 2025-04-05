@@ -1,5 +1,5 @@
 --- linux-6.6.70/Documentation/ABI/stable/sysfs-driver-firmware-zynqmp	2025-03-31 13:52:58.516393200 +0900
-+++ linux-xlnx-6.6.70-2024.1/Documentation/ABI/stable/sysfs-driver-firmware-zynqmp	2025-03-31 13:54:50.476577700 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/ABI/stable/sysfs-driver-firmware-zynqmp	2025-04-05 13:10:14.460964900 +0900
 @@ -254,3 +254,16 @@
  		The expected result is 500.
  
@@ -18,7 +18,7 @@
 +
 +Users:		Xilinx
 --- linux-6.6.70/Documentation/devicetree/bindings/firmware/xilinx/xlnx,zynqmp-firmware.yaml	2025-03-31 13:52:59.539607600 +0900
-+++ linux-xlnx-6.6.70-2024.1/Documentation/devicetree/bindings/firmware/xilinx/xlnx,zynqmp-firmware.yaml	2025-03-31 13:54:51.536218600 +0900
++++ linux-xlnx-6.6.70-v2024.1/Documentation/devicetree/bindings/firmware/xilinx/xlnx,zynqmp-firmware.yaml	2025-04-05 13:10:15.493971600 +0900
 @@ -26,6 +26,12 @@
        - description: For implementations complying for Versal.
          const: xlnx,versal-firmware
@@ -146,7 +146,7 @@
      };
  
 --- linux-6.6.70/drivers/firmware/xilinx/Kconfig	2025-03-31 13:53:11.408119200 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/firmware/xilinx/Kconfig	2025-03-31 13:55:03.383749300 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/firmware/xilinx/Kconfig	2025-04-05 13:10:26.867969700 +0900
 @@ -23,4 +23,12 @@
  	  Say yes to enable ZynqMP firmware interface debug APIs.
  	  If in doubt, say N.
@@ -161,14 +161,14 @@
 +
  endmenu
 --- linux-6.6.70/drivers/firmware/xilinx/Makefile	2025-03-31 13:53:11.409154300 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/firmware/xilinx/Makefile	2025-03-31 13:55:03.384746100 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/firmware/xilinx/Makefile	2025-04-05 13:10:26.867969700 +0900
 @@ -3,3 +3,4 @@
  
  obj-$(CONFIG_ZYNQMP_FIRMWARE) += zynqmp.o
  obj-$(CONFIG_ZYNQMP_FIRMWARE_DEBUG) += zynqmp-debug.o
 +obj-$(CONFIG_ZYNQMP_FIRMWARE_SECURE) += zynqmp-secure.o
 --- linux-6.6.70/drivers/firmware/xilinx/zynqmp-debug.c	2025-03-31 13:53:11.409154300 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/firmware/xilinx/zynqmp-debug.c	2025-03-31 13:55:03.384746100 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/firmware/xilinx/zynqmp-debug.c	2025-04-05 13:10:26.867969700 +0900
 @@ -2,7 +2,7 @@
  /*
   * Xilinx Zynq MPSoC Firmware layer for debugfs APIs
@@ -381,7 +381,7 @@
  	u32 pm_api_ret[4] = {0, 0, 0, 0};
  
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/drivers/firmware/xilinx/zynqmp-secure.c	2025-03-31 13:55:03.385744100 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/firmware/xilinx/zynqmp-secure.c	2025-04-05 13:10:26.868967100 +0900
 @@ -0,0 +1,194 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -578,7 +578,7 @@
 +module_init(zynqmp_secure_init);
 +module_exit(zynqmp_secure_exit);
 --- linux-6.6.70/drivers/firmware/xilinx/zynqmp.c	2025-03-31 13:53:11.410151400 +0900
-+++ linux-xlnx-6.6.70-2024.1/drivers/firmware/xilinx/zynqmp.c	2025-03-31 13:55:03.385744100 +0900
++++ linux-xlnx-6.6.70-v2024.1/drivers/firmware/xilinx/zynqmp.c	2025-04-05 13:10:26.869975400 +0900
 @@ -3,6 +3,7 @@
   * Xilinx Zynq MPSoC Firmware layer
   *
@@ -2814,7 +2814,7 @@
  	return of_platform_populate(dev->of_node, NULL, NULL, dev);
  }
 --- linux-6.6.70/include/linux/firmware/xlnx-event-manager.h	2025-03-31 13:53:26.736577300 +0900
-+++ linux-xlnx-6.6.70-2024.1/include/linux/firmware/xlnx-event-manager.h	2025-03-31 13:55:18.662172600 +0900
++++ linux-xlnx-6.6.70-v2024.1/include/linux/firmware/xlnx-event-manager.h	2025-04-05 13:10:41.710876900 +0900
 @@ -7,6 +7,11 @@
  
  #define CB_MAX_PAYLOAD_SIZE	(4U) /*In payload maximum 32bytes */
@@ -2828,7 +2828,7 @@
  
  typedef void (*event_cb_func_t)(const u32 *payload, void *data);
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/include/linux/firmware/xlnx-versal-error-events.h	2025-03-31 13:55:18.663170100 +0900
++++ linux-xlnx-6.6.70-v2024.1/include/linux/firmware/xlnx-versal-error-events.h	2025-04-05 13:10:41.710876900 +0900
 @@ -0,0 +1,662 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
 +/*
@@ -3493,7 +3493,7 @@
 +
 +#endif /* _FIRMWARE_XLNX_VERSAL_ERROR_EVENTS_H_ */
 --- /dev/null
-+++ linux-xlnx-6.6.70-2024.1/include/linux/firmware/xlnx-versal-net-error-events.h	2025-03-31 13:55:18.663170100 +0900
++++ linux-xlnx-6.6.70-v2024.1/include/linux/firmware/xlnx-versal-net-error-events.h	2025-04-05 13:10:41.711874300 +0900
 @@ -0,0 +1,1121 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
 +/*
@@ -4617,7 +4617,7 @@
 +
 +#endif /* _FIRMWARE_XLNX_VERSAL_NET_ERROR_EVENTS_H_ */
 --- linux-6.6.70/include/linux/firmware/xlnx-zynqmp.h	2025-03-31 13:53:26.736577300 +0900
-+++ linux-xlnx-6.6.70-2024.1/include/linux/firmware/xlnx-zynqmp.h	2025-03-31 13:55:18.664166600 +0900
++++ linux-xlnx-6.6.70-v2024.1/include/linux/firmware/xlnx-zynqmp.h	2025-04-05 13:10:41.711874300 +0900
 @@ -3,6 +3,7 @@
   * Xilinx Zynq MPSoC Firmware layer
   *
