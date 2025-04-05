@@ -2,7 +2,7 @@
 
 SCRIPT_DIR=$(cd $(dirname $0); pwd)
 REPO_DIR=$(cd $(dirname $0); cd .. ; pwd)
-KERNEL_VERSION=6.6.40
+KERNEL_VERSION=6.6.70
 EXTRA_VERSION=-zynqmp-fpga
 LOCAL_VERSION=-generic
 BUILD_VERSION=2

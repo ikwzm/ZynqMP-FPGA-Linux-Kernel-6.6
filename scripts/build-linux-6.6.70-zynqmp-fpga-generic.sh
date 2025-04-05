@@ -1,7 +1,7 @@
 #!/bin/bash
 
 CURRENT_DIR=`pwd`
-KERNEL_VERSION=6.6.40
+KERNEL_VERSION=6.6.70
 KERNEL_EXTRA_VERSION=-zynqmp-fpga
 KERNEL_LOCAL_VERSION=-generic
 KERNEL_STABLE_VERSION=v$KERNEL_VERSION
@@ -31,7 +31,7 @@ git checkout -b $KERNEL_RELEASE refs/tags/$KERNEL_STABLE_VERSION
 
 ## Patch to Linux Kernel
 
-### Patch for linux-6.6.40-xlnx-2024.2
+### Patch for linux-6.6.70-xlnx-2024.2
 
 sh ../patches/linux-$KERNEL_VERSION-xlnx-v2024.2/$PATCH_SCRIPT
 
