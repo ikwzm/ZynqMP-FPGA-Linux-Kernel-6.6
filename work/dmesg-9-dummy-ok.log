@@ -1,0 +1,201 @@
+[  323.987786] cfs_overlay_item_dtbo_write: buf=000000004d427c79 count=203
+[  323.987816] create_overlay : start
+[  323.987821] OF: overlay: of_overlay_fdt_apply() start
+[  323.987836] OF: fdt:  -> unflatten_device_tree()
+[  323.987840] OF: fdt: Unflattening device tree:
+[  323.987844] OF: fdt: magic: d00dfeed
+[  323.987849] OF: fdt: size: 000000cb
+[  323.987853] OF: fdt: version: 00000011
+[  323.987872] OF: fdt:   size is 1552, allocating...
+[  323.987878] OF: fdt:   unflattening 000000004f8d0eb9...
+[  323.987885] OF: fdt: fixed up name for  -> 
+[  323.987893] OF: fdt: fixed up name for fragment@0 -> fragment
+[  323.987901] OF: fdt: fixed up name for __overlay__ -> __overlay__
+[  323.987908] OF: fdt: fixed up name for dummy -> dummy
+[  323.987914] OF: fdt: unflattened tree is detached
+[  323.987918] OF: fdt:  <- unflatten_device_tree()
+[  323.987921] OF: overlay: of_overlay_apply() start
+[  323.987993] OF: overlay: init_overlay_changeset() start
+[  323.987998] OF: overlay: init_overlay_changeset() ovcs->overlay_root is not dynamic
+[  323.988005] OF: overlay: init_overlay_changeset() : get_target : kref(/fragment@0)=2
+[  323.988031] OF: overlay: init_overlay_changeset() : get_target : kref(/fragment@0)=2
+[  323.988039] OF: overlay: init_overlay_changeset() : target : kref(/amba_pl@0)=4
+[  323.988048] OF: overlay: init_overlay_changeset() done
+[  323.988053] OF: overlay: overlay_notify(pre-apply) start
+[  323.988072] OF: overlay: overlay changeset pre-apply notifier success, target: /amba_pl@0
+[  323.988080] OF: overlay: overlay_notify(pre-apply) done
+[  323.988084] OF: overlay: build_changeset() start
+[  323.988089] OF: overlay: build_changeset_next_level() start
+[  323.988093] OF: overlay: build_changeset_next_level() : kref(/amba_pl@0)=4
+[  323.988102] OF: overlay: Successful to apply prop @/amba_pl@0/name
+[  323.988113] OF: changeset: add : ATTACH_NODE /amba_pl@0/dummy(1=>2,OF_OVERLAY)
+[  323.988125] OF: overlay: build_changeset_next_level() start
+[  323.988130] OF: overlay: build_changeset_next_level() : kref(/amba_pl@0/dummy)=2
+[  323.988141] OF: changeset: add : ADD_PROPERTY /amba_pl@0/dummy(2=>3,OF_OVERLAY):compatible
+[  323.988153] OF: overlay: Successful to apply prop @/amba_pl@0/dummy/compatible
+[  323.988163] OF: changeset: add : ADD_PROPERTY /amba_pl@0/dummy(3=>4,OF_OVERLAY):name
+[  323.988175] OF: overlay: Successful to apply prop @/amba_pl@0/dummy/name
+[  323.988184] OF: overlay: build_changeset_next_level() : kref(/amba_pl@0/dummy)=4
+[  323.988193] OF: overlay: build_changeset_next_level() done
+[  323.988198] OF: overlay: Successful to apply node @/amba_pl@0/dummy
+[  323.988206] OF: overlay: build_changeset_next_level() : kref(/amba_pl@0)=4
+[  323.988214] OF: overlay: build_changeset_next_level() done
+[  323.988218] OF: overlay: fragment apply success '/amba_pl@0'
+[  323.988237] OF: overlay: build_changeset() done(=0)
+[  323.988243] OF: __of_changeset_apply_entries() start
+[  323.988248] OF: changeset: apply: ATTACH_NODE     /amba_pl@0/dummy(3)
+[  323.988260] OF: __of_attach_node(/amba_pl@0/dummy(3)) start
+[  323.988284] OF: __of_attach_node(/amba_pl@0/dummy(4)) done 
+[  323.988295] OF: changeset: apply done: ATTACH_NODE     /amba_pl@0/dummy(4)
+[  323.988306] OF: changeset: apply: ADD_PROPERTY    /amba_pl@0/dummy(4):compatible
+[  323.988322] OF: changeset: apply done: ADD_PROPERTY    /amba_pl@0/dummy(4):compatible
+[  323.988333] OF: changeset: apply: ADD_PROPERTY    /amba_pl@0/dummy(4):name
+[  323.988346] OF: changeset: apply done: ADD_PROPERTY    /amba_pl@0/dummy(4):name
+[  323.988358] OF: __of_changeset_apply_entries() done
+[  323.988362] OF: __of_changeset_apply_notify() start
+[  323.988367] OF: changeset: __of_changeset_entry_notify(): start: ATTACH_NODE     /amba_pl@0/dummy(4)
+[  323.988378] OF: changeset: notify: ATTACH_NODE     /amba_pl@0/dummy(4)
+[  323.988389] OF: of_platform_notify() start
+[  323.988394] OF: changeset: state change: ATTACH_NODE     /amba_pl@0/dummy(4)
+[  323.988405] OF:  OF_RECONFIG_CHANGE_ADD start /amba_pl@0/dummy(4)
+[  323.988446] OF: of_platform_device_create_pdata(/amba_pl@0/dummy(4)) start
+[  323.988456] OF:   parent=amba_pl@0(4)
+[  323.988482] OF: of_device_add(amba_pl@0:dummy(1)) start
+[  323.988488] device_add() start 
+[  323.988493] device_add(amba_pl@0:dummy(2)) -1- 
+[  323.988499] device_add(amba_pl@0:dummy(2)) -2- 
+[  323.988509] device_add(amba_pl@0:dummy(2)) device_platform_notify()
+[  323.988514] device_add(amba_pl@0:dummy(2)) device_create_file()
+[  323.988522] device_add(amba_pl@0:dummy(2)) device_add_class_symlinks()
+[  323.988531] device_add(amba_pl@0:dummy(2)) device_add_attrs()
+[  323.988540] device_add(amba_pl@0:dummy(2)) bus_add_device()
+[  323.988557] device_add(amba_pl@0:dummy(3)) dpm_sysfs_add()
+[  323.988577] device_add(amba_pl@0:dummy(3)) device_pm_add()
+[  323.988585] device_add(amba_pl@0:dummy(3)) bus_notify()
+[  323.988592] device_add(amba_pl@0:dummy(3)) kobject_uevent()
+[  323.988647] device_add(amba_pl@0:dummy(3)) -3- 
+[  323.988669] __fw_devlink_link_to_consumers(amba_pl@0:dummy(3)) start
+[  323.988675] __fw_devlink_link_to_consumers(amba_pl@0:dummy(3)) done
+[  323.988680] __fw_devlink_link_to_suppliers(amba_pl@0:dummy(3)) start
+[  323.988686] __fw_devlink_link_to_suppliers(amba_pl@0:dummy(3)) done
+[  323.988691] device_add(amba_pl@0:dummy(3)) bus_probe_device() start
+[  323.989008] device_add(amba_pl@0:dummy(3)) bus_probe_device() done
+[  323.989014] device_add(amba_pl@0:dummy(3)) fw_devlink_unblock_consumers()
+[  323.989020] device_add(amba_pl@0:dummy(3)) klist_add_tail()
+[  323.989026] device_add(amba_pl@0:dummy(4)) class_to_subsys()
+[  323.989031] device_add(amba_pl@0:dummy(4)) -4-
+[  323.989036] device_add() done(0) 
+[  323.989041] OF: of_device_add(amba_pl@0:dummy(3)) done(0)
+[  323.989047] OF: of_platform_device_create_pdata(/amba_pl@0/dummy(5)) done(amba_pl@0:dummy(3))
+[  323.989059] OF:  OF_RECONFIG_CHANGE_ADD pdev  amba_pl@0:dummy(3)
+[  323.989065] OF:  OF_RECONFIG_CHANGE_ADD done  /amba_pl@0/dummy(5)
+[  323.989075] OF: of_platform_notify() done
+[  323.989079] OF: changeset: state change: ATTACH_NODE     /amba_pl@0/dummy(5)
+[  323.989092] OF: changeset: state change: ATTACH_NODE     /amba_pl@0/dummy(5)
+[  323.989107] OF: changeset: state change: ATTACH_NODE     /amba_pl@0/dummy(5)
+[  323.989128] OF: changeset: __of_changeset_entry_notify(): done  :ATTACH_NODE     /amba_pl@0/dummy(5)
+[  323.989139] OF: changeset: __of_changeset_entry_notify(): start: ADD_PROPERTY    /amba_pl@0/dummy(5):compatible
+[  323.989151] OF: changeset: notify: ADD_PROPERTY    /amba_pl@0/dummy(5):compatible
+[  323.989162] OF: of_platform_notify() start
+[  323.989166] OF: changeset: state change: ADD_PROPERTY    /amba_pl@0/dummy(5):compatible
+[  323.989177] OF: of_platform_notify() done
+[  323.989181] OF: changeset: state change: ADD_PROPERTY    /amba_pl@0/dummy(5):compatible
+[  323.989192] OF: changeset: state change: ADD_PROPERTY    /amba_pl@0/dummy(5):compatible
+[  323.989203] OF: changeset: state change: ADD_PROPERTY    /amba_pl@0/dummy(5):compatible
+[  323.989214] OF: changeset: __of_changeset_entry_notify(): done  :ADD_PROPERTY    /amba_pl@0/dummy(5):compatible
+[  323.989225] OF: changeset: __of_changeset_entry_notify(): start: ADD_PROPERTY    /amba_pl@0/dummy(5):name
+[  323.989236] OF: changeset: notify: ADD_PROPERTY    /amba_pl@0/dummy(5):name
+[  323.989246] OF: of_platform_notify() start
+[  323.989250] OF: changeset: state change: ADD_PROPERTY    /amba_pl@0/dummy(5):name
+[  323.989261] OF: of_platform_notify() done
+[  323.989265] OF: changeset: state change: ADD_PROPERTY    /amba_pl@0/dummy(5):name
+[  323.989276] OF: changeset: state change: ADD_PROPERTY    /amba_pl@0/dummy(5):name
+[  323.989287] OF: changeset: state change: ADD_PROPERTY    /amba_pl@0/dummy(5):name
+[  323.989297] OF: changeset: __of_changeset_entry_notify(): done  :ADD_PROPERTY    /amba_pl@0/dummy(5):name
+[  323.989308] OF: __of_changeset_apply_notify() done(0)
+[  323.989313] OF: overlay: overlay_notify(post-apply) start
+[  323.989320] OF: overlay: overlay changeset post-apply notifier success, target: /amba_pl@0
+[  323.989328] OF: overlay: overlay_notify(post-apply) done
+[  323.989333] OF: overlay: of_overlay_apply() err=0
+[  323.989338] OF: overlay: of_overlay_fdt_apply() err=0
+[  323.989343] create_overlay: done(0)
+[  323.989348] cfs_overlay_item_dtbo_write: done(203)
+[  323.997224] OF: overlay: of_overlay_remove() start
+[  323.997246] OF: overlay: overlay_notify(pre-remove) start
+[  323.997260] OF: overlay: overlay changeset pre-remove notifier success, target: /amba_pl@0
+[  323.997275] OF: overlay: overlay_notify(pre-remove) done
+[  323.997281] OF: __of_changeset_revert_entries() start
+[  323.997286] OF: changeset: apply: REMOVE_PROPERTY /amba_pl@0/dummy(5):name
+[  323.997311] OF: changeset: apply done: REMOVE_PROPERTY /amba_pl@0/dummy(5):name
+[  323.997322] OF: changeset: apply: REMOVE_PROPERTY /amba_pl@0/dummy(5):compatible
+[  323.997336] OF: changeset: apply done: REMOVE_PROPERTY /amba_pl@0/dummy(5):compatible
+[  323.997347] OF: changeset: apply: DETACH_NODE     /amba_pl@0/dummy(5)
+[  323.997358] OF: __of_detach_node(/amba_pl@0/dummy(5)) start
+[  323.997372] OF: __of_detach_node(/amba_pl@0/dummy(4)) done 
+[  323.997382] OF: changeset: apply done: DETACH_NODE     /amba_pl@0/dummy(4)
+[  323.997393] OF: __of_changeset_revert_entries() done
+[  323.997397] OF: __of_changeset_revert_notify() start
+[  323.997403] OF: changeset: __of_changeset_entry_notify(): start: REMOVE_PROPERTY /amba_pl@0/dummy(4):name
+[  323.997414] OF: changeset: __of_changeset_entry_notify(): done  :REMOVE_PROPERTY /amba_pl@0/dummy(4):name
+[  323.997425] OF: changeset: __of_changeset_entry_notify(): start: REMOVE_PROPERTY /amba_pl@0/dummy(4):compatible
+[  323.997435] OF: changeset: __of_changeset_entry_notify(): done  :REMOVE_PROPERTY /amba_pl@0/dummy(4):compatible
+[  323.997446] OF: changeset: __of_changeset_entry_notify(): start: DETACH_NODE     /amba_pl@0/dummy(4)
+[  323.997457] OF: changeset: notify: DETACH_NODE     /amba_pl@0/dummy(4)
+[  323.997468] OF: of_platform_notify() start
+[  323.997473] OF: changeset: state change: DETACH_NODE     /amba_pl@0/dummy(4)
+[  323.997485] OF:  OF_RECONFIG_CHANGE_REMOVE start /amba_pl@0/dummy(4)
+[  323.997551] OF:  OF_RECONFIG_CHANGE_REMOVE pdev  amba_pl@0:dummy(4)
+[  323.997556] OF:  OF_RECONFIG_CHANGE_REMOVE --1-- /amba_pl@0/dummy(4)
+[  323.997567] OF: of_platform_device_destroy(amba_pl@0:dummy(4)//amba_pl@0/dummy(4)) start
+[  323.997580] OF: platform_device_unregister(amba_pl@0:dummy(4)) start
+[  323.997586] OF: platform_device_del(amba_pl@0:dummy(4)) start
+[  323.997692] OF: platform_device_del(amba_pl@0:dummy(2)) done
+[  323.997699] OF: platform_device_put(amba_pl@0:dummy(2)) start
+[  323.997705] OF: put_device(amba_pl@0:dummy(2)) start
+[  323.997711] OF: kobject_put('amba_pl@0:dummy') start
+[  323.997715] OF: kref_put('amba_pl@0:dummy') start
+[  323.997720] OF: __kref_put refcount_dec_and_test is false
+[  323.997726] OF: kref_put('amba_pl@0:dummy') done(0)
+[  323.997730] OF: kobject_put('amba_pl@0:dummy') done 
+[  323.997735] OF: put_device(amba_pl@0:dummy(1)) done
+[  323.997740] OF: platform_device_put(amba_pl@0:dummy(1)) done
+[  323.997746] OF: platform_device_unregister(amba_pl@0:dummy(1)) done
+[  323.997750] OF: of_platform_device_destroy(amba_pl@0:dummy(1)//amba_pl@0/dummy(4)) done
+[  323.997762] OF:  OF_RECONFIG_CHANGE_REMOVE --2-- /amba_pl@0/dummy(4)
+[  323.997772] OF: platform_device_put(amba_pl@0:dummy(1)) start
+[  323.997777] OF: put_device(amba_pl@0:dummy(1)) start
+[  323.997782] OF: kobject_put('amba_pl@0:dummy') start
+[  323.997786] OF: kref_put('amba_pl@0:dummy') start
+[  323.997790] OF: __kref_put refcount_dec_and_test is true
+[  323.997795] OF: kobject_release('amba_pl@0:dummy') start
+[  323.997800] OF: kobject_cleanup('amba_pl@0:dummy') start
+[  323.997804] OF: 'amba_pl@0:dummy' (000000003ac90820): __kobject_cleanup, parent 0000000000000000
+[  323.997813] OF: 'amba_pl@0:dummy' (000000003ac90820): calling ktype release
+[  323.997821] OF: 'amba_pl@0:dummy': free name
+[  323.997825] OF: kobject_put(NONE)
+[  323.997828] OF: kobject_cleanup('amba_pl@0:dummy') done
+[  323.997833] OF: kobject_release('amba_pl@0:dummy') done
+[  323.997837] OF: kref_put('amba_pl@0:dummy') done(1)
+[  323.997842] OF: kobject_put('amba_pl@0:dummy') done 
+[  323.997846] OF: put_device(amba_pl@0:dummy(0)) done
+[  323.997852] OF: platform_device_put(amba_pl@0:dummy(0)) done
+[  323.997857] OF:  OF_RECONFIG_CHANGE_REMOVE done  /amba_pl@0/dummy(3)
+[  323.997866] OF: of_platform_notify() done
+[  323.997871] OF: changeset: state change: DETACH_NODE     /amba_pl@0/dummy(3)
+[  323.997882] OF: changeset: state change: DETACH_NODE     /amba_pl@0/dummy(3)
+[  323.997893] OF: changeset: state change: DETACH_NODE     /amba_pl@0/dummy(3)
+[  323.997904] OF: changeset: __of_changeset_entry_notify(): done  :DETACH_NODE     /amba_pl@0/dummy(3)
+[  323.997914] OF: __of_changeset_revert_notify() done(0)
+[  323.997920] OF: overlay: overlay_notify(post-remove) start
+[  323.997933] OF: overlay: overlay changeset post-remove notifier success, target: /amba_pl@0
+[  323.997941] OF: overlay: overlay_notify(post-remove) done
+[  323.997946] OF: overlay: free_overlay_changeset() start
+[  323.997951] OF: of_changeset_destroy() start
+[  323.997960] OF: changeset: del : ADD_PROPERTY /amba_pl@0/dummy(3=>2,OF_OVERLAY):name
+[  323.997972] OF: changeset: del : ADD_PROPERTY /amba_pl@0/dummy(2=>1,OF_OVERLAY):compatible
+[  323.997985] OF: changeset: del : ATTACH_NODE /amba_pl@0/dummy(1=>0,OF_OVERLAY)
+[  323.998000] OF: of_changeset_destroy() done
+[  323.998006] OF: overlay: free_overlay_changeset() target  : kref(/amba_pl@0)=4
+[  323.998023] OF: overlay: free_overlay_changeset() overlay : kref(/fragment@0/__overlay__)=2
+[  323.998036] OF: overlay: free_overlay_changeset() done
+[  323.998041] OF: overlay: of_overlay_remove() err=0
