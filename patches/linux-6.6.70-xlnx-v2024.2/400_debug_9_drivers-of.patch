@@ -1,0 +1,1400 @@
+diff --git a/drivers/base/core.c b/drivers/base/core.c
+index 18a73e492..95858a9cc 100644
+--- a/drivers/base/core.c
++++ b/drivers/base/core.c
+@@ -46,6 +46,25 @@ static bool fw_devlink_drv_reg_done;
+ static bool fw_devlink_best_effort;
+ static struct workqueue_struct *device_link_wq;
+ 
++static inline const char *__dev_name(const struct device *dev)
++{
++	if (dev)
++		return dev_name(dev);
++	else
++		return "NONE";
++}
++
++static inline int __dev_refcount(struct device* dev)
++{
++	if (dev) {
++		struct kobject* kobj = &dev->kobj;
++		struct kref*    kref = &kobj->kref;
++		return (int)kref_read(kref);
++	} else {
++		return -1;
++	}
++}
++
+ /**
+  * __fwnode_link_add - Create a link between two fwnode_handles.
+  * @con: Consumer end of the link.
+@@ -1954,6 +1973,8 @@ static bool __fw_devlink_relax_cycles(struct fwnode_handle *con_handle,
+ 	if (sup_handle->flags & FWNODE_FLAG_VISITED)
+ 		return false;
+ 
++	pr_debug("%s() start\n", __func__);
++	
+ 	sup_handle->flags |= FWNODE_FLAG_VISITED;
+ 
+ 	/* Termination condition. */
+@@ -1965,6 +1986,7 @@ static bool __fw_devlink_relax_cycles(struct fwnode_handle *con_handle,
+ 
+ 	sup_dev = get_dev_from_fwnode(sup_handle);
+ 	con_dev = get_dev_from_fwnode(con_handle);
++	pr_debug("%s() con=%s(%d),sup=%s(%d))\n", __func__, __dev_name(con_dev), __dev_refcount(con_dev), __dev_name(sup_dev), __dev_refcount(sup_dev));
+ 	/*
+ 	 * If sup_dev is bound to a driver and @con hasn't started binding to a
+ 	 * driver, sup_dev can't be a consumer of @con. So, no need to check
+@@ -2027,6 +2049,7 @@ static bool __fw_devlink_relax_cycles(struct fwnode_handle *con_handle,
+ 	sup_handle->flags &= ~FWNODE_FLAG_VISITED;
+ 	put_device(sup_dev);
+ 	put_device(par_dev);
++	pr_debug("%s() done(%s)\n", __func__, (ret == true)? "true" : "false");
+ 	return ret;
+ }
+ 
+@@ -2057,6 +2080,7 @@ static int fw_devlink_create_devlink(struct device *con,
+ 	struct device *sup_dev;
+ 	int ret = 0;
+ 	u32 flags;
++        pr_debug("%s(%s(%d)) start\n", __func__, __dev_name(con), __dev_refcount(con));
+ 
+ 	if (link->flags & FWLINK_FLAG_IGNORE)
+ 		return 0;
+@@ -2121,7 +2145,7 @@ static int fw_devlink_create_devlink(struct device *con,
+ 
+ 		if (con != sup_dev && !device_link_add(con, sup_dev, flags)) {
+ 			dev_err(con, "Failed to create device link (0x%x) with %s\n",
+-				flags, dev_name(sup_dev));
++				flags, __dev_name(sup_dev));
+ 			ret = -EINVAL;
+ 		}
+ 
+@@ -2142,6 +2166,7 @@ static int fw_devlink_create_devlink(struct device *con,
+ 	ret = -EAGAIN;
+ out:
+ 	put_device(sup_dev);
++        pr_debug("%s(%s(%d)) done\n", __func__, __dev_name(con), __dev_refcount(con));
+ 	return ret;
+ }
+ 
+@@ -2165,6 +2190,7 @@ static void __fw_devlink_link_to_consumers(struct device *dev)
+ {
+ 	struct fwnode_handle *fwnode = dev->fwnode;
+ 	struct fwnode_link *link, *tmp;
++        pr_debug("%s(%s(%d)) start\n", __func__, __dev_name(dev), __dev_refcount(dev));
+ 
+ 	list_for_each_entry_safe(link, tmp, &fwnode->consumers, s_hook) {
+ 		struct device *con_dev;
+@@ -2209,6 +2235,7 @@ static void __fw_devlink_link_to_consumers(struct device *dev)
+ 
+ 		__fwnode_link_del(link);
+ 	}
++        pr_debug("%s(%s(%d)) done\n", __func__, __dev_name(dev), __dev_refcount(dev));
+ }
+ 
+ /**
+@@ -2241,6 +2268,7 @@ static void __fw_devlink_link_to_suppliers(struct device *dev,
+ 	struct fwnode_link *link, *tmp;
+ 	struct fwnode_handle *child = NULL;
+ 
++        pr_debug("%s(%s(%d)) start\n", __func__, __dev_name(dev), __dev_refcount(dev));
+ 	list_for_each_entry_safe(link, tmp, &fwnode->suppliers, c_hook) {
+ 		int ret;
+ 		struct fwnode_handle *sup = link->supplier;
+@@ -2260,6 +2288,7 @@ static void __fw_devlink_link_to_suppliers(struct device *dev,
+ 	 */
+ 	while ((child = fwnode_get_next_available_child_node(fwnode, child)))
+ 		__fw_devlink_link_to_suppliers(dev, child);
++        pr_debug("%s(%s(%d)) done\n", __func__, __dev_name(dev), __dev_refcount(dev));
+ }
+ 
+ static void fw_devlink_link_device(struct device *dev)
+@@ -3544,6 +3573,7 @@ int device_add(struct device *dev)
+ 	int error = -EINVAL;
+ 	struct kobject *glue_dir = NULL;
+ 
++	pr_debug("%s() start \n", __func__);
+ 	dev = get_device(dev);
+ 	if (!dev)
+ 		goto done;
+@@ -3574,7 +3604,7 @@ int device_add(struct device *dev)
+ 	if (error)
+ 		goto name_error;
+ 
+-	pr_debug("device: '%s': %s\n", dev_name(dev), __func__);
++	pr_debug("%s(%s(%d)) -1- \n", __func__, __dev_name(dev), __dev_refcount(dev));
+ 
+ 	parent = get_device(dev->parent);
+ 	kobj = get_device_parent(dev, parent);
+@@ -3585,6 +3615,8 @@ int device_add(struct device *dev)
+ 	if (kobj)
+ 		dev->kobj.parent = kobj;
+ 
++	pr_debug("%s(%s(%d)) -2- \n", __func__, __dev_name(dev), __dev_refcount(dev));
++
+ 	/* use parent numa_node */
+ 	if (parent && (dev_to_node(dev) == NUMA_NO_NODE))
+ 		set_dev_node(dev, dev_to_node(parent));
+@@ -3597,45 +3629,58 @@ int device_add(struct device *dev)
+ 		goto Error;
+ 	}
+ 
++	pr_debug("%s(%s(%d)) device_platform_notify()\n", __func__, __dev_name(dev), __dev_refcount(dev));
+ 	/* notify platform of device entry */
+ 	device_platform_notify(dev);
+ 
++	pr_debug("%s(%s(%d)) device_create_file()\n", __func__, __dev_name(dev), __dev_refcount(dev));
+ 	error = device_create_file(dev, &dev_attr_uevent);
+ 	if (error)
+ 		goto attrError;
+ 
++	pr_debug("%s(%s(%d)) device_add_class_symlinks()\n", __func__, __dev_name(dev), __dev_refcount(dev));
+ 	error = device_add_class_symlinks(dev);
+ 	if (error)
+ 		goto SymlinkError;
++	pr_debug("%s(%s(%d)) device_add_attrs()\n", __func__, __dev_name(dev), __dev_refcount(dev));
+ 	error = device_add_attrs(dev);
+ 	if (error)
+ 		goto AttrsError;
++	pr_debug("%s(%s(%d)) bus_add_device()\n", __func__, __dev_name(dev), __dev_refcount(dev));
+ 	error = bus_add_device(dev);
+ 	if (error)
+ 		goto BusError;
++	pr_debug("%s(%s(%d)) dpm_sysfs_add()\n", __func__, __dev_name(dev), __dev_refcount(dev));
+ 	error = dpm_sysfs_add(dev);
+ 	if (error)
+ 		goto DPMError;
++	pr_debug("%s(%s(%d)) device_pm_add()\n", __func__, __dev_name(dev), __dev_refcount(dev));
+ 	device_pm_add(dev);
+ 
+ 	if (MAJOR(dev->devt)) {
++		pr_debug("%s(%s(%d)) device_create_file()\n", __func__, __dev_name(dev), __dev_refcount(dev));
+ 		error = device_create_file(dev, &dev_attr_dev);
+ 		if (error)
+ 			goto DevAttrError;
+ 
++		pr_debug("%s(%s(%d)) device_create_sys_dev_entry()\n", __func__, __dev_name(dev), __dev_refcount(dev));
+ 		error = device_create_sys_dev_entry(dev);
+ 		if (error)
+ 			goto SysEntryError;
+ 
++		pr_debug("%s(%s(%d)) devtmpfs_create_node()\n", __func__, __dev_name(dev), __dev_refcount(dev));
+ 		devtmpfs_create_node(dev);
+ 	}
+ 
+ 	/* Notify clients of device addition.  This call must come
+ 	 * after dpm_sysfs_add() and before kobject_uevent().
+ 	 */
++	pr_debug("%s(%s(%d)) bus_notify()\n", __func__, __dev_name(dev), __dev_refcount(dev));
+ 	bus_notify(dev, BUS_NOTIFY_ADD_DEVICE);
++	pr_debug("%s(%s(%d)) kobject_uevent()\n", __func__, __dev_name(dev), __dev_refcount(dev));
+ 	kobject_uevent(&dev->kobj, KOBJ_ADD);
+ 
++	pr_debug("%s(%s(%d)) -3- \n", __func__, __dev_name(dev), __dev_refcount(dev));
+ 	/*
+ 	 * Check if any of the other devices (consumers) have been waiting for
+ 	 * this device (supplier) to be added so that they can create a device
+@@ -3653,20 +3698,27 @@ int device_add(struct device *dev)
+ 		fw_devlink_link_device(dev);
+ 	}
+ 
++	pr_debug("%s(%s(%d)) bus_probe_device() start\n", __func__, __dev_name(dev), __dev_refcount(dev));
+ 	bus_probe_device(dev);
++	pr_debug("%s(%s(%d)) bus_probe_device() done\n", __func__, __dev_name(dev), __dev_refcount(dev));
+ 
+ 	/*
+ 	 * If all driver registration is done and a newly added device doesn't
+ 	 * match with any driver, don't block its consumers from probing in
+ 	 * case the consumer device is able to operate without this supplier.
+ 	 */
+-	if (dev->fwnode && fw_devlink_drv_reg_done && !dev->can_match)
++	if (dev->fwnode && fw_devlink_drv_reg_done && !dev->can_match) {
++		pr_debug("%s(%s(%d)) fw_devlink_unblock_consumers()\n", __func__, __dev_name(dev), __dev_refcount(dev));
+ 		fw_devlink_unblock_consumers(dev);
++	}
+ 
+-	if (parent)
++	if (parent) {
++		pr_debug("%s(%s(%d)) klist_add_tail()\n", __func__, __dev_name(dev), __dev_refcount(dev));
+ 		klist_add_tail(&dev->p->knode_parent,
+ 			       &parent->p->klist_children);
++	}
+ 
++	pr_debug("%s(%s(%d)) class_to_subsys()\n", __func__, __dev_name(dev), __dev_refcount(dev));
+ 	sp = class_to_subsys(dev->class);
+ 	if (sp) {
+ 		mutex_lock(&sp->mutex);
+@@ -3680,8 +3732,10 @@ int device_add(struct device *dev)
+ 		mutex_unlock(&sp->mutex);
+ 		subsys_put(sp);
+ 	}
++	pr_debug("%s(%s(%d)) -4-\n", __func__, __dev_name(dev), __dev_refcount(dev));
+ done:
+ 	put_device(dev);
++	pr_debug("%s() done(%d) \n", __func__, error);
+ 	return error;
+  SysEntryError:
+ 	if (MAJOR(dev->devt))
+diff --git a/drivers/of/configfs.c b/drivers/of/configfs.c
+index 3839f14dc..24c6dfa39 100644
+--- a/drivers/of/configfs.c
++++ b/drivers/of/configfs.c
+@@ -48,6 +48,7 @@ static DEFINE_MUTEX(overlay_lock);
+ static int create_overlay(struct cfs_overlay_item *overlay, void *blob)
+ {
+ 	int err;
++        pr_debug("%s : start\n", __func__);
+ 
+ 	/* FIXME */
+ 	err = of_overlay_fdt_apply(blob, overlay->dtbo_size, &overlay->ov_id, NULL);
+@@ -57,6 +58,7 @@ static int create_overlay(struct cfs_overlay_item *overlay, void *blob)
+ 		return err;
+ 	}
+ 
++        pr_debug("%s: done(%d)\n", __func__, err);
+ 	return err;
+ }
+ 
+@@ -150,6 +152,7 @@ ssize_t cfs_overlay_item_dtbo_read(struct config_item *item,
+ 		memcpy(buf, overlay->dtbo, overlay->dtbo_size);
+ 	}
+ 
++	pr_debug("%s: done(%d)\n", __func__, overlay->dtbo_size);
+ 	return overlay->dtbo_size;
+ }
+ 
+@@ -159,6 +162,7 @@ ssize_t cfs_overlay_item_dtbo_write(struct config_item *item,
+ 	struct cfs_overlay_item *overlay = to_cfs_overlay_item(item);
+ 	int err;
+ 
++	pr_debug("%s: buf=%p count=%zu\n", __func__, buf, count);
+ 	/* if it's set do not allow changes */
+ 	if (overlay->path[0] != '\0' || overlay->dtbo_size > 0)
+ 		return -EPERM;
+@@ -174,6 +178,7 @@ ssize_t cfs_overlay_item_dtbo_write(struct config_item *item,
+ 	if (err < 0)
+ 		goto out_err;
+ 
++	pr_debug("%s: done(%zd)\n", __func__, count);
+ 	return count;
+ 
+ out_err:
+@@ -181,6 +186,7 @@ ssize_t cfs_overlay_item_dtbo_write(struct config_item *item,
+ 	overlay->dtbo = NULL;
+ 	overlay->dtbo_size = 0;
+ 
++	pr_debug("%s: error(%d)\n", __func__, err);
+ 	return err;
+ }
+ 
+diff --git a/drivers/of/dynamic.c b/drivers/of/dynamic.c
+index 4d57a4e34..1390b7257 100644
+--- a/drivers/of/dynamic.c
++++ b/drivers/of/dynamic.c
+@@ -81,12 +81,24 @@ static const char *action_names[] = {
+ #define of_changeset_action_err(...) _do_print(pr_err, __VA_ARGS__)
+ #define of_changeset_action_debug(...) _do_print(pr_debug, __VA_ARGS__)
+ 
++#define _do_print2(func, prefix, action, node, prop, ...) ({	\
++	func("changeset: " prefix "%-15s %pOF(%d)%s%s\n",	\
++	     ##__VA_ARGS__, action_names[action], node,		\
++	     kref_read(&(node)->kobj.kref),                     \
++	     prop ? ":" : "", prop ? prop->name : "");		\
++})
++#define of_changeset_action_debug2(...) _do_print2(pr_debug, __VA_ARGS__)
++
++#define pr_debug_of_node(prefix, node) ({       \
++    pr_debug(prefix "kref(%pOF)=%d\n", node, kref_read(&(node)->kobj.kref)); \
++})
++
+ int of_reconfig_notify(unsigned long action, struct of_reconfig_data *p)
+ {
+ 	int rc;
+ 	struct of_reconfig_data *pr = p;
+ 
+-	of_changeset_action_debug("notify: ", action, pr->dn, pr->prop);
++	of_changeset_action_debug2("notify: ", action, pr->dn, pr->prop);
+ 
+ 	rc = blocking_notifier_call_chain(&of_reconfig_chain, action, p);
+ 	return notifier_to_errno(rc);
+@@ -108,6 +120,8 @@ int of_reconfig_get_state_change(unsigned long action, struct of_reconfig_data *
+ 	struct property *prop, *old_prop = NULL;
+ 	int is_status, status_state, old_status_state, prev_state, new_state;
+ 
++        of_changeset_action_debug2("state change: ", action, pr->dn, pr->prop);
++
+ 	/* figure out if a device should be created or destroyed */
+ 	switch (action) {
+ 	case OF_RECONFIG_ATTACH_NODE:
+@@ -202,6 +216,7 @@ static void __of_attach_node(struct device_node *np)
+ 	int sz;
+ 	unsigned long flags;
+ 
++        pr_debug("%s(%pOF(%d)) start", __func__, np, kref_read(&(np)->kobj.kref));
+ 	raw_spin_lock_irqsave(&devtree_lock, flags);
+ 
+ 	if (!of_node_check_flag(np, OF_OVERLAY)) {
+@@ -229,6 +244,7 @@ static void __of_attach_node(struct device_node *np)
+ 	raw_spin_unlock_irqrestore(&devtree_lock, flags);
+ 
+ 	__of_attach_node_sysfs(np);
++        pr_debug("%s(%pOF(%d)) done ", __func__, np, kref_read(&(np)->kobj.kref));
+ }
+ 
+ /**
+@@ -239,6 +255,7 @@ int of_attach_node(struct device_node *np)
+ {
+ 	struct of_reconfig_data rd;
+ 
++        pr_debug("%s(%pOF(%d)) start", __func__, np, kref_read(&(np)->kobj.kref));
+ 	memset(&rd, 0, sizeof(rd));
+ 	rd.dn = np;
+ 
+@@ -248,6 +265,7 @@ int of_attach_node(struct device_node *np)
+ 
+ 	of_reconfig_notify(OF_RECONFIG_ATTACH_NODE, &rd);
+ 
++        pr_debug("%s(%pOF(%d)) done ", __func__, np, kref_read(&(np)->kobj.kref));
+ 	return 0;
+ }
+ 
+@@ -256,6 +274,7 @@ void __of_detach_node(struct device_node *np)
+ 	struct device_node *parent;
+ 	unsigned long flags;
+ 
++        pr_debug("%s(%pOF(%d)) start", __func__, np, kref_read(&(np)->kobj.kref));
+ 	raw_spin_lock_irqsave(&devtree_lock, flags);
+ 
+ 	parent = np->parent;
+@@ -283,6 +302,7 @@ void __of_detach_node(struct device_node *np)
+ 	raw_spin_unlock_irqrestore(&devtree_lock, flags);
+ 
+ 	__of_detach_node_sysfs(np);
++        pr_debug("%s(%pOF(%d)) done ", __func__, np, kref_read(&(np)->kobj.kref));
+ }
+ 
+ /**
+@@ -293,6 +313,7 @@ int of_detach_node(struct device_node *np)
+ {
+ 	struct of_reconfig_data rd;
+ 
++        pr_debug("%s(%pOF(%d)) start", __func__, np, kref_read(&(np)->kobj.kref));
+ 	memset(&rd, 0, sizeof(rd));
+ 	rd.dn = np;
+ 
+@@ -302,6 +323,7 @@ int of_detach_node(struct device_node *np)
+ 
+ 	of_reconfig_notify(OF_RECONFIG_DETACH_NODE, &rd);
+ 
++        pr_debug("%s(%pOF(%d)) done ", __func__, np, kref_read(&(np)->kobj.kref));
+ 	return 0;
+ }
+ EXPORT_SYMBOL_GPL(of_detach_node);
+@@ -519,6 +541,13 @@ EXPORT_SYMBOL(of_changeset_create_node);
+ 
+ static void __of_changeset_entry_destroy(struct of_changeset_entry *ce)
+ {
++	pr_debug("changeset: del : %s %pOF(%d=>%d,%s)%s%s\n",
++		 action_names[ce->action],
++                 ce->np,
++                 kref_read(&ce->np->kobj.kref),
++                 kref_read(&ce->np->kobj.kref)-1,
++                 (of_node_check_flag(ce->np, OF_OVERLAY)) ? "OF_OVERLAY": "NONE",
++	         ce->prop ? ":" : "", ce->prop ? ce->prop->name : "");
+ 	if (ce->action == OF_RECONFIG_ATTACH_NODE &&
+ 	    of_node_check_flag(ce->np, OF_OVERLAY)) {
+ 		if (kref_read(&ce->np->kobj.kref) > 1) {
+@@ -575,6 +604,7 @@ static int __of_changeset_entry_notify(struct of_changeset_entry *ce,
+ 		__of_changeset_entry_invert(ce, &ce_inverted);
+ 		ce = &ce_inverted;
+ 	}
++	of_changeset_action_debug2("__of_changeset_entry_notify(): start: ", ce->action, ce->np, ce->prop);
+ 
+ 	switch (ce->action) {
+ 	case OF_RECONFIG_ATTACH_NODE:
+@@ -596,6 +626,7 @@ static int __of_changeset_entry_notify(struct of_changeset_entry *ce,
+ 
+ 	if (ret)
+ 		pr_err("changeset notifier error @%pOF\n", ce->np);
++	of_changeset_action_debug2("__of_changeset_entry_notify(): done  :", ce->action, ce->np, ce->prop);
+ 	return ret;
+ }
+ 
+@@ -603,7 +634,7 @@ static int __of_changeset_entry_apply(struct of_changeset_entry *ce)
+ {
+ 	int ret = 0;
+ 
+-	of_changeset_action_debug("apply: ", ce->action, ce->np, ce->prop);
++	of_changeset_action_debug2("apply: ", ce->action, ce->np, ce->prop);
+ 
+ 	switch (ce->action) {
+ 	case OF_RECONFIG_ATTACH_NODE:
+@@ -629,8 +660,9 @@ static int __of_changeset_entry_apply(struct of_changeset_entry *ce)
+ 	if (ret) {
+ 		of_changeset_action_err("apply failed: ", ce->action, ce->np, ce->prop);
+ 		return ret;
+-	}
+-
++	} else {
++		of_changeset_action_debug2("apply done: ", ce->action, ce->np, ce->prop);
++        }
+ 	return 0;
+ }
+ 
+@@ -667,6 +699,7 @@ EXPORT_SYMBOL_GPL(of_changeset_init);
+ void of_changeset_destroy(struct of_changeset *ocs)
+ {
+ 	struct of_changeset_entry *ce, *cen;
++	pr_debug("%s() start\n", __func__);
+ 
+ 	/*
+ 	 * When a device is deleted, the device links to/from it are also queued
+@@ -681,6 +714,7 @@ void of_changeset_destroy(struct of_changeset *ocs)
+ 
+ 	list_for_each_entry_safe_reverse(ce, cen, &ocs->entries, node)
+ 		__of_changeset_entry_destroy(ce);
++	pr_debug("%s() done\n", __func__);
+ }
+ EXPORT_SYMBOL_GPL(of_changeset_destroy);
+ 
+@@ -699,7 +733,7 @@ int __of_changeset_apply_entries(struct of_changeset *ocs, int *ret_revert)
+ 	struct of_changeset_entry *ce;
+ 	int ret, ret_tmp;
+ 
+-	pr_debug("changeset: applying...\n");
++	pr_debug("%s() start\n", __func__);
+ 	list_for_each_entry(ce, &ocs->entries, node) {
+ 		ret = __of_changeset_entry_apply(ce);
+ 		if (ret) {
+@@ -713,7 +747,7 @@ int __of_changeset_apply_entries(struct of_changeset *ocs, int *ret_revert)
+ 			return ret;
+ 		}
+ 	}
+-
++	pr_debug("%s() done\n", __func__);
+ 	return 0;
+ }
+ 
+@@ -728,7 +762,7 @@ int __of_changeset_apply_notify(struct of_changeset *ocs)
+ 	struct of_changeset_entry *ce;
+ 	int ret = 0, ret_tmp;
+ 
+-	pr_debug("changeset: emitting notifiers.\n");
++	pr_debug("%s() start\n", __func__);
+ 
+ 	/* drop the global lock while emitting notifiers */
+ 	mutex_unlock(&of_mutex);
+@@ -738,8 +772,8 @@ int __of_changeset_apply_notify(struct of_changeset *ocs)
+ 			ret = ret_tmp;
+ 	}
+ 	mutex_lock(&of_mutex);
+-	pr_debug("changeset: notifiers sent.\n");
+ 
++	pr_debug("%s() done(%d)\n", __func__, ret);
+ 	return ret;
+ }
+ 
+@@ -754,11 +788,12 @@ int __of_changeset_apply_notify(struct of_changeset *ocs)
+ static int __of_changeset_apply(struct of_changeset *ocs)
+ {
+ 	int ret, ret_revert = 0;
+-
++	pr_debug("%s() start\n", __func__);
+ 	ret = __of_changeset_apply_entries(ocs, &ret_revert);
+ 	if (!ret)
+ 		ret = __of_changeset_apply_notify(ocs);
+ 
++	pr_debug("%s() done(%d)\n", __func__, ret);
+ 	return ret;
+ }
+ 
+@@ -779,10 +814,11 @@ int of_changeset_apply(struct of_changeset *ocs)
+ {
+ 	int ret;
+ 
++	pr_debug("%s() start\n", __func__);
+ 	mutex_lock(&of_mutex);
+ 	ret = __of_changeset_apply(ocs);
+ 	mutex_unlock(&of_mutex);
+-
++	pr_debug("%s() done(%d)\n", __func__, ret);
+ 	return ret;
+ }
+ EXPORT_SYMBOL_GPL(of_changeset_apply);
+@@ -803,7 +839,7 @@ int __of_changeset_revert_entries(struct of_changeset *ocs, int *ret_apply)
+ 	struct of_changeset_entry *ce;
+ 	int ret, ret_tmp;
+ 
+-	pr_debug("changeset: reverting...\n");
++	pr_debug("%s() start\n", __func__);
+ 	list_for_each_entry_reverse(ce, &ocs->entries, node) {
+ 		ret = __of_changeset_entry_revert(ce);
+ 		if (ret) {
+@@ -816,7 +852,7 @@ int __of_changeset_revert_entries(struct of_changeset *ocs, int *ret_apply)
+ 			return ret;
+ 		}
+ 	}
+-
++	pr_debug("%s() done\n", __func__);
+ 	return 0;
+ }
+ 
+@@ -829,7 +865,7 @@ int __of_changeset_revert_notify(struct of_changeset *ocs)
+ 	struct of_changeset_entry *ce;
+ 	int ret = 0, ret_tmp;
+ 
+-	pr_debug("changeset: emitting notifiers.\n");
++	pr_debug("%s() start\n", __func__);
+ 
+ 	/* drop the global lock while emitting notifiers */
+ 	mutex_unlock(&of_mutex);
+@@ -839,8 +875,8 @@ int __of_changeset_revert_notify(struct of_changeset *ocs)
+ 			ret = ret_tmp;
+ 	}
+ 	mutex_lock(&of_mutex);
+-	pr_debug("changeset: notifiers sent.\n");
+ 
++	pr_debug("%s() done(%d)\n", __func__, ret);
+ 	return ret;
+ }
+ 
+@@ -848,12 +884,15 @@ static int __of_changeset_revert(struct of_changeset *ocs)
+ {
+ 	int ret, ret_reply;
+ 
++	pr_debug("%s() start\n", __func__);
++
+ 	ret_reply = 0;
+ 	ret = __of_changeset_revert_entries(ocs, &ret_reply);
+ 
+ 	if (!ret)
+ 		ret = __of_changeset_revert_notify(ocs);
+ 
++	pr_debug("%s() done(%d)\n", __func__, ret);
+ 	return ret;
+ }
+ 
+@@ -873,10 +912,13 @@ int of_changeset_revert(struct of_changeset *ocs)
+ {
+ 	int ret;
+ 
++	pr_debug("%s() start\n", __func__);
++
+ 	mutex_lock(&of_mutex);
+ 	ret = __of_changeset_revert(ocs);
+ 	mutex_unlock(&of_mutex);
+ 
++	pr_debug("%s() done(%d)\n", __func__, ret);
+ 	return ret;
+ }
+ EXPORT_SYMBOL_GPL(of_changeset_revert);
+@@ -910,6 +952,13 @@ int of_changeset_action(struct of_changeset *ocs, unsigned long action,
+ 	if (!ce)
+ 		return -ENOMEM;
+ 
++	pr_debug("changeset: add : %s %pOF(%d=>%d,%s)%s%s\n",
++		 action_names[action],
++                 np,
++                 kref_read(&np->kobj.kref),
++                 kref_read(&np->kobj.kref)+1,
++                 (of_node_check_flag(np, OF_OVERLAY)) ? "OF_OVERLAY": "NONE",
++	         prop ? ":" : "", prop ? prop->name : "");
+ 	/* get a reference to the node */
+ 	ce->action = action;
+ 	ce->np = of_node_get(np);
+@@ -959,12 +1008,16 @@ int of_changeset_add_prop_string(struct of_changeset *ocs,
+ 				 const char *prop_name, const char *str)
+ {
+ 	struct property prop;
++        int ret;
+ 
++        pr_debug_of_node("of_changeset_add_prop_string() start : ", np);
+ 	prop.name = (char *)prop_name;
+ 	prop.length = strlen(str) + 1;
+ 	prop.value = (void *)str;
+ 
+-	return of_changeset_add_prop_helper(ocs, np, &prop);
++	ret = of_changeset_add_prop_helper(ocs, np, &prop);
++        pr_debug_of_node("of_changeset_add_prop_string() done : ", np);
++        return ret;
+ }
+ EXPORT_SYMBOL_GPL(of_changeset_add_prop_string);
+ 
+@@ -991,6 +1044,7 @@ int of_changeset_add_prop_string_array(struct of_changeset *ocs,
+ 	int i, ret;
+ 	char *vp;
+ 
++        pr_debug_of_node("of_changeset_add_prop_string_array() start : ", np);
+ 	prop.name = (char *)prop_name;
+ 
+ 	prop.length = 0;
+@@ -1009,6 +1063,7 @@ int of_changeset_add_prop_string_array(struct of_changeset *ocs,
+ 	ret = of_changeset_add_prop_helper(ocs, np, &prop);
+ 	kfree(prop.value);
+ 
++        pr_debug_of_node("of_changeset_add_prop_string_array() done : ", np);
+ 	return ret;
+ }
+ EXPORT_SYMBOL_GPL(of_changeset_add_prop_string_array);
+@@ -1036,6 +1091,7 @@ int of_changeset_add_prop_u32_array(struct of_changeset *ocs,
+ 	__be32 *val;
+ 	int i, ret;
+ 
++        pr_debug_of_node("of_changeset_add_prop_u32_array() start : ", np);
+ 	val = kcalloc(sz, sizeof(__be32), GFP_KERNEL);
+ 	if (!val)
+ 		return -ENOMEM;
+@@ -1049,6 +1105,7 @@ int of_changeset_add_prop_u32_array(struct of_changeset *ocs,
+ 	ret = of_changeset_add_prop_helper(ocs, np, &prop);
+ 	kfree(val);
+ 
++        pr_debug_of_node("of_changeset_add_prop_u32_array() done : ", np);
+ 	return ret;
+ }
+ EXPORT_SYMBOL_GPL(of_changeset_add_prop_u32_array);
+diff --git a/drivers/of/overlay.c b/drivers/of/overlay.c
+index 540a2825a..c90167be5 100644
+--- a/drivers/of/overlay.c
++++ b/drivers/of/overlay.c
+@@ -23,6 +23,10 @@
+ 
+ #include "of_private.h"
+ 
++#define pr_debug_of_node(prefix, node) ({       \
++    pr_debug(prefix "kref(%pOF)=%d\n", node, kref_read(&(node)->kobj.kref)); \
++})
++
+ /**
+  * struct target - info about current target node as recursing through overlay
+  * @np:			node where current level of overlay will be applied
+@@ -158,6 +162,7 @@ static int overlay_notify(struct overlay_changeset *ovcs,
+ 	struct of_overlay_notify_data nd;
+ 	int i, ret;
+ 
++	pr_debug("%s(%s) start\n", __func__, of_overlay_action_name(action));
+ 	ovcs->notify_state = action;
+ 
+ 	for (i = 0; i < ovcs->count; i++) {
+@@ -173,9 +178,13 @@ static int overlay_notify(struct overlay_changeset *ovcs,
+ 			pr_err("overlay changeset %s notifier error %d, target: %pOF\n",
+ 			       of_overlay_action_name(action), ret, nd.target);
+ 			return ret;
+-		}
++		} else {
++			pr_debug("overlay changeset %s notifier success, target: %pOF\n",
++                                 of_overlay_action_name(action), nd.target);
++                }
+ 	}
+ 
++	pr_debug("%s(%s) done\n", __func__, of_overlay_action_name(action));
+ 	return 0;
+ }
+ 
+@@ -481,13 +490,19 @@ static int build_changeset_next_level(struct overlay_changeset *ovcs,
+ 	struct property *prop;
+ 	int ret;
+ 
++	pr_debug("%s() start\n", __func__);
++        pr_debug_of_node("build_changeset_next_level() : ", target->np);
++        
+ 	for_each_property_of_node(overlay_node, prop) {
+ 		ret = add_changeset_property(ovcs, target, prop, 0);
+ 		if (ret) {
+ 			pr_debug("Failed to apply prop @%pOF/%s, err=%d\n",
+ 				 target->np, prop->name, ret);
+ 			return ret;
+-		}
++		} else {
++			pr_debug("Successful to apply prop @%pOF/%s\n",
++				 target->np, prop->name);
++                }
+ 	}
+ 
+ 	for_each_child_of_node(overlay_node, child) {
+@@ -497,9 +512,13 @@ static int build_changeset_next_level(struct overlay_changeset *ovcs,
+ 				 target->np, child, ret);
+ 			of_node_put(child);
+ 			return ret;
+-		}
++		} else {
++			pr_debug("Successful to apply node @%pOF/%pOFn\n",
++				 target->np, child);
++                }
+ 	}
+-
++        pr_debug_of_node("build_changeset_next_level() : ", target->np);
++	pr_debug("%s() done\n", __func__);
+ 	return 0;
+ }
+ 
+@@ -513,15 +532,23 @@ static int build_changeset_symbols_node(struct overlay_changeset *ovcs,
+ 	struct property *prop;
+ 	int ret;
+ 
++	pr_debug("%s() start\n", __func__);
++        pr_debug_of_node("build_changeset_symbols_node() : ", target->np);
++
+ 	for_each_property_of_node(overlay_symbols_node, prop) {
+ 		ret = add_changeset_property(ovcs, target, prop, 1);
+ 		if (ret) {
+ 			pr_debug("Failed to apply symbols prop @%pOF/%s, err=%d\n",
+ 				 target->np, prop->name, ret);
+ 			return ret;
+-		}
++		} else {
++			pr_debug("Successful to apply symbols prop @%pOF/%s\n",
++				 target->np, prop->name);
++                }
+ 	}
+ 
++        pr_debug_of_node("build_changeset_symbols_node() : ", target->np);
++	pr_debug("%s() done\n", __func__);
+ 	return 0;
+ }
+ 
+@@ -635,6 +662,7 @@ static int build_changeset(struct overlay_changeset *ovcs)
+ 	struct target target;
+ 	int fragments_count, i, ret;
+ 
++	pr_debug("%s() start\n", __func__);
+ 	/*
+ 	 * if there is a symbols fragment in ovcs->fragments[i] it is
+ 	 * the final element in the array
+@@ -655,7 +683,10 @@ static int build_changeset(struct overlay_changeset *ovcs)
+ 			pr_debug("fragment apply failed '%pOF'\n",
+ 				 fragment->target);
+ 			return ret;
+-		}
++		} else {
++			pr_debug("fragment apply success '%pOF'\n",
++				 fragment->target);
++                }
+ 	}
+ 
+ 	if (ovcs->symbols_fragment) {
+@@ -669,10 +700,15 @@ static int build_changeset(struct overlay_changeset *ovcs)
+ 			pr_debug("symbols fragment apply failed '%pOF'\n",
+ 				 fragment->target);
+ 			return ret;
+-		}
++		} else {
++			pr_debug("symbols fragment apply success '%pOF'\n",
++				 fragment->target);
++                }
+ 	}
+ 
+-	return changeset_dup_entry_check(ovcs);
++	ret = changeset_dup_entry_check(ovcs);
++	pr_debug("%s() done(=%d)\n", __func__, ret);
++        return ret;
+ }
+ 
+ /*
+@@ -749,6 +785,7 @@ static int init_overlay_changeset(struct overlay_changeset *ovcs,
+ 	struct fragment *fragments;
+ 	int cnt, ret;
+ 
++	pr_debug("%s() start\n", __func__);
+ 	/*
+ 	 * None of the resources allocated by this function will be freed in
+ 	 * the error paths.  Instead the caller of this function is required
+@@ -795,6 +832,7 @@ static int init_overlay_changeset(struct overlay_changeset *ovcs,
+ 
+ 	cnt = 0;
+ 	for_each_child_of_node(ovcs->overlay_root, node) {
++                pr_debug_of_node("init_overlay_changeset() : get_target : ", node);
+ 		overlay_node = of_get_child_by_name(node, "__overlay__");
+ 		if (!overlay_node)
+ 			continue;
+@@ -808,6 +846,8 @@ static int init_overlay_changeset(struct overlay_changeset *ovcs,
+ 			of_node_put(node);
+ 			goto err_out;
+ 		}
++                pr_debug_of_node("init_overlay_changeset() : get_target : ", node);
++                pr_debug_of_node("init_overlay_changeset() : target : ", fragment->target);
+ 
+ 		cnt++;
+ 	}
+@@ -841,6 +881,7 @@ static int init_overlay_changeset(struct overlay_changeset *ovcs,
+ 
+ 	ovcs->count = cnt;
+ 
++	pr_debug("%s() done\n", __func__);
+ 	return 0;
+ 
+ err_out:
+@@ -853,6 +894,7 @@ static void free_overlay_changeset(struct overlay_changeset *ovcs)
+ {
+ 	int i;
+ 
++	pr_debug("%s() start\n", __func__);
+ 	if (ovcs->cset.entries.next)
+ 		of_changeset_destroy(&ovcs->cset);
+ 
+@@ -864,6 +906,8 @@ static void free_overlay_changeset(struct overlay_changeset *ovcs)
+ 
+ 
+ 	for (i = 0; i < ovcs->count; i++) {
++                pr_debug_of_node("free_overlay_changeset() target  : ", ovcs->fragments[i].target);
++                pr_debug_of_node("free_overlay_changeset() overlay : ", ovcs->fragments[i].overlay);
+ 		of_node_put(ovcs->fragments[i].target);
+ 		of_node_put(ovcs->fragments[i].overlay);
+ 	}
+@@ -885,6 +929,7 @@ static void free_overlay_changeset(struct overlay_changeset *ovcs)
+ 		kfree(ovcs->new_fdt);
+ 	}
+ 	kfree(ovcs);
++	pr_debug("%s() done\n", __func__);
+ }
+ 
+ /*
+@@ -921,6 +966,8 @@ static int of_overlay_apply(struct overlay_changeset *ovcs,
+ {
+ 	int ret = 0, ret_revert, ret_tmp;
+ 
++	pr_debug("%s() start\n", __func__);
++        
+ 	ret = of_resolve_phandles(ovcs->overlay_root);
+ 	if (ret)
+ 		goto out;
+@@ -994,6 +1041,7 @@ int of_overlay_fdt_apply(const void *overlay_fdt, u32 overlay_fdt_size,
+ 	u32 size;
+ 	struct overlay_changeset *ovcs;
+ 
++	pr_debug("%s() start\n", __func__);
+ 	*ret_ovcs_id = 0;
+ 
+ 	if (devicetree_corrupt()) {
+@@ -1072,6 +1120,7 @@ int of_overlay_fdt_apply(const void *overlay_fdt, u32 overlay_fdt_size,
+ out_unlock:
+ 	mutex_unlock(&of_mutex);
+ 	of_overlay_mutex_unlock();
++	pr_debug("%s() err=%d\n", __func__, ret);
+ 	return ret;
+ }
+ EXPORT_SYMBOL_GPL(of_overlay_fdt_apply);
+@@ -1198,6 +1247,8 @@ int of_overlay_remove(int *ovcs_id)
+ 	struct overlay_changeset *ovcs;
+ 	int ret, ret_apply, ret_tmp;
+ 
++	pr_debug("%s() start\n", __func__);
++
+ 	if (devicetree_corrupt()) {
+ 		pr_err("suspect devicetree state, refuse to remove overlay\n");
+ 		ret = -EBUSY;
+diff --git a/drivers/of/platform.c b/drivers/of/platform.c
+index f235ab55b..a58bfdc8c 100644
+--- a/drivers/of/platform.c
++++ b/drivers/of/platform.c
+@@ -33,6 +33,297 @@ const struct of_device_id of_default_bus_match_table[] = {
+ 	{} /* Empty terminated list */
+ };
+ 
++static const char *reconfig_action_names[] = {
++	[OF_RECONFIG_NO_CHANGE]     = "OF_RECONFIG_NO_CHANGE",
++	[OF_RECONFIG_CHANGE_ADD]    = "OF_RECONFIG_CHANGE_ADD",
++	[OF_RECONFIG_CHANGE_REMOVE] = "OF_RECONFIG_CHANGE_REMOVE",
++};
++
++#include <linux/kref.h>
++static void __kobj_kset_leave(struct kobject *kobj);
++static void __kobject_put(struct kobject *kobj);
++static void __kobject_del(struct kobject *kobj);
++static void __kobject_cleanup(struct kobject *kobj);
++static void __kobject_release(struct kref *kref);
++static void __put_device(struct device *dev);
++static void __platform_device_put(struct platform_device *pdev);
++static void __platform_device_del(struct platform_device *pdev);
++static void __platform_device_unregister(struct platform_device *pdev);
++
++static const char* __none_name  = "NONE";
++static const char* __error_name = "ERROR";
++static const char* save_name(const char* name)
++{
++	const char* buf;
++	if (!name)
++		return __none_name;
++	if (name == __none_name)
++		return __none_name;
++	if (name == __error_name)
++		return __error_name;
++	buf = kstrdup_const(name, GFP_KERNEL);
++	if (IS_ERR_OR_NULL(buf))
++		return __error_name;
++	else
++		return buf;
++}
++static void free_name(const char* name)
++{
++	if (name == __none_name )
++		return;
++	if (name == __error_name)
++		return;
++	kfree_const(name);
++}
++
++static const char *__platform_device_name(struct platform_device* pdev)
++{
++	if (IS_ERR_OR_NULL(pdev))
++		return __none_name;
++	return dev_name(&pdev->dev);
++}
++static int __device_refcount(struct device* dev)
++{
++	if (dev) {
++		struct kobject* kobj = &dev->kobj;
++		struct kref*    kref = &kobj->kref;
++		return (int)kref_read(kref);
++	} else {
++		return -1;
++	}
++}
++static int __platform_device_refcount(struct platform_device* pdev)
++{
++	if (IS_ERR_OR_NULL(pdev))
++		return -1;
++	return __device_refcount(&pdev->dev);
++}
++
++/* remove the kobject from its kset's list */
++static void __kobj_kset_leave(struct kobject *kobj)
++{
++	if (!kobj->kset)
++		return;
++
++	spin_lock(&kobj->kset->list_lock);
++	list_del_init(&kobj->entry);
++	spin_unlock(&kobj->kset->list_lock);
++	kset_put(kobj->kset);
++}
++
++static void __kobject_del(struct kobject *kobj)
++{
++	struct kernfs_node *sd;
++	const struct kobj_type *ktype;
++
++	sd = kobj->sd;
++	ktype = get_ktype(kobj);
++
++	if (ktype)
++		sysfs_remove_groups(kobj, ktype->default_groups);
++
++	/* send "remove" if the caller did not do it but sent "add" */
++	if (kobj->state_add_uevent_sent && !kobj->state_remove_uevent_sent) {
++		pr_debug("'%s' (%p): auto cleanup 'remove' event\n",
++			 kobject_name(kobj), kobj);
++		kobject_uevent(kobj, KOBJ_REMOVE);
++	}
++
++	sysfs_remove_dir(kobj);
++	sysfs_put(sd);
++
++	kobj->state_in_sysfs = 0;
++	__kobj_kset_leave(kobj);
++	kobj->parent = NULL;
++}
++/**
++ * _kref_put - decrement refcount for object.
++ * @kref: object.
++ * @release: pointer to the function that will clean up the object when the
++ *	     last reference to the object is released.
++ *	     This pointer is required, and it is not acceptable to pass kfree
++ *	     in as this function.
++ *
++ * Decrement the refcount, and if 0, call release().
++ * Return 1 if the object was removed, otherwise return 0.  Beware, if this
++ * function returns 0, you still can not count on the kref from remaining in
++ * memory.  Only use the return value if you want to see if the kref is now
++ * gone, not present.
++ */
++static inline int __kref_put(struct kref *kref, void (*release)(struct kref *kref))
++{
++	struct kobject *kobj = container_of(kref, struct kobject, kref);
++        int  ret;
++        const char* kobj_name = save_name(kobject_name(kobj));
++        pr_debug("kref_put('%s') start", kobj_name);
++	if (refcount_dec_and_test(&kref->refcount)) {
++                pr_debug("%s refcount_dec_and_test is true", __func__);
++		release(kref);
++		ret = 1;
++	} else {
++                pr_debug("%s refcount_dec_and_test is false", __func__);
++                ret = 0;
++        }
++        pr_debug("kref_put('%s') done(%d)", kobj_name, ret);
++        free_name(kobj_name);
++        return ret;
++}
++/**
++ * __kobject_put() - Decrement refcount for object.
++ * @kobj: object.
++ *
++ * Decrement the refcount, and if 0, call kobject_cleanup().
++ */
++static void __kobject_put(struct kobject *kobj)
++{
++	if (kobj) {
++		const char* kobj_name = save_name(kobject_name(kobj));
++		pr_debug("kobject_put('%s') start", kobj_name);
++		if (!kobj->state_initialized)
++			WARN(1, KERN_WARNING
++				"kobject: '%s' (%p): is not initialized, yet kobject_put() is being called.\n",
++			     kobject_name(kobj), kobj);
++		__kref_put(&kobj->kref, __kobject_release);
++		pr_debug("kobject_put('%s') done ", kobj_name);
++		free_name(kobj_name);                
++	} else {
++		pr_debug("kobject_put(NONE)");
++	}
++}
++/*
++ * __kobject_cleanup - free kobject resources.
++ * @kobj: object to cleanup
++ */
++static void __kobject_cleanup(struct kobject *kobj)
++{
++	struct kobject *parent = kobj->parent;
++	const struct kobj_type *t = get_ktype(kobj);
++	const char *name = kobj->name;
++        const char *kobj_name = save_name(kobj->name);
++
++        pr_debug("kobject_cleanup('%s') start", kobj_name);
++	pr_debug("'%s' (%p): %s, parent %p\n",
++		 kobject_name(kobj), kobj, __func__, kobj->parent);
++
++	if (t && !t->release)
++		pr_debug("'%s' (%p): does not have a release() function, it is broken and must be fixed. See Documentation/core-api/kobject.rst.\n",
++			 kobject_name(kobj), kobj);
++
++	/* remove from sysfs if the caller did not do it */
++	if (kobj->state_in_sysfs) {
++		pr_debug("'%s' (%p): auto cleanup kobject_del\n",
++			 kobject_name(kobj), kobj);
++		__kobject_del(kobj);
++	} else {
++		/* avoid dropping the parent reference unnecessarily */
++		parent = NULL;
++	}
++
++	if (t && t->release) {
++		pr_debug("'%s' (%p): calling ktype release\n",
++			 kobject_name(kobj), kobj);
++		t->release(kobj);
++	}
++
++	/* free name if we allocated it */
++	if (name) {
++		pr_debug("'%s': free name\n", name);
++		kfree_const(name);
++	}
++
++	__kobject_put(parent);
++	pr_debug("kobject_cleanup('%s') done", kobj_name);
++	free_name(kobj_name);
++}
++
++static void __kobject_release(struct kref *kref)
++{
++	struct kobject *kobj = container_of(kref, struct kobject, kref);
++	const char* kobj_name = save_name(kobject_name(kobj));
++	pr_debug("kobject_release('%s') start", kobj_name);
++#ifdef CONFIG_DEBUG_KOBJECT_RELEASE
++	unsigned long delay = HZ + HZ * get_random_u32_below(4);
++	pr_info("'%s' (%p): %s, parent %p (delayed %ld)\n",
++		kobject_name(kobj), kobj, __func__, kobj->parent, delay);
++	INIT_DELAYED_WORK(&kobj->release, kobject_delayed_cleanup);
++
++	schedule_delayed_work(&kobj->release, delay);
++#else
++	__kobject_cleanup(kobj);
++#endif
++	pr_debug("kobject_release('%s') done" , kobj_name);
++	free_name(kobj_name);
++}
++
++/**
++ * __put_device - decrement reference count.
++ * @dev: device in question.
++ */
++static void __put_device(struct device *dev)
++{
++	/* might_sleep(); */
++	if (dev) {
++		const char* name = save_name(dev_name(dev));
++		pr_debug("put_device(%s(%d)) start\n", name, __device_refcount(dev));
++		__kobject_put(&dev->kobj);
++		pr_debug("put_device(%s(%d)) done\n" , name, __device_refcount(dev));
++		free_name(name);
++	} else {
++		pr_debug("put_device(NONE)\n");
++	}
++}
++
++/**
++ * __platform_device_put - destroy a platform device
++ * @pdev: platform device to free
++ *
++ * Free all memory associated with a platform device.  This function must
++ * _only_ be externally called in error cases.  All other usage is a bug.
++ */
++static void __platform_device_put(struct platform_device *pdev)
++{
++	const char* name = save_name(__platform_device_name(pdev));
++	pr_debug("platform_device_put(%s(%d)) start\n", name, __platform_device_refcount(pdev));
++	if (!IS_ERR_OR_NULL(pdev))
++		__put_device(&pdev->dev);
++	pr_debug("platform_device_put(%s(%d)) done\n" , name, __platform_device_refcount(pdev));
++	free_name(name);
++}
++
++/**
++ * __platform_device_del - remove a platform-level device
++ * @pdev: platform device we're removing
++ *
++ * Note that this function will also release all memory- and port-based
++ * resources owned by the device (@dev->resource).  This function must
++ * _only_ be externally called in error cases.  All other usage is a bug.
++ */
++static void __platform_device_del(struct platform_device *pdev)
++{
++	const char* name = save_name(__platform_device_name(pdev));
++	pr_debug("platform_device_del(%s(%d)) start\n", name, __platform_device_refcount(pdev));
++        platform_device_del(pdev);
++	pr_debug("platform_device_del(%s(%d)) done\n" , name, __platform_device_refcount(pdev));
++	free_name(name);
++}
++/**
++ * __platform_device_unregister - unregister a platform-level device
++ * @pdev: platform device we're unregistering
++ *
++ * Unregistration is done in 2 steps. First we release all resources
++ * and remove it from the subsystem, then we drop reference count by
++ * calling platform_device_put().
++ */
++static void __platform_device_unregister(struct platform_device *pdev)
++{
++	const char* name = save_name(__platform_device_name(pdev));
++	pr_debug("platform_device_unregister(%s(%d)) start\n", name, __platform_device_refcount(pdev));
++	__platform_device_del(pdev);
++	__platform_device_put(pdev);
++	pr_debug("platform_device_unregister(%s(%d)) done\n" , name, __platform_device_refcount(pdev));
++	free_name(name);
++}
++
+ /**
+  * of_find_device_by_node - Find the platform_device associated with a node
+  * @np: Pointer to device tree node
+@@ -53,6 +344,8 @@ EXPORT_SYMBOL(of_find_device_by_node);
+ 
+ int of_device_add(struct platform_device *ofdev)
+ {
++	int ret;
++	pr_debug("%s(%s(%d)) start\n", __func__, __platform_device_name(ofdev), __platform_device_refcount(ofdev));
+ 	BUG_ON(ofdev->dev.of_node == NULL);
+ 
+ 	/* name and id have to be set so that the platform bus doesn't get
+@@ -67,19 +360,27 @@ int of_device_add(struct platform_device *ofdev)
+ 	 */
+ 	set_dev_node(&ofdev->dev, of_node_to_nid(ofdev->dev.of_node));
+ 
+-	return device_add(&ofdev->dev);
++	ret = device_add(&ofdev->dev);
++	pr_debug("%s(%s(%d)) done(%d)\n", __func__, __platform_device_name(ofdev), __platform_device_refcount(ofdev), ret);
++	return ret;        
+ }
+ 
+ int of_device_register(struct platform_device *pdev)
+ {
++	int ret;
++	pr_debug("%s() start\n", __func__);
+ 	device_initialize(&pdev->dev);
+-	return of_device_add(pdev);
++	ret = of_device_add(pdev);
++	pr_debug("%s() done(%d)\n", __func__, ret);
++	return ret;        
+ }
+ EXPORT_SYMBOL(of_device_register);
+ 
+ void of_device_unregister(struct platform_device *ofdev)
+ {
++	pr_debug("%s() start\n", __func__);
+ 	device_unregister(&ofdev->dev);
++	pr_debug("%s() done\n", __func__);
+ }
+ EXPORT_SYMBOL(of_device_unregister);
+ 
+@@ -205,9 +506,13 @@ static struct platform_device *of_platform_device_create_pdata(
+ {
+ 	struct platform_device *dev;
+ 
++	pr_debug("%s(%pOF(%d)) start\n", __func__, np, kref_read(&np->kobj.kref));
++	if (parent) {
++		pr_debug("  parent=%s(%d)\n", dev_name(parent), __device_refcount(parent));
++	}            
+ 	if (!of_device_is_available(np) ||
+ 	    of_node_test_and_set_flag(np, OF_POPULATED))
+-		return NULL;
++		goto err;
+ 
+ 	dev = of_device_alloc(np, bus_id, parent);
+ 	if (!dev)
+@@ -224,11 +529,13 @@ static struct platform_device *of_platform_device_create_pdata(
+ 		platform_device_put(dev);
+ 		goto err_clear_flag;
+ 	}
+-
++	pr_debug("%s(%pOF(%d)) done(%s(%d))\n", __func__, np, kref_read(&np->kobj.kref), __platform_device_name(dev), __platform_device_refcount(dev));
+ 	return dev;
+ 
+ err_clear_flag:
+ 	of_node_clear_flag(np, OF_POPULATED);
++err:
++	pr_debug("%s(%pOF(%d)) error\n", __func__, np, kref_read(&np->kobj.kref));
+ 	return NULL;
+ }
+ 
+@@ -381,6 +688,8 @@ static int of_platform_bus_create(struct device_node *bus,
+ 	void *platform_data = NULL;
+ 	int rc = 0;
+ 
++        pr_debug("%s(%pOF(%d)) start", __func__, bus, kref_read(&bus->kobj.kref));
++
+ 	/* Make sure it has a compatible property */
+ 	if (strict && (!of_get_property(bus, "compatible", NULL))) {
+ 		pr_debug("%s() - skipping %pOF, no compatible prop\n",
+@@ -428,6 +737,7 @@ static int of_platform_bus_create(struct device_node *bus,
+ 		}
+ 	}
+ 	of_node_set_flag(bus, OF_POPULATED_BUS);
++        pr_debug("%s(%pOF(%d)) done(%d)", __func__, bus, kref_read(&bus->kobj.kref), rc);
+ 	return rc;
+ }
+ 
+@@ -451,8 +761,7 @@ int of_platform_bus_probe(struct device_node *root,
+ 	if (!root)
+ 		return -EINVAL;
+ 
+-	pr_debug("%s()\n", __func__);
+-	pr_debug(" starting at: %pOF\n", root);
++	pr_debug("%s(%pOF) start\n", __func__, root);
+ 
+ 	/* Do a self check of bus type, if there's a match, create children */
+ 	if (of_match_node(matches, root)) {
+@@ -466,8 +775,8 @@ int of_platform_bus_probe(struct device_node *root,
+ 			break;
+ 		}
+ 	}
+-
+ 	of_node_put(root);
++	pr_debug("%s(%pOF) done(%d)\n", __func__, root, rc);
+ 	return rc;
+ }
+ EXPORT_SYMBOL(of_platform_bus_probe);
+@@ -503,8 +812,7 @@ int of_platform_populate(struct device_node *root,
+ 	if (!root)
+ 		return -EINVAL;
+ 
+-	pr_debug("%s()\n", __func__);
+-	pr_debug(" starting at: %pOF\n", root);
++	pr_debug("%s(%pOF) start", __func__, root);
+ 
+ 	device_links_supplier_sync_state_pause();
+ 	for_each_child_of_node(root, child) {
+@@ -519,6 +827,7 @@ int of_platform_populate(struct device_node *root,
+ 	of_node_set_flag(root, OF_POPULATED_BUS);
+ 
+ 	of_node_put(root);
++	pr_debug("%s(%pOF) done(%d)", __func__, root, rc);
+ 	return rc;
+ }
+ EXPORT_SYMBOL_GPL(of_platform_populate);
+@@ -641,9 +950,12 @@ late_initcall_sync(of_platform_sync_state_init);
+ 
+ int of_platform_device_destroy(struct device *dev, void *data)
+ {
++	char name[128];
+ 	/* Do not touch devices not populated from the device tree */
+ 	if (!dev->of_node || !of_node_check_flag(dev->of_node, OF_POPULATED))
+ 		return 0;
++        strscpy(name, dev_name(dev), sizeof(name));
++        pr_debug("%s(%s(%d)/%pOF(%d)) start", __func__, name, __device_refcount(dev), dev->of_node, kref_read(&(dev->of_node)->kobj.kref));
+ 
+ 	/* Recurse for any nodes that were treated as busses */
+ 	if (of_node_check_flag(dev->of_node, OF_POPULATED_BUS))
+@@ -653,12 +965,13 @@ int of_platform_device_destroy(struct device *dev, void *data)
+ 	of_node_clear_flag(dev->of_node, OF_POPULATED_BUS);
+ 
+ 	if (dev->bus == &platform_bus_type)
+-		platform_device_unregister(to_platform_device(dev));
++		__platform_device_unregister(to_platform_device(dev));
+ #ifdef CONFIG_ARM_AMBA
+ 	else if (dev->bus == &amba_bustype)
+ 		amba_device_unregister(to_amba_device(dev));
+ #endif
+ 
++        pr_debug("%s(%s(%d)/%pOF(%d)) done", __func__, name, __device_refcount(dev), dev->of_node, kref_read(&(dev->of_node)->kobj.kref));
+ 	return 0;
+ }
+ EXPORT_SYMBOL_GPL(of_platform_device_destroy);
+@@ -760,15 +1073,18 @@ static int of_platform_notify(struct notifier_block *nb,
+ 	struct platform_device *pdev_parent, *pdev;
+ 	bool children_left;
+ 
++        pr_debug("%s() start", __func__);
++
+ 	switch (of_reconfig_get_state_change(action, rd)) {
+ 	case OF_RECONFIG_CHANGE_ADD:
++		pr_debug(" %s start %pOF(%d)\n", reconfig_action_names[OF_RECONFIG_CHANGE_ADD], rd->dn, kref_read(&(rd->dn)->kobj.kref));
+ 		/* verify that the parent is a bus */
+ 		if (!of_node_check_flag(rd->dn->parent, OF_POPULATED_BUS))
+-			return NOTIFY_OK;	/* not for us */
++			goto done;	/* not for us */
+ 
+ 		/* already populated? (driver using of_populate manually) */
+ 		if (of_node_check_flag(rd->dn, OF_POPULATED))
+-			return NOTIFY_OK;
++			goto done;
+ 
+ 		/*
+ 		 * Clear the flag before adding the device so that fw_devlink
+@@ -787,27 +1103,34 @@ static int of_platform_notify(struct notifier_block *nb,
+ 			/* of_platform_device_create tosses the error code */
+ 			return notifier_from_errno(-EINVAL);
+ 		}
++                pr_debug(" %s pdev  %s(%d)\n"  , reconfig_action_names[OF_RECONFIG_CHANGE_ADD], __platform_device_name(pdev), __platform_device_refcount(pdev));
++		pr_debug(" %s done  %pOF(%d)\n", reconfig_action_names[OF_RECONFIG_CHANGE_ADD], rd->dn, kref_read(&(rd->dn)->kobj.kref));
+ 		break;
+ 
+ 	case OF_RECONFIG_CHANGE_REMOVE:
+-
++		pr_debug(" %s start %pOF(%d)\n", reconfig_action_names[OF_RECONFIG_CHANGE_REMOVE], rd->dn, kref_read(&(rd->dn)->kobj.kref));
+ 		/* already depopulated? */
+ 		if (!of_node_check_flag(rd->dn, OF_POPULATED))
+-			return NOTIFY_OK;
++                        goto done;
+ 
+ 		/* find our device by node */
+ 		pdev = of_find_device_by_node(rd->dn);
+ 		if (pdev == NULL)
+-			return NOTIFY_OK;	/* no? not meant for us */
++			goto done;	/* no? not meant for us */
+ 
+ 		/* unregister takes one ref away */
++                pr_debug(" %s pdev  %s(%d)\n"  , reconfig_action_names[OF_RECONFIG_CHANGE_REMOVE], __platform_device_name(pdev), __platform_device_refcount(pdev));
++		pr_debug(" %s --1-- %pOF(%d)\n", reconfig_action_names[OF_RECONFIG_CHANGE_REMOVE], rd->dn, kref_read(&(rd->dn)->kobj.kref));
+ 		of_platform_device_destroy(&pdev->dev, &children_left);
++		pr_debug(" %s --2-- %pOF(%d)\n", reconfig_action_names[OF_RECONFIG_CHANGE_REMOVE], rd->dn, kref_read(&(rd->dn)->kobj.kref));
+ 
+ 		/* and put the reference of the find */
+-		platform_device_put(pdev);
++		__platform_device_put(pdev);
++		pr_debug(" %s done  %pOF(%d)\n", reconfig_action_names[OF_RECONFIG_CHANGE_REMOVE], rd->dn, kref_read(&(rd->dn)->kobj.kref));
+ 		break;
+ 	}
+-
++ done:
++        pr_debug("%s() done", __func__);
+ 	return NOTIFY_OK;
+ }
+ 
