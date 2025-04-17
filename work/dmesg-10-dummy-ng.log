@@ -1,0 +1,242 @@
+[  137.695933] cfs_overlay_item_dtbo_write: buf=00000000d867e80c count=313
+[  137.695961] create_overlay : start
+[  137.695966] OF: overlay: of_overlay_fdt_apply() start
+[  137.695978] OF: fdt:  -> unflatten_device_tree()
+[  137.695983] OF: fdt: Unflattening device tree:
+[  137.695987] OF: fdt: magic: d00dfeed
+[  137.695991] OF: fdt: size: 00000139
+[  137.695995] OF: fdt: version: 00000011
+[  137.696015] OF: fdt:   size is 2100, allocating...
+[  137.696022] OF: fdt:   unflattening 000000009e35cb26...
+[  137.696028] OF: fdt: fixed up name for  -> 
+[  137.696037] OF: fdt: fixed up name for fragment@0 -> fragment
+[  137.696044] OF: fdt: fixed up name for __overlay__ -> __overlay__
+[  137.696052] OF: fdt: fixed up name for dummy -> dummy
+[  137.696059] OF: fdt: fixed up name for __fixups__ -> __fixups__
+[  137.696064] OF: fdt: unflattened tree is detached
+[  137.696068] OF: fdt:  <- unflatten_device_tree()
+[  137.696072] OF: overlay: of_overlay_apply() start
+[  137.696172] OF: overlay: init_overlay_changeset() start
+[  137.696177] OF: overlay: init_overlay_changeset() ovcs->overlay_root is not dynamic
+[  137.696185] OF: overlay: init_overlay_changeset() : get_target : kref(/fragment@0)=2
+[  137.696204] OF: overlay: init_overlay_changeset() : get_target : kref(/fragment@0)=2
+[  137.696211] OF: overlay: init_overlay_changeset() : target : kref(/amba_pl@0)=4
+[  137.696219] OF: overlay: init_overlay_changeset() : get_target : kref(/__fixups__)=2
+[  137.696227] OF: overlay: init_overlay_changeset() done
+[  137.696232] OF: overlay: overlay_notify(pre-apply) start
+[  137.696250] OF: overlay: overlay changeset pre-apply notifier success, target: /amba_pl@0
+[  137.696258] OF: overlay: overlay_notify(pre-apply) done
+[  137.696262] OF: overlay: build_changeset() start
+[  137.696267] OF: overlay: build_changeset_next_level() start
+[  137.696271] OF: overlay: build_changeset_next_level() : kref(/amba_pl@0)=4
+[  137.696279] OF: overlay: Successful to apply prop @/amba_pl@0/name
+[  137.696290] OF: changeset: add : ATTACH_NODE /amba_pl@0/dummy(1=>2,OF_OVERLAY)
+[  137.696302] OF: overlay: build_changeset_next_level() start
+[  137.696306] OF: overlay: build_changeset_next_level() : kref(/amba_pl@0/dummy)=2
+[  137.696316] OF: changeset: add : ADD_PROPERTY /amba_pl@0/dummy(2=>3,OF_OVERLAY):compatible
+[  137.696380] OF: overlay: Successful to apply prop @/amba_pl@0/dummy/compatible
+[  137.696391] OF: changeset: add : ADD_PROPERTY /amba_pl@0/dummy(3=>4,OF_OVERLAY):clocks
+[  137.696403] OF: overlay: Successful to apply prop @/amba_pl@0/dummy/clocks
+[  137.696413] OF: changeset: add : ADD_PROPERTY /amba_pl@0/dummy(4=>5,OF_OVERLAY):name
+[  137.696424] OF: overlay: Successful to apply prop @/amba_pl@0/dummy/name
+[  137.696433] OF: overlay: build_changeset_next_level() : kref(/amba_pl@0/dummy)=5
+[  137.696441] OF: overlay: build_changeset_next_level() done
+[  137.696446] OF: overlay: Successful to apply node @/amba_pl@0/dummy
+[  137.696454] OF: overlay: build_changeset_next_level() : kref(/amba_pl@0)=4
+[  137.696462] OF: overlay: build_changeset_next_level() done
+[  137.696466] OF: overlay: fragment apply success '/amba_pl@0'
+[  137.696502] OF: overlay: build_changeset() done(=0)
+[  137.696507] OF: __of_changeset_apply_entries() start
+[  137.696513] OF: changeset: apply: ATTACH_NODE     /amba_pl@0/dummy(4)
+[  137.696524] OF: __of_attach_node(/amba_pl@0/dummy(4)) start
+[  137.696550] OF: __of_attach_node(/amba_pl@0/dummy(5)) done 
+[  137.696561] OF: changeset: apply done: ATTACH_NODE     /amba_pl@0/dummy(5)
+[  137.696571] OF: changeset: apply: ADD_PROPERTY    /amba_pl@0/dummy(5):compatible
+[  137.696587] OF: changeset: apply done: ADD_PROPERTY    /amba_pl@0/dummy(5):compatible
+[  137.696598] OF: changeset: apply: ADD_PROPERTY    /amba_pl@0/dummy(5):clocks
+[  137.696611] OF: changeset: apply done: ADD_PROPERTY    /amba_pl@0/dummy(5):clocks
+[  137.696621] OF: changeset: apply: ADD_PROPERTY    /amba_pl@0/dummy(5):name
+[  137.696634] OF: changeset: apply done: ADD_PROPERTY    /amba_pl@0/dummy(5):name
+[  137.696645] OF: __of_changeset_apply_entries() done
+[  137.696649] OF: __of_changeset_apply_notify() start
+[  137.696654] OF: changeset: __of_changeset_entry_notify(): start: ATTACH_NODE     /amba_pl@0/dummy(5)
+[  137.696665] OF: changeset: notify: ATTACH_NODE     /amba_pl@0/dummy(5)
+[  137.696677] OF: of_platform_notify() start
+[  137.696681] OF: changeset: state change: ATTACH_NODE     /amba_pl@0/dummy(5)
+[  137.696693] OF:  OF_RECONFIG_CHANGE_ADD start /amba_pl@0/dummy(5)
+[  137.696734] OF: of_platform_device_create_pdata(/amba_pl@0/dummy(5)) start
+[  137.696745] OF:   parent=amba_pl@0(4)
+[  137.696771] OF: of_device_add(amba_pl@0:dummy(1)) start
+[  137.696777] device_add() start 
+[  137.696783] device_add(amba_pl@0:dummy(2)) -1- 
+[  137.696788] device_add(amba_pl@0:dummy(2)) -2- 
+[  137.696798] device_add(amba_pl@0:dummy(2)) device_platform_notify()
+[  137.696804] device_add(amba_pl@0:dummy(2)) device_create_file()
+[  137.696812] device_add(amba_pl@0:dummy(2)) device_add_class_symlinks()
+[  137.696821] device_add(amba_pl@0:dummy(2)) device_add_attrs()
+[  137.696829] device_add(amba_pl@0:dummy(2)) bus_add_device()
+[  137.696848] device_add(amba_pl@0:dummy(3)) dpm_sysfs_add()
+[  137.696865] device_add(amba_pl@0:dummy(3)) device_pm_add()
+[  137.696872] device_add(amba_pl@0:dummy(3)) bus_notify()
+[  137.696879] device_add(amba_pl@0:dummy(3)) kobject_uevent()
+[  137.696935] device_add(amba_pl@0:dummy(3)) -3- 
+[  137.696958] /amba_pl@0/dummy Linked as a fwnode consumer to /firmware/zynqmp-firmware/clock-controller
+[  137.696978] __fw_devlink_link_to_consumers(amba_pl@0:dummy(3)) start
+[  137.696984] __fw_devlink_link_to_consumers(amba_pl@0:dummy(3)) done
+[  137.696990] __fw_devlink_link_to_suppliers(amba_pl@0:dummy(3)) start
+[  137.696996] fw_devlink_create_devlink(amba_pl@0:dummy(3)) start
+[  137.697002] __fw_devlink_relax_cycles() start
+[  137.697006] __fw_devlink_relax_cycles() con=amba_pl@0:dummy(4),sup=firmware:zynqmp-firmware:clock-controller(41))
+[  137.697014] __fw_devlink_relax_cycles() done(false)
+[  137.697032] device_add() start 
+[  137.697037] device_add(platform:firmware:zynqmp-firmware:clock-controller--platform:amba_pl@0:dummy(2)) -1- 
+[  137.697045] device_add(platform:firmware:zynqmp-firmware:clock-controller--platform:amba_pl@0:dummy(2)) -2- 
+[  137.697056] device_add(platform:firmware:zynqmp-firmware:clock-controller--platform:amba_pl@0:dummy(2)) device_platform_notify()
+[  137.697062] device_add(platform:firmware:zynqmp-firmware:clock-controller--platform:amba_pl@0:dummy(2)) device_create_file()
+[  137.697070] device_add(platform:firmware:zynqmp-firmware:clock-controller--platform:amba_pl@0:dummy(2)) device_add_class_symlinks()
+[  137.697082] device_add(platform:firmware:zynqmp-firmware:clock-controller--platform:amba_pl@0:dummy(2)) device_add_attrs()
+[  137.697094] device_add(platform:firmware:zynqmp-firmware:clock-controller--platform:amba_pl@0:dummy(2)) bus_add_device()
+[  137.697101] device_add(platform:firmware:zynqmp-firmware:clock-controller--platform:amba_pl@0:dummy(2)) dpm_sysfs_add()
+[  137.697106] device_add(platform:firmware:zynqmp-firmware:clock-controller--platform:amba_pl@0:dummy(2)) device_pm_add()
+[  137.697112] device_add(platform:firmware:zynqmp-firmware:clock-controller--platform:amba_pl@0:dummy(2)) bus_notify()
+[  137.697118] device_add(platform:firmware:zynqmp-firmware:clock-controller--platform:amba_pl@0:dummy(2)) kobject_uevent()
+[  137.697135] device_add(platform:firmware:zynqmp-firmware:clock-controller--platform:amba_pl@0:dummy(2)) -3- 
+[  137.697141] device_add(platform:firmware:zynqmp-firmware:clock-controller--platform:amba_pl@0:dummy(2)) bus_probe_device() start
+[  137.697147] device_add(platform:firmware:zynqmp-firmware:clock-controller--platform:amba_pl@0:dummy(2)) bus_probe_device() done
+[  137.697153] device_add(platform:firmware:zynqmp-firmware:clock-controller--platform:amba_pl@0:dummy(2)) class_to_subsys()
+[  137.697174] device_add(platform:firmware:zynqmp-firmware:clock-controller--platform:amba_pl@0:dummy(3)) -4-
+[  137.697180] device_add() done(0) 
+[  137.697186] devices_kset: Moving amba_pl@0:dummy to end of list
+[  137.697193] platform amba_pl@0:dummy: Linked as a consumer to firmware:zynqmp-firmware:clock-controller
+[  137.697199] fw_devlink_create_devlink(amba_pl@0:dummy(4)) done
+[  137.697204] /amba_pl@0/dummy Dropping the fwnode link to /firmware/zynqmp-firmware/clock-controller
+[  137.697219] __fw_devlink_link_to_suppliers(amba_pl@0:dummy(4)) done
+[  137.697224] device_add(amba_pl@0:dummy(4)) bus_probe_device() start
+[  137.697522] device_add(amba_pl@0:dummy(4)) bus_probe_device() done
+[  137.697528] device_add(amba_pl@0:dummy(4)) fw_devlink_unblock_consumers()
+[  137.697533] device_add(amba_pl@0:dummy(4)) klist_add_tail()
+[  137.697538] device_add(amba_pl@0:dummy(5)) class_to_subsys()
+[  137.697543] device_add(amba_pl@0:dummy(5)) -4-
+[  137.697548] device_add() done(0) 
+[  137.697552] OF: of_device_add(amba_pl@0:dummy(4)) done(0)
+[  137.697558] OF: of_platform_device_create_pdata(/amba_pl@0/dummy(6)) done(amba_pl@0:dummy(4))
+[  137.697570] OF:  OF_RECONFIG_CHANGE_ADD pdev  amba_pl@0:dummy(4)
+[  137.697575] OF:  OF_RECONFIG_CHANGE_ADD done  /amba_pl@0/dummy(6)
+[  137.697584] OF: of_platform_notify() done
+[  137.697589] OF: changeset: state change: ATTACH_NODE     /amba_pl@0/dummy(6)
+[  137.697600] OF: changeset: state change: ATTACH_NODE     /amba_pl@0/dummy(6)
+[  137.697615] OF: changeset: state change: ATTACH_NODE     /amba_pl@0/dummy(6)
+[  137.697636] OF: changeset: __of_changeset_entry_notify(): done  :ATTACH_NODE     /amba_pl@0/dummy(6)
+[  137.697647] OF: changeset: __of_changeset_entry_notify(): start: ADD_PROPERTY    /amba_pl@0/dummy(6):compatible
+[  137.697658] OF: changeset: notify: ADD_PROPERTY    /amba_pl@0/dummy(6):compatible
+[  137.697669] OF: of_platform_notify() start
+[  137.697672] OF: changeset: state change: ADD_PROPERTY    /amba_pl@0/dummy(6):compatible
+[  137.697683] OF: of_platform_notify() done
+[  137.697687] OF: changeset: state change: ADD_PROPERTY    /amba_pl@0/dummy(6):compatible
+[  137.697698] OF: changeset: state change: ADD_PROPERTY    /amba_pl@0/dummy(6):compatible
+[  137.697708] OF: changeset: state change: ADD_PROPERTY    /amba_pl@0/dummy(6):compatible
+[  137.697718] OF: changeset: __of_changeset_entry_notify(): done  :ADD_PROPERTY    /amba_pl@0/dummy(6):compatible
+[  137.697729] OF: changeset: __of_changeset_entry_notify(): start: ADD_PROPERTY    /amba_pl@0/dummy(6):clocks
+[  137.697739] OF: changeset: notify: ADD_PROPERTY    /amba_pl@0/dummy(6):clocks
+[  137.697749] OF: of_platform_notify() start
+[  137.697753] OF: changeset: state change: ADD_PROPERTY    /amba_pl@0/dummy(6):clocks
+[  137.697763] OF: of_platform_notify() done
+[  137.697767] OF: changeset: state change: ADD_PROPERTY    /amba_pl@0/dummy(6):clocks
+[  137.697777] OF: changeset: state change: ADD_PROPERTY    /amba_pl@0/dummy(6):clocks
+[  137.697787] OF: changeset: state change: ADD_PROPERTY    /amba_pl@0/dummy(6):clocks
+[  137.697798] OF: changeset: __of_changeset_entry_notify(): done  :ADD_PROPERTY    /amba_pl@0/dummy(6):clocks
+[  137.697808] OF: changeset: __of_changeset_entry_notify(): start: ADD_PROPERTY    /amba_pl@0/dummy(6):name
+[  137.697818] OF: changeset: notify: ADD_PROPERTY    /amba_pl@0/dummy(6):name
+[  137.697828] OF: of_platform_notify() start
+[  137.697832] OF: changeset: state change: ADD_PROPERTY    /amba_pl@0/dummy(6):name
+[  137.697842] OF: of_platform_notify() done
+[  137.697846] OF: changeset: state change: ADD_PROPERTY    /amba_pl@0/dummy(6):name
+[  137.697856] OF: changeset: state change: ADD_PROPERTY    /amba_pl@0/dummy(6):name
+[  137.697867] OF: changeset: state change: ADD_PROPERTY    /amba_pl@0/dummy(6):name
+[  137.697877] OF: changeset: __of_changeset_entry_notify(): done  :ADD_PROPERTY    /amba_pl@0/dummy(6):name
+[  137.697887] OF: __of_changeset_apply_notify() done(0)
+[  137.697892] OF: overlay: overlay_notify(post-apply) start
+[  137.697900] OF: overlay: overlay changeset post-apply notifier success, target: /amba_pl@0
+[  137.697908] OF: overlay: overlay_notify(post-apply) done
+[  137.697913] OF: overlay: of_overlay_apply() err=0
+[  137.697918] OF: overlay: of_overlay_fdt_apply() err=0
+[  137.697923] create_overlay: done(0)
+[  137.697928] cfs_overlay_item_dtbo_write: done(313)
+[  137.706642] OF: overlay: of_overlay_remove() start
+[  137.706658] OF: overlay: overlay_notify(pre-remove) start
+[  137.706672] OF: overlay: overlay changeset pre-remove notifier success, target: /amba_pl@0
+[  137.706687] OF: overlay: overlay_notify(pre-remove) done
+[  137.706692] OF: __of_changeset_revert_entries() start
+[  137.706698] OF: changeset: apply: REMOVE_PROPERTY /amba_pl@0/dummy(6):name
+[  137.706721] OF: changeset: apply done: REMOVE_PROPERTY /amba_pl@0/dummy(6):name
+[  137.706732] OF: changeset: apply: REMOVE_PROPERTY /amba_pl@0/dummy(6):clocks
+[  137.706744] OF: changeset: apply done: REMOVE_PROPERTY /amba_pl@0/dummy(6):clocks
+[  137.706755] OF: changeset: apply: REMOVE_PROPERTY /amba_pl@0/dummy(6):compatible
+[  137.706767] OF: changeset: apply done: REMOVE_PROPERTY /amba_pl@0/dummy(6):compatible
+[  137.706778] OF: changeset: apply: DETACH_NODE     /amba_pl@0/dummy(6)
+[  137.706788] OF: __of_detach_node(/amba_pl@0/dummy(6)) start
+[  137.706802] OF: __of_detach_node(/amba_pl@0/dummy(5)) done 
+[  137.706812] OF: changeset: apply done: DETACH_NODE     /amba_pl@0/dummy(5)
+[  137.706822] OF: __of_changeset_revert_entries() done
+[  137.706827] OF: __of_changeset_revert_notify() start
+[  137.706832] OF: changeset: __of_changeset_entry_notify(): start: REMOVE_PROPERTY /amba_pl@0/dummy(5):name
+[  137.706843] OF: changeset: __of_changeset_entry_notify(): done  :REMOVE_PROPERTY /amba_pl@0/dummy(5):name
+[  137.706853] OF: changeset: __of_changeset_entry_notify(): start: REMOVE_PROPERTY /amba_pl@0/dummy(5):clocks
+[  137.706864] OF: changeset: __of_changeset_entry_notify(): done  :REMOVE_PROPERTY /amba_pl@0/dummy(5):clocks
+[  137.706874] OF: changeset: __of_changeset_entry_notify(): start: REMOVE_PROPERTY /amba_pl@0/dummy(5):compatible
+[  137.706884] OF: changeset: __of_changeset_entry_notify(): done  :REMOVE_PROPERTY /amba_pl@0/dummy(5):compatible
+[  137.706895] OF: changeset: __of_changeset_entry_notify(): start: DETACH_NODE     /amba_pl@0/dummy(5)
+[  137.706905] OF: changeset: notify: DETACH_NODE     /amba_pl@0/dummy(5)
+[  137.706916] OF: of_platform_notify() start
+[  137.706921] OF: changeset: state change: DETACH_NODE     /amba_pl@0/dummy(5)
+[  137.706932] OF:  OF_RECONFIG_CHANGE_REMOVE start /amba_pl@0/dummy(5)
+[  137.706992] OF:  OF_RECONFIG_CHANGE_REMOVE pdev  amba_pl@0:dummy(5)
+[  137.706998] OF:  OF_RECONFIG_CHANGE_REMOVE --1-- /amba_pl@0/dummy(5)
+[  137.707008] OF: of_platform_device_destroy(amba_pl@0:dummy(5)//amba_pl@0/dummy(5)) start
+[  137.707021] OF: platform_device_unregister(amba_pl@0:dummy(5)) start
+[  137.707027] OF: platform_device_del(amba_pl@0:dummy(5)) start
+[  137.707081] platform amba_pl@0:dummy: Dropping the link to firmware:zynqmp-firmware:clock-controller
+[  137.707087] device: 'platform:firmware:zynqmp-firmware:clock-controller--platform:amba_pl@0:dummy': device_unregister
+[  137.707192] OF: platform_device_del(amba_pl@0:dummy(3)) done
+[  137.707200] OF: platform_device_put(amba_pl@0:dummy(3)) start
+[  137.707205] OF: put_device(amba_pl@0:dummy(3)) start
+[  137.707211] OF: kobject_put('amba_pl@0:dummy') start
+[  137.707215] OF: kref_put('amba_pl@0:dummy') start
+[  137.707220] OF: __kref_put refcount_dec_and_test is false
+[  137.707224] OF: kref_put('amba_pl@0:dummy') done(0)
+[  137.707229] OF: kobject_put('amba_pl@0:dummy') done 
+[  137.707233] OF: put_device(amba_pl@0:dummy(2)) done
+[  137.707238] OF: platform_device_put(amba_pl@0:dummy(2)) done
+[  137.707243] OF: platform_device_unregister(amba_pl@0:dummy(2)) done
+[  137.707248] OF: of_platform_device_destroy(amba_pl@0:dummy(2)//amba_pl@0/dummy(5)) done
+[  137.707259] OF:  OF_RECONFIG_CHANGE_REMOVE --2-- /amba_pl@0/dummy(5)
+[  137.707269] OF: platform_device_put(amba_pl@0:dummy(2)) start
+[  137.707274] OF: put_device(amba_pl@0:dummy(2)) start
+[  137.707279] OF: kobject_put('amba_pl@0:dummy') start
+[  137.707283] OF: kref_put('amba_pl@0:dummy') start
+[  137.707287] OF: __kref_put refcount_dec_and_test is false
+[  137.707291] OF: kref_put('amba_pl@0:dummy') done(0)
+[  137.707295] OF: kobject_put('amba_pl@0:dummy') done 
+[  137.707300] OF: put_device(amba_pl@0:dummy(1)) done
+[  137.707305] OF: platform_device_put(amba_pl@0:dummy(1)) done
+[  137.707310] OF:  OF_RECONFIG_CHANGE_REMOVE done  /amba_pl@0/dummy(5)
+[  137.707319] OF: of_platform_notify() done
+[  137.707323] OF: changeset: state change: DETACH_NODE     /amba_pl@0/dummy(5)
+[  137.707335] OF: changeset: state change: DETACH_NODE     /amba_pl@0/dummy(5)
+[  137.707345] OF: changeset: state change: DETACH_NODE     /amba_pl@0/dummy(5)
+[  137.707356] OF: changeset: __of_changeset_entry_notify(): done  :DETACH_NODE     /amba_pl@0/dummy(5)
+[  137.707367] OF: __of_changeset_revert_notify() done(0)
+[  137.707372] OF: overlay: overlay_notify(post-remove) start
+[  137.707386] OF: overlay: overlay changeset post-remove notifier success, target: /amba_pl@0
+[  137.707394] OF: overlay: overlay_notify(post-remove) done
+[  137.707399] OF: overlay: free_overlay_changeset() start
+[  137.707403] OF: of_changeset_destroy() start
+[  137.707469] OF: changeset: del : ADD_PROPERTY /amba_pl@0/dummy(4=>3,OF_OVERLAY):name
+[  137.707484] OF: changeset: del : ADD_PROPERTY /amba_pl@0/dummy(3=>2,OF_OVERLAY):clocks
+[  137.707496] OF: changeset: del : ADD_PROPERTY /amba_pl@0/dummy(2=>1,OF_OVERLAY):compatible
+[  137.707507] OF: changeset: del : ATTACH_NODE /amba_pl@0/dummy(1=>0,OF_OVERLAY)
+[  137.707523] OF: of_changeset_destroy() done
+[  137.707529] OF: overlay: free_overlay_changeset() target  : kref(/amba_pl@0)=4
+[  137.707536] OF: overlay: free_overlay_changeset() overlay : kref(/fragment@0/__overlay__)=2
+[  137.707547] OF: overlay: free_overlay_changeset() done
+[  137.707552] OF: overlay: of_overlay_remove() err=0
