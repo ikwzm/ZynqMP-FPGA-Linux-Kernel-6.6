@@ -1,0 +1,12 @@
+diff --git a/drivers/base/core.c b/drivers/base/core.c
+index 95858a9cc..f07c1ec9d 100644
+--- a/drivers/base/core.c
++++ b/drivers/base/core.c
+@@ -2048,6 +2048,7 @@ static bool __fw_devlink_relax_cycles(struct fwnode_handle *con_handle,
+ out:
+ 	sup_handle->flags &= ~FWNODE_FLAG_VISITED;
+ 	put_device(sup_dev);
++	put_device(con_dev);
+ 	put_device(par_dev);
+ 	pr_debug("%s() done(%s)\n", __func__, (ret == true)? "true" : "false");
+ 	return ret;
