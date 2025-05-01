@@ -183,7 +183,7 @@ index 70e6c240a..69d603d09 100644
  		return ret;
  
 diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
-index fddb3a90d..12514eb31 100644
+index df87e8bcb..ecc59b634 100644
 --- a/drivers/usb/host/xhci.h
 +++ b/drivers/usb/host/xhci.h
 @@ -1872,6 +1872,14 @@ void xhci_free_container_ctx(struct xhci_hcd *xhci,

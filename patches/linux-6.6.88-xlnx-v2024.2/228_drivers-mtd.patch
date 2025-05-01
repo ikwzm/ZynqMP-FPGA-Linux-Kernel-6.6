@@ -77,7 +77,7 @@ index 58968c1e7..644d8c3a8 100644
  	return 0;
  }
 diff --git a/drivers/mtd/spi-nor/core.c b/drivers/mtd/spi-nor/core.c
-index 8d75a6677..3e309674c 100644
+index 1b0c6770c..9212fe600 100644
 --- a/drivers/mtd/spi-nor/core.c
 +++ b/drivers/mtd/spi-nor/core.c
 @@ -21,6 +21,7 @@

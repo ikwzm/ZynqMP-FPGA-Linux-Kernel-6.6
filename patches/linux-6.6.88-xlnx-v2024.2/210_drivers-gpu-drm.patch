@@ -1439,7 +1439,7 @@ index 784e63d70..d57bcea32 100644
  EXPORT_SYMBOL(__drm_atomic_helper_connector_destroy_state);
  
 diff --git a/drivers/gpu/drm/drm_atomic_uapi.c b/drivers/gpu/drm/drm_atomic_uapi.c
-index ab03b0843..8a5af8510 100644
+index 814b1da36..19e4aebc4 100644
 --- a/drivers/gpu/drm/drm_atomic_uapi.c
 +++ b/drivers/gpu/drm/drm_atomic_uapi.c
 @@ -764,6 +764,13 @@ static int drm_atomic_connector_set_property(struct drm_connector *connector,
@@ -1467,10 +1467,10 @@ index ab03b0843..8a5af8510 100644
  		*val = state->content_protection;
  	} else if (property == config->hdcp_content_type_property) {
 diff --git a/drivers/gpu/drm/drm_connector.c b/drivers/gpu/drm/drm_connector.c
-index 309aad5f0..2103817f6 100644
+index 573086d88..6925c8e22 100644
 --- a/drivers/gpu/drm/drm_connector.c
 +++ b/drivers/gpu/drm/drm_connector.c
-@@ -1374,6 +1374,14 @@ static const u32 dp_colorspaces =
+@@ -1379,6 +1379,14 @@ static const u32 dp_colorspaces =
   *	hdmi_drm_infoframe_pack() to pack the infoframe as per spec, in case of
   *	HDMI encoder.
   *
@@ -1485,7 +1485,7 @@ index 309aad5f0..2103817f6 100644
   * max bpc:
   *	This range property is used by userspace to limit the bit depth. When
   *	used the driver would limit the bpc in accordance with the valid range
-@@ -1538,6 +1546,12 @@ int drm_connector_create_standard_properties(struct drm_device *dev)
+@@ -1543,6 +1551,12 @@ int drm_connector_create_standard_properties(struct drm_device *dev)
  		return -ENOMEM;
  	dev->mode_config.hdr_output_metadata_property = prop;
  
@@ -1499,7 +1499,7 @@ index 309aad5f0..2103817f6 100644
  }
  
 diff --git a/drivers/gpu/drm/drm_edid.c b/drivers/gpu/drm/drm_edid.c
-index ee3fab115..e779e0252 100644
+index ad872c61a..c5d2b6c54 100644
 --- a/drivers/gpu/drm/drm_edid.c
 +++ b/drivers/gpu/drm/drm_edid.c
 @@ -2973,6 +2973,57 @@ mode_is_rb(const struct drm_display_mode *mode)
@@ -1582,7 +1582,7 @@ index 3b535ad1b..64f4f318d 100644
  	return dma_addr;
  }
 diff --git a/drivers/gpu/drm/drm_fb_helper.c b/drivers/gpu/drm/drm_fb_helper.c
-index 618b04523..a5cd09658 100644
+index b507c1c00..11cbedae4 100644
 --- a/drivers/gpu/drm/drm_fb_helper.c
 +++ b/drivers/gpu/drm/drm_fb_helper.c
 @@ -69,7 +69,7 @@ MODULE_PARM_DESC(drm_fbdev_overalloc,
@@ -35317,10 +35317,10 @@ index f077d7fbd..a80bc6ea2 100644
  
  #endif /* _ZYNQMP_DP_H_ */
 diff --git a/drivers/gpu/drm/xlnx/zynqmp_dpsub.c b/drivers/gpu/drm/xlnx/zynqmp_dpsub.c
-index f5781939d..101c23d61 100644
+index a25b22238..4635d8da2 100644
 --- a/drivers/gpu/drm/xlnx/zynqmp_dpsub.c
 +++ b/drivers/gpu/drm/xlnx/zynqmp_dpsub.c
-@@ -9,309 +9,174 @@
+@@ -9,309 +9,184 @@
   * - Laurent Pinchart <laurent.pinchart@ideasonboard.com>
   */
  
@@ -35345,41 +35345,56 @@ index f5781939d..101c23d61 100644
  #include "zynqmp_dp.h"
  #include "zynqmp_dpsub.h"
 -#include "zynqmp_kms.h"
- 
--/* -----------------------------------------------------------------------------
-- * Power Management
-- */
--
--static int __maybe_unused zynqmp_dpsub_suspend(struct device *dev)
--{
--	struct zynqmp_dpsub *dpsub = dev_get_drvdata(dev);
--
--	if (!dpsub->drm)
--		return 0;
--
--	return drm_mode_config_helper_suspend(&dpsub->drm->dev);
--}
--
--static int __maybe_unused zynqmp_dpsub_resume(struct device *dev)
--{
--	struct zynqmp_dpsub *dpsub = dev_get_drvdata(dev);
--
--	if (!dpsub->drm)
--		return 0;
--
--	return drm_mode_config_helper_resume(&dpsub->drm->dev);
--}
--
--static const struct dev_pm_ops zynqmp_dpsub_pm_ops = {
--	SET_SYSTEM_SLEEP_PM_OPS(zynqmp_dpsub_suspend, zynqmp_dpsub_resume)
--};
--
--/* -----------------------------------------------------------------------------
-- * DPSUB Configuration
-- */
++
 +#define DP_PCM_NAME_0 "zynqmp_dp_snd_pcm0"
 +#define DP_PCM_NAME_1 "zynqmp_dp_snd_pcm1"
  
+ /* -----------------------------------------------------------------------------
+  * Power Management
+  */
+ 
+-static int __maybe_unused zynqmp_dpsub_suspend(struct device *dev)
++static int __maybe_unused zynqmp_dpsub_pm_suspend(struct device *dev)
+ {
+-	struct zynqmp_dpsub *dpsub = dev_get_drvdata(dev);
++	struct platform_device *pdev =
++		container_of(dev, struct platform_device, dev);
++	struct zynqmp_dpsub *dpsub = platform_get_drvdata(pdev);
+ 
+-	if (!dpsub->drm)
+-		return 0;
++	zynqmp_dp_pm_suspend(dpsub->dp);
+ 
+-	return drm_mode_config_helper_suspend(&dpsub->drm->dev);
++	return 0;
+ }
+ 
+-static int __maybe_unused zynqmp_dpsub_resume(struct device *dev)
++static int __maybe_unused zynqmp_dpsub_pm_resume(struct device *dev)
+ {
+-	struct zynqmp_dpsub *dpsub = dev_get_drvdata(dev);
++	struct platform_device *pdev =
++		container_of(dev, struct platform_device, dev);
++	struct zynqmp_dpsub *dpsub = platform_get_drvdata(pdev);
+ 
+-	if (!dpsub->drm)
+-		return 0;
++	zynqmp_dp_pm_resume(dpsub->dp);
+ 
+-	return drm_mode_config_helper_resume(&dpsub->drm->dev);
++	return 0;
+ }
+ 
+ static const struct dev_pm_ops zynqmp_dpsub_pm_ops = {
+-	SET_SYSTEM_SLEEP_PM_OPS(zynqmp_dpsub_suspend, zynqmp_dpsub_resume)
++	SET_SYSTEM_SLEEP_PM_OPS(zynqmp_dpsub_pm_suspend,
++				zynqmp_dpsub_pm_resume)
+ };
+ 
+ /* -----------------------------------------------------------------------------
+- * DPSUB Configuration
+- */
+-
 -/**
 - * zynqmp_dpsub_audio_enabled - If the audio is enabled
 - * @dpsub: DisplayPort subsystem
@@ -35408,8 +35423,9 @@ index f5781939d..101c23d61 100644
 -
 -/* -----------------------------------------------------------------------------
 - * Probe & Remove
-- */
--
++ * Component
+  */
+ 
 -static int zynqmp_dpsub_init_clocks(struct zynqmp_dpsub *dpsub)
 +static int
 +zynqmp_dpsub_bind(struct device *dev, struct device *master, void *data)
@@ -35427,7 +35443,7 @@ index f5781939d..101c23d61 100644
 +	if (ret)
  		return ret;
 -	}
- 
+-
 -	/*
 -	 * Try the live PL video clock, and fall back to the PS clock if the
 -	 * live PL video clock isn't valid.
@@ -35457,7 +35473,7 @@ index f5781939d..101c23d61 100644
 -		dpsub->aud_clk_from_ps = false;
 -		return 0;
 -	}
--
+ 
 -	dpsub->aud_clk = devm_clk_get(dpsub->dev, "dp_aud_clk");
 -	if (!IS_ERR(dpsub->aud_clk)) {
 -		dpsub->aud_clk_from_ps = true;
@@ -35528,16 +35544,26 @@ index f5781939d..101c23d61 100644
 -	if ((dpsub->connected_ports & BIT(ZYNQMP_DPSUB_PORT_OUT_VIDEO)) ||
 -	    (dpsub->connected_ports & BIT(ZYNQMP_DPSUB_PORT_OUT_AUDIO)))
 -		dev_warn(dpsub->dev, "output to PL unsupported, ignoring\n");
--
++	zynqmp_dp_unbind(dev, master, data);
++	zynqmp_disp_unbind(dev, master, data);
++}
+ 
 -	if (!(dpsub->connected_ports & BIT(ZYNQMP_DPSUB_PORT_OUT_DP))) {
 -		dev_err(dpsub->dev, "DP output port not connected\n");
 -		return -EINVAL;
 -	}
--
++static const struct component_ops zynqmp_dpsub_component_ops = {
++	.bind	= zynqmp_dpsub_bind,
++	.unbind	= zynqmp_dpsub_unbind,
++};
+ 
 -	return 0;
-+	zynqmp_dp_unbind(dev, master, data);
-+	zynqmp_disp_unbind(dev, master, data);
- }
+-}
++static struct of_dev_auxdata zynqmp_dpsub_auxdata_lookup[] = {
++	OF_DEV_AUXDATA("xlnx,dp-snd-pcm0", 0, DP_PCM_NAME_0, NULL),
++	OF_DEV_AUXDATA("xlnx,dp-snd-pcm1", 0, DP_PCM_NAME_1, NULL),
++	{ /* end of table */ }
++};
  
 -void zynqmp_dpsub_release(struct zynqmp_dpsub *dpsub)
 -{
@@ -35545,16 +35571,9 @@ index f5781939d..101c23d61 100644
 -	kfree(dpsub->dp);
 -	kfree(dpsub);
 -}
-+static const struct component_ops zynqmp_dpsub_component_ops = {
-+	.bind	= zynqmp_dpsub_bind,
-+	.unbind	= zynqmp_dpsub_unbind,
-+};
-+
-+static struct of_dev_auxdata zynqmp_dpsub_auxdata_lookup[] = {
-+	OF_DEV_AUXDATA("xlnx,dp-snd-pcm0", 0, DP_PCM_NAME_0, NULL),
-+	OF_DEV_AUXDATA("xlnx,dp-snd-pcm1", 0, DP_PCM_NAME_1, NULL),
-+	{ /* end of table */ }
-+};
++/* -----------------------------------------------------------------------------
++ * Probe & Remove
++ */
  
  static int zynqmp_dpsub_probe(struct platform_device *pdev)
  {
@@ -35574,6 +35593,8 @@ index f5781939d..101c23d61 100644
 -	ret = dma_set_mask(dpsub->dev, DMA_BIT_MASK(ZYNQMP_DISP_MAX_DMA_BIT));
 -	if (ret)
 -		return ret;
+-
+-	dma_set_max_seg_size(&pdev->dev, DMA_BIT_MASK(32));
 -
 -	/* Try the reserved memory. Proceed if there's none. */
 -	of_reserved_mem_device_init(&pdev->dev);
@@ -35609,11 +35630,7 @@ index f5781939d..101c23d61 100644
 +
 +	/* Try the reserved memory. Proceed if there's none */
 +	of_reserved_mem_device_init(&pdev->dev);
- 
--	if (dpsub->dma_enabled) {
--		ret = zynqmp_dpsub_drm_init(dpsub);
--		if (ret)
--			goto err_disp;
++
 +	/* Populate the sound child nodes */
 +	ret = of_platform_populate(pdev->dev.of_node, NULL,
 +				   zynqmp_dpsub_auxdata_lookup, &pdev->dev);
@@ -35621,7 +35638,11 @@ index f5781939d..101c23d61 100644
 +		dev_err(&pdev->dev, "failed to populate child nodes\n");
 +		goto err_rmem;
 +	}
-+
+ 
+-	if (dpsub->dma_enabled) {
+-		ret = zynqmp_dpsub_drm_init(dpsub);
+-		if (ret)
+-			goto err_disp;
 +	if (!dpsub->external_crtc_attached) {
 +		dpsub->master = xlnx_drm_pipeline_init(pdev);
 +		if (IS_ERR(dpsub->master)) {
@@ -35664,67 +35685,43 @@ index f5781939d..101c23d61 100644
  
 -	if (dpsub->drm)
 -		zynqmp_dpsub_drm_cleanup(dpsub);
+-
+-	drm_bridge_remove(dpsub->bridge);
+-	zynqmp_disp_remove(dpsub);
+-	zynqmp_dp_remove(dpsub);
+-
+-	pm_runtime_disable(&pdev->dev);
+-	clk_disable_unprepare(dpsub->apb_clk);
 +	if (!dpsub->external_crtc_attached)
 +		xlnx_drm_pipeline_exit(dpsub->master);
 +	of_platform_depopulate(&pdev->dev);
-+	of_reserved_mem_device_release(&pdev->dev);
+ 	of_reserved_mem_device_release(&pdev->dev);
 +	component_del(&pdev->dev, &zynqmp_dpsub_component_ops);
-+
+ 
+-	if (!dpsub->drm)
+-		zynqmp_dpsub_release(dpsub);
+-}
 +	err = zynqmp_disp_remove(pdev);
 +	if (err)
 +		ret = -EIO;
  
--	drm_bridge_remove(dpsub->bridge);
--	zynqmp_disp_remove(dpsub);
--	zynqmp_dp_remove(dpsub);
+-static void zynqmp_dpsub_shutdown(struct platform_device *pdev)
+-{
+-	struct zynqmp_dpsub *dpsub = platform_get_drvdata(pdev);
 +	err = zynqmp_dp_remove(pdev);
 +	if (err)
 +		ret = -EIO;
  
- 	pm_runtime_disable(&pdev->dev);
--	clk_disable_unprepare(dpsub->apb_clk);
--	of_reserved_mem_device_release(&pdev->dev);
- 
--	if (!dpsub->drm)
--		zynqmp_dpsub_release(dpsub);
-+	return ret;
-+}
-+
-+static int __maybe_unused zynqmp_dpsub_pm_suspend(struct device *dev)
-+{
-+	struct platform_device *pdev =
-+		container_of(dev, struct platform_device, dev);
-+	struct zynqmp_dpsub *dpsub = platform_get_drvdata(pdev);
-+
-+	zynqmp_dp_pm_suspend(dpsub->dp);
-+
-+	return 0;
- }
- 
--static void zynqmp_dpsub_shutdown(struct platform_device *pdev)
-+static int __maybe_unused zynqmp_dpsub_pm_resume(struct device *dev)
- {
-+	struct platform_device *pdev =
-+		container_of(dev, struct platform_device, dev);
- 	struct zynqmp_dpsub *dpsub = platform_get_drvdata(pdev);
- 
 -	if (!dpsub->drm)
 -		return;
-+	zynqmp_dp_pm_resume(dpsub->dp);
++	pm_runtime_disable(&pdev->dev);
  
 -	drm_atomic_helper_shutdown(&dpsub->drm->dev);
-+	return 0;
++	return ret;
  }
  
-+static const struct dev_pm_ops zynqmp_dpsub_pm_ops = {
-+	SET_SYSTEM_SLEEP_PM_OPS(zynqmp_dpsub_pm_suspend,
-+				zynqmp_dpsub_pm_resume)
-+};
-+
  static const struct of_device_id zynqmp_dpsub_of_match[] = {
- 	{ .compatible = "xlnx,zynqmp-dpsub-1.7", },
- 	{ /* end of table */ },
-@@ -320,16 +185,15 @@ MODULE_DEVICE_TABLE(of, zynqmp_dpsub_of_match);
+@@ -322,16 +197,15 @@ MODULE_DEVICE_TABLE(of, zynqmp_dpsub_of_match);
  
  static struct platform_driver zynqmp_dpsub_driver = {
  	.probe			= zynqmp_dpsub_probe,
@@ -35855,7 +35852,7 @@ index 76d234826..9c9b46e01 100644
  					 const struct drm_connector_state *conn_state);
  
 diff --git a/include/drm/drm_connector.h b/include/drm/drm_connector.h
-index d300fde6c..4fb0e56cb 100644
+index b2e9dc02f..f180640be 100644
 --- a/include/drm/drm_connector.h
 +++ b/include/drm/drm_connector.h
 @@ -1022,6 +1022,13 @@ struct drm_connector_state {

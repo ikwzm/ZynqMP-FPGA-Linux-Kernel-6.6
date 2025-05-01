@@ -2193,7 +2193,7 @@ index 000000000..80f99681d
 +
 +#endif /* __UAPI_XILINX_V4L2_EVENTS_H__ */
 diff --git a/usr/include/Makefile b/usr/include/Makefile
-index 07796df0a..32168d93a 100644
+index c16fbabb3..c4d76facc 100644
 --- a/usr/include/Makefile
 +++ b/usr/include/Makefile
 @@ -43,6 +43,9 @@ no-header-test += linux/v4l2-mediabus.h

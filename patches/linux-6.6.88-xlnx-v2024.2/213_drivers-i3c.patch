@@ -1,5 +1,5 @@
 diff --git a/drivers/i3c/master/dw-i3c-master.c b/drivers/i3c/master/dw-i3c-master.c
-index 235235613..b5b259487 100644
+index 030127525..83094e715 100644
 --- a/drivers/i3c/master/dw-i3c-master.c
 +++ b/drivers/i3c/master/dw-i3c-master.c
 @@ -218,6 +218,10 @@
